@@ -1,0 +1,25 @@
+@media only screen and (max-width: 800px) {
+  div.corpo{
+      margin-inline: 1em;
+  }
+}
+@media only screen and (min-width: 800px) {
+  div.corpo{
+      margin-inline: 30%;
+  }
+}
+#terminal{
+  background-color:white;
+  color:#282C34;
+  border-color: #d4d9e3;
+  border-style: solid;
+  border-width: 1px;
+  white-space: pre-line;
+  padding: 1em 1em;
+  border-radius: 8px;
+}
+#btnEnviar{
+  float: right;
+  margin-right:1em;
+  border-radius: 4px;
+}
