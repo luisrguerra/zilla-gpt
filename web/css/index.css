@@ -10,7 +10,7 @@
 }
 div.corpo{
   overflow: scroll;
-  height: 60vh;
+  height: 70vh;
 }
 p.terminal{
   background-color:white;
@@ -23,10 +23,12 @@ p.terminal{
   border-radius: 8px;
 }
 div.prompt-container{
+  position: fixed;
+  left: 0;
+  bottom: 0;
   background-color: white;
   width: 100%;
   text-align: center;
-  bottom: 0;
   height: 20vh;
 }
 div.prompt-input{
