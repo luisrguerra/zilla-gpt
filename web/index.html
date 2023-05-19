@@ -1,0 +1,158 @@
+<!-- carrecargar recursos do material dessign -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+
+<!-- correção de resolução no smartphone -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- css -->
+<style>
+  @media only screen and (max-width: 800px) {
+    div.corpo{
+        margin-inline: 1em;
+    }
+  }
+  @media only screen and (min-width: 800px) {
+    div.corpo{
+        margin-inline: 30%;
+    }
+  }
+  #terminal{
+    background-color:white;
+    color:#282C34;
+    border-color: #d4d9e3;
+    border-style: solid;
+    border-width: 1px;
+    white-space: pre-line;
+    padding: 1em 1em;
+    border-radius: 8px;
+  }
+  #btnEnviar{
+    float: right;
+    margin-right:1em;
+    border-radius: 4px;
+  }
+
+</style>
+
+<!-- correção da margem -->
+<div class="corpo">
+<!-- pular linha -->
+<br>
+
+<h6><b>ZillaGPT</b></h6>
+<!-- campo de input de texto -->
+<h6>Prompt:</h6>
+<div style="width: 100%;" class="mdl-textfield mdl-js-textfield ">
+   <input class="mdl-textfield__input" type="text" id="formterminal">
+   <label class="mdl-textfield__label">Oi</label>
+</div>
+
+
+<!-- botao enviar -->
+<button id="btnEnviar" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--white mdl-color-text--black">
+Enviar
+</button>
+
+<!-- pular linha -->
+<br>
+<br>
+<br>
+<br>
+
+<!-- texto terminal -->
+<p id=terminal >...</p>
+
+</div>
+
+<script type="module">
+import openailib from 'https://cdn.jsdelivr.net/npm/openai@3.2.1/+esm';
+//console.log("openailib: ",openailib);
+let configuration;
+let openai;
+let loading = false;
+const gptModelName = "gpt-3.5-turbo";
+const personalidade = `
+Você é a ZillaGPT, uma raposa assistente e prestativa.
+`;
+
+function initializeChat(behavior) {
+  return [
+    {role: "system", content: behavior}
+  ];
+}
+
+async function completionsChatTextModelV3(messages) {
+  const parameters ={
+      model: gptModelName,
+      messages: messages,
+      /*
+      temperature: ,
+      max_tokens: ,
+      top_p: ,
+      frequency_penalty: ,
+      presence_penalty: ,
+      */
+  };
+  console.log("parameters: ",parameters);
+  return await openai.createChatCompletion(parameters);
+}
+
+async function generateChatMessagesV3(promptText, messages) {
+  const prompt = {role: "user", content: promptText};
+  messages.push(prompt);
+
+  const apiResponse = await completionsChatTextModelV3(messages);
+  const textResponse = apiResponse.data.choices[0].message.content;
+
+  const assistantResponse = {role: "assistant", content: textResponse};
+  messages.push(assistantResponse);
+
+  return messages;
+}
+
+function lastMessage(messages){
+  return messages[messages.length - 1].content;
+}
+
+function key (){
+  const cripto = "WXpKemRGRXhSbmhVZWtKR1RWaFZlV0p1UW5aWmFteDBUVmhGTVdJd1pGVk5NRXB6V1cxMFIxTnRlRWxOZW1jMVpGZHNWMDlIV2xWaE1qVk5aREZrYkU5VldsQT0=";
+  const apiKey = atob(atob(atob(cripto)));
+  return apiKey;
+}
+
+async function configurar(){
+  configuration = new openailib.Configuration({
+    apiKey: key(),
+  });
+  openai = new openailib.OpenAIApi(configuration);
+  return initializeChat(personalidade);
+}
+
+function getPrompt(){
+return document.getElementById("formterminal").value;
+}
+
+function setTerminal(text){
+return document.getElementById("terminal").innerHTML = text;
+}
+
+const btnEnviar = document.getElementById('btnEnviar');
+btnEnviar.addEventListener('click', async () => {
+  const userInput = getPrompt();
+  if (loading === false){
+    let initialMessages = await configurar();
+    loading = true;
+    console.log("loading");
+    setTerminal("Pensando...");
+    const mensagesObject = await generateChatMessagesV3(userInput,initialMessages);
+    loading = false;
+    console.log("mensagesObject: ",mensagesObject);
+    const textResponse = lastMessage(mensagesObject);
+    console.log("textResponse: ",textResponse);
+    setTerminal(textResponse);
+  }
+});
+
+</script>
