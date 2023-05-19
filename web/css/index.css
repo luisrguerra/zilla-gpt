@@ -1,32 +1,29 @@
-@media only screen and (max-width: 800px) {
-  div.corpo{
-      margin-inline: 1em;
-  }
-}
-@media only screen and (min-width: 800px) {
-  div.corpo{
-      margin-inline: 30%;
-  }
+
+body{
+  color: #c9d3e3;
+  background-color:#1E2227;
 }
 div.corpo{
   overflow: scroll;
   height: 70vh;
 }
 p.terminal{
-  background-color:white;
-  color:#282C34;
-  border-color: #d4d9e3;
+  font-size: 22px;
+  background-color:#23272E;
+  color: #c9d3e3;
+  border-width: 2px;
+  border-color: #ffffff7e;
   border-style: solid;
-  border-width: 1px;
   white-space: pre-line;
   padding: 1em 1em;
   border-radius: 8px;
 }
 div.prompt-container{
+  border-top: 1px solid #ffffff17;
   position: fixed;
   left: 0;
   bottom: 0;
-  background-color: white;
+  background-color: #23272E;
   width: 100%;
   text-align: center;
   height: 16vh;
@@ -35,7 +32,8 @@ div.prompt-input{
   width:100%;
 }
 #btnEnviar{
-  margin-bottom: 1em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
   width:fit-content;
   float: right;
   border-radius: 4px;
@@ -43,20 +41,59 @@ div.prompt-input{
 }
 
 ::-webkit-scrollbar {
+  background-color: transparent;
   width: 10px;
 }
 
 /* Track */
-::-webkit-scrollbar-track {
+::-webkit-scrollbar-track,::-webkit-scrollbar-corner {
   background: transparent;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #e0e0e0;
+  background: #ffffff22;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #e0e0e0;
+  background: #ffffff22;
+}
+
+input.form-control{
+  color: #c9d3e3;
+  background: transparent;
+  border-width: 2px;
+  border-color: #ffffff40;
+}
+input.form-control:focus,input.form-control:active{
+  color: #c9d3e3;
+  background: #1E2227;
+  border-color: #ffffff7e;
+  box-shadow: none;
+}
+
+@media only screen and (max-width: 800px) {
+  div.corpo{
+      margin-inline: 1em;
+  }
+
+  div.prompt-container{
+    height: 16vh;
+  }
+}
+@media only screen and (max-width: 360px){
+  div.prompt-container{
+    height: 18vh;
+  }
+}
+@media only screen and (max-width: 350px){
+  div.prompt-container{
+    height: 22vh;
+  }
+}
+@media only screen and (min-width: 800px) {
+  div.corpo{
+      margin-inline: 20%;
+  }
 }
