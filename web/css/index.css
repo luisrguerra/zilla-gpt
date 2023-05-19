@@ -8,6 +8,9 @@
       margin-inline: 30%;
   }
 }
+body{
+  max-height: 100vh;
+}
 div.corpo{
   overflow: scroll;
   height: 80vh;
