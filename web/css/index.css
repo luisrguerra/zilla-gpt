@@ -8,7 +8,11 @@
       margin-inline: 30%;
   }
 }
-#terminal{
+div.corpo{
+  overflow: scroll;
+  height: 80vh;
+}
+p.terminal{
   background-color:white;
   color:#282C34;
   border-color: #d4d9e3;
@@ -18,8 +22,20 @@
   padding: 1em 1em;
   border-radius: 8px;
 }
+div.prompt-container{
+  background-color: white;
+  width: 100%;
+  text-align: center;
+  bottom: 0;
+  height: 20vh;
+}
+div.prompt-input{
+  width:100%;
+}
 #btnEnviar{
+  margin-bottom: 1em;
+  width:fit-content;
   float: right;
-  margin-right:1em;
   border-radius: 4px;
+  padding-inline: 0.5em;
 }

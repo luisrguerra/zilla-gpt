@@ -1,10 +1,15 @@
-<!-- carrecargar recursos do material dessign -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
-<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<head>
+  <meta charset="utf-8">
+  <!-- Melhoria da visualização em smartphones -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- correção de resolução no smartphone -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- carrecargar recursos do material dessign -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!--Bootstrap -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/js/bootstrap.min.js" integrity="sha512-5BqtYqlWfJemW5+v+TZUs22uigI8tXeVah5S/1Z6qBLVO7gakAOtkOzUtgq6dsIo5c0NJdmGPs0H9I+2OHUHVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css" integrity="sha512-CpIKUSyh9QX2+zSdfGP+eWLx23C8Dj9/XmHjZY2uDtfkdLGo0uY12jgcnkX9vXOgYajEKb/jiw67EYm+kBf+6g==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
 
 <!-- css -->
 <link rel="stylesheet" href="css/index.css">
@@ -15,28 +20,22 @@
 <br>
 
 <h6><b>ZillaGPT</b></h6>
-<!-- campo de input de texto -->
-<h6>Prompt:</h6>
-<div style="width: 100%;" class="mdl-textfield mdl-js-textfield ">
-   <input class="mdl-textfield__input" type="text" id="formterminal">
-   <label class="mdl-textfield__label">Oi</label>
-</div>
-
-
-<!-- botao enviar -->
-<button id="btnEnviar" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-color--white mdl-color-text--black">
-Enviar
-</button>
-
-<!-- pular linha -->
-<br>
-<br>
-<br>
-<br>
 
 <!-- texto terminal -->
-<p id=terminal >...</p>
+<div id="terminalContainer"></div>
 
+</div> <!-- fim da div corpo -->
+
+<!-- campo de input de texto -->
+<div class="prompt-container">
+<div style="margin-inline: 2em;margin-bottom: 1em;">
+ <!-- botao enviar -->
+ <button id="btnEnviar" class="btn btn-primary enviar">
+  Enviar
+ </button>
+ <!-- input prompt -->
+ <input class="form-control" type="text" id="formterminal">
+</div>
 </div>
 
 <script type="module">
@@ -107,24 +106,45 @@ function getPrompt(){
 return document.getElementById("formterminal").value;
 }
 
-function setTerminal(text){
-return document.getElementById("terminal").innerHTML = text;
+function appendChat(text){
+  const terminal = document.getElementById("terminalContainer");
+  let p = document.createElement("p");
+  p.innerHTML = text;
+  p.classList.add("terminal");
+  terminal.appendChild(p);
 }
 
+function disableButton(){
+  const btnEnviar = document.getElementById('btnEnviar');
+  btnEnviar.disabled = true;
+}
+
+function enableButton(){
+  const btnEnviar = document.getElementById('btnEnviar');
+  btnEnviar.disabled = false;
+}
+
+function clearInput(){
+  document.getElementById("formterminal").value = "";
+}
+
+let mensagesObject = await configurar();
 const btnEnviar = document.getElementById('btnEnviar');
 btnEnviar.addEventListener('click', async () => {
   const userInput = getPrompt();
   if (loading === false){
-    let initialMessages = await configurar();
     loading = true;
     console.log("loading");
-    setTerminal("Pensando...");
-    const mensagesObject = await generateChatMessagesV3(userInput,initialMessages);
+    disableButton();
+    appendChat(userInput);
+    mensagesObject = await generateChatMessagesV3(userInput,mensagesObject);
     loading = false;
+    clearInput();
+    enableButton();
     console.log("mensagesObject: ",mensagesObject);
     const textResponse = lastMessage(mensagesObject);
     console.log("textResponse: ",textResponse);
-    setTerminal(textResponse);
+    appendChat(textResponse);
   }
 });
 
