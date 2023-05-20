@@ -5,14 +5,27 @@ body{
 }
 div.corpo{
   overflow: scroll;
-  height: 70vh;
+  height: 86vh;
 }
-p.terminal{
+p.chatBot{
+  margin-right: 2em;
   font-size: 22px;
   background-color:#23272E;
   color: #c9d3e3;
   border-width: 2px;
   border-color: #ffffff7e;
+  border-style: solid;
+  white-space: pre-line;
+  padding: 1em 1em;
+  border-radius: 8px;
+}
+p.chatUser{
+  margin-left: 2em;
+  font-size: 22px;
+  background-color:#23272E;
+  color: #c9d3e3;
+  border-width: 2px;
+  border-color: #ffffff3d;
   border-style: solid;
   white-space: pre-line;
   padding: 1em 1em;

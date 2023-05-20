@@ -110,11 +110,19 @@ return document.getElementById("formterminal").value;
 }
 
 function appendChat(text){
-  const terminal = document.getElementById("terminalContainer");
+  const container = document.getElementById("terminalContainer");
   let p = document.createElement("p");
   p.innerHTML = text;
-  p.classList.add("terminal");
-  terminal.appendChild(p);
+  p.classList.add("chatUser");
+  container.appendChild(p);
+}
+
+function appendChatBot(text){
+  const container = document.getElementById("terminalContainer");
+  let p = document.createElement("p");
+  p.innerHTML = text;
+  p.classList.add("chatBot");
+  container.appendChild(p);
 }
 
 function disableButton(){
@@ -147,7 +155,7 @@ btnEnviar.addEventListener('click', async () => {
     console.log("mensagesObject: ",mensagesObject);
     const textResponse = lastMessage(mensagesObject);
     console.log("textResponse: ",textResponse);
-    appendChat(textResponse);
+    appendChatBot(textResponse);
   }
 });
 
