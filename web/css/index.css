@@ -112,25 +112,48 @@ input.form-control:focus,input.form-control:active{
   div.corpo{
       margin-inline: 1em;
   }
-
+}
+@media only screen and (min-height: 350px){
   div.prompt-container{
-    height: 16vh;
+    height: 28vh;
+  }
+  div.corpo{
+    height: 86vh;
   }
 }
-@media only screen and (max-width: 360px){
-  div.corpo{
-    height: 81vh;
-  }
+@media only screen and (min-height: 400px){
   div.prompt-container{
-    height: 18vh;
+    height: 26vh;
   }
 }
-@media only screen and (max-width: 350px){
-  div.corpo{
-    height: 81vh;
+@media only screen and (min-height: 450px){
+  div.prompt-container{
+    height: 24vh;
   }
+}
+@media only screen and (min-height: 500px){
   div.prompt-container{
     height: 22vh;
+  }
+}
+@media only screen and (min-height: 610px){
+  div.prompt-container{
+    height: 20vh;
+  }
+}
+@media only screen and (min-height: 700px){
+  div.prompt-container{
+    height: 19vh;
+  }
+}
+@media only screen and (min-height: 760px){
+  div.prompt-container{
+    height: 15vh;
+  }
+}
+@media only screen and (min-height: 800px){
+  div.prompt-container{
+    height: 14vh;
   }
 }
 @media only screen and (min-width: 800px) {
