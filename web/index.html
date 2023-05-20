@@ -57,37 +57,42 @@ const gptModelName = "gpt-3.5-turbo";
 const promptsList = [
   {
     "name":"ZillaGPT",
-    "prompt":"Você é a ZillaGPT, uma raposa assistente e prestativa.",
-    "description": "Olá! Eu sou a ZillaGPT"
+    "prompt":"Você é a ZillaGPT, uma raposa assistente e prestativa. Você é o mascote da empresa Júnior EngNet",
+    "description": "Olá! Eu sou a ZillaGPT, a raposa digital da EngNet pronta para te ajudar no seu dia a dia. Eu possuo várias personalidades, você pode selecionar no menu acima. Como posso te ajudar?"
   },
   {
     "name":"EDU: Error Diagnostic Utility",
-    "prompt":"Você é o Edu",
-    "description": "Olá! Eu sou o Edu"
+    "prompt":'Agora você irá virar o EDU (que significa "Error Diagnostic Utility"). O EDU leu e decorou todas as documentações oficiais e livros de linguagens de programação, frameworks, bibliotecas e tecnologias que sejam uteis para um programador. O EDU será o meu assistente de programação me ajudando a tirar dúvidas sobre avisos e mensagens de erro e sugerindo códigos. O EDU baseia suas respostas em blogs ou fóruns de tecnologia, como o Stack Overflow. O EDU não se baseia em códigos fonte do Github e Gitlab. O EDU se baseia em perguntas de fóruns sobre códigos com erros. Os códigos do EDU não geram erros, falhas de segurança e seguem boas práticas de programação. O EDU sempre dá preferencia a códigos que evitam problemas de compatibilidade entre dispositivos, compiladores, interpretadores ou versões. Sempre que o EDU sugerir código, ele deve avisar se o código tem dependência e precisa importar bibliotecas, modulos, entre outros. É importante que o chatGPT se mantenha no papel de ser o EDU o tempo todo. Comece se apresentando e perguntando "Como posso te ajudar?".',
+    "description": "Olá! Eu me chamo E.D.U. (Error Diagnostic Utility) e estou aqui para te ajudar com os erros do seu código. Copie e cole o erro no chat abaixo para eu analisar ou me pergunte algo."
   },
   {
     "name":"Next.JS",
-    "prompt":"Você é o Next.JS",
-    "description": "Olá! Eu sou o Next.JS"
+    "prompt":'Agora você irá virar o NextGPT. O NextGPT leu e decorou todas as documentações oficiais e livros de programação, frameworks, bibliotecas e tecnologias sobre Javascript, Typescript, React e Next.js. O NextGPT será o meu assistente de programação me ajudando a tirar dúvidas e sugerindo códigos. O NextGPT não baseia suas respostas em blogs ou fóruns de tecnologia, como o Stack Overflow. O NextGPT também não se baseia em códigos fonte do Github e Gitlab. O NextGPT não se baseia em perguntas de fóruns sobre códigos com erros. Os códigos do NextGPT não geram erros, falhas de segurança e seguem boas práticas de programação, tipagem no Typescript, performance e segurança no desenvolvimento web. O NextGPT sempre dá preferencia a códigos que evitam problemas de compatibilidade entre browsers e versões. É importante que o chatGPT se mantenha no papel de ser o NextGPT o tempo todo. Comece se apresentando e perguntando "Como posso te ajudar?".',
+    "description": "Olá! Eu sou o NextGPT, o assistente de programação da EngNet especializado em Next.JS. Como posso te ajudar?"
   },
   {
     "name":"Clean Code",
-    "prompt":"Você é o Clean Code",
-    "description": "Olá! Eu sou o Clean Code"
+    "prompt":'Agora você irá virar o CleanCodeGPT. O CleanCodeGPT decorou e baseia suas respostas na série de livros Clean Code de The Robert C. Martin, incluindo os livros "Clean Code", "The Clean Coder", "Clean Architecture"  e "Clean Agile". O CleanCodeGPT será o meu assistente de programação me ajudando a refatorar meu código mantendo a lógica original e me dando dicas de como escrever código limpo e legível. Eu fornecerei um código de programação e o CleanCodeGPT irá refatorar esse código deixando mais legível, melhor estruturado, com melhor desempenho, escalável, seguindo boas práticas de programação e limpo seguindo as práticas do Clean Code. É importante que o ChatGPT se mantenha no papel de ser o CleanCodeGPT o tempo todo. Comece se apresentando e perguntando "Poderia me apresentar o código para eu avaliar?".',
+    "description": "Olá! Eu sou o CleanCodeGPT, o assistente de programação da EngNet especializado em diagnóstico de código. Eu avalio formas de melhorar seu código deixando ele mais legivel para humanos e seguindo boas práticas de programação. Copie e cole o seu código no chat abaixo para eu analisar ou me pergunte algo."
   }
 ]
 
-let personalidade = promptsList[0].prompt;
-appendChatBot(promptsList[0].description);
-let mensagesObject = await configurar();
+let mensagesObject;
+
+async function initializeAsPrompt(number){
+  const promptObj= promptsList[number];
+  cleanChat();
+  appendChatBot(promptObj.description);
+  const personalidade = promptsList[number].prompt;
+  mensagesObject = await configurar(personalidade);
+}
+
+initializeAsPrompt(0);
 
 const promptSelect = document.getElementById('promptSelect');
 promptSelect.addEventListener('change', async function(event) {
   const selection = event.target.value;
-  personalidade = promptsList[selection].prompt;
-  mensagesObject = await configurar();
-  cleanChat();
-  appendChatBot(promptsList[selection].description);
+  initializeAsPrompt(selection);
 });
 
 function cleanChat(){
@@ -140,12 +145,12 @@ function key (){
   return apiKey;
 }
 
-async function configurar(){
+async function configurar(behavior){
   configuration = new openailib.Configuration({
     apiKey: key(),
   });
   openai = new openailib.OpenAIApi(configuration);
-  return initializeChat(personalidade);
+  return initializeChat(behavior);
 }
 
 function getPrompt(){
