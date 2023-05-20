@@ -5,7 +5,7 @@ body{
 }
 div.corpo{
   overflow: scroll;
-  height: 86vh;
+  height: 87vh;
 }
 p.chatBot{
   margin-right: 2em;
@@ -78,13 +78,13 @@ div.prompt-input{
   text-align: center;
   margin-inline: auto;
   color: #c9d3e3;
-  background: transparent;
+  background-color: transparent;
   border-width: 2px;
   border-color: #ffffff40;
 }
 .form-select:focus,.form-select:active{
   color: #c9d3e3;
-  background: #1E2227;
+  background-color: #1E2227;
   border-color: #ffffff7e;
   box-shadow: none;
 }
@@ -112,11 +112,17 @@ input.form-control:focus,input.form-control:active{
   }
 }
 @media only screen and (max-width: 360px){
+  div.corpo{
+    height: 81vh;
+  }
   div.prompt-container{
     height: 18vh;
   }
 }
 @media only screen and (max-width: 350px){
+  div.corpo{
+    height: 81vh;
+  }
   div.prompt-container{
     height: 22vh;
   }

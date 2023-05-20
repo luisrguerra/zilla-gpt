@@ -192,20 +192,28 @@ function clearInput(){
   document.getElementById("formterminal").value = "";
 }
 
+function disableUserInteraction(){
+  disableButton();
+  disableSelect();
+}
+
+function enableUserInteraction(){
+  enableButton();
+  enableSelect();
+}
+
 const btnEnviar = document.getElementById('btnEnviar');
 btnEnviar.addEventListener('click', async () => {
   const userInput = getPrompt();
   if (loading === false){
     loading = true;
     console.log("loading");
-    disableButton();
-    disableSelect()
+    disableUserInteraction();
     appendChat(userInput);
     mensagesObject = await generateChatMessagesV3(userInput,mensagesObject);
     loading = false;
     clearInput();
-    enableButton();
-    enableSelect();
+    enableUserInteraction();
     console.log("mensagesObject: ",mensagesObject);
     const textResponse = lastMessage(mensagesObject);
     console.log("textResponse: ",textResponse);
