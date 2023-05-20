@@ -1,11 +1,13 @@
 
 body{
   color: #c9d3e3;
-  background-color:#1E2227;
+  background-color:#23272E;
 }
 div.corpo{
-  overflow: scroll;
-  height: 87vh;
+  overflow: auto;
+  background-color:#1E2227; 
+  height: 100%;
+  margin-bottom: 7em;
 }
 p.chatBot{
   width: fit-content;
@@ -37,13 +39,13 @@ p.chatUser{
 }
 div.prompt-container{
   border-top: 1px solid #ffffff17;
-  position: fixed;
-  left: 0;
-  bottom: 0;
   background-color: #23272E;
   width: 100%;
   text-align: center;
-  height: 16vh;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 div.prompt-input{
   width:100%;
@@ -100,6 +102,7 @@ input.form-control{
   background: transparent;
   border-width: 2px;
   border-color: #ffffff40;
+  margin-bottom: 1em;
 }
 input.form-control:focus,input.form-control:active{
   color: #c9d3e3;
@@ -110,54 +113,11 @@ input.form-control:focus,input.form-control:active{
 
 @media only screen and (max-width: 800px) {
   div.corpo{
-      margin-inline: 1em;
-  }
-}
-@media only screen and (min-height: 350px){
-  div.prompt-container{
-    height: 28vh;
-  }
-  div.corpo{
-    height: 86vh;
-  }
-}
-@media only screen and (min-height: 400px){
-  div.prompt-container{
-    height: 26vh;
-  }
-}
-@media only screen and (min-height: 450px){
-  div.prompt-container{
-    height: 24vh;
-  }
-}
-@media only screen and (min-height: 500px){
-  div.prompt-container{
-    height: 22vh;
-  }
-}
-@media only screen and (min-height: 610px){
-  div.prompt-container{
-    height: 20vh;
-  }
-}
-@media only screen and (min-height: 700px){
-  div.prompt-container{
-    height: 19vh;
-  }
-}
-@media only screen and (min-height: 760px){
-  div.prompt-container{
-    height: 15vh;
-  }
-}
-@media only screen and (min-height: 800px){
-  div.prompt-container{
-    height: 14vh;
+    padding-inline: 1em;
   }
 }
 @media only screen and (min-width: 800px) {
   div.corpo{
-      margin-inline: 20%;
+      padding-inline: 20%;
   }
 }
