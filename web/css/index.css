@@ -73,6 +73,19 @@ div.prompt-input{
   background: #ffffff22;
 }
 
+.form-select,.form-select:disabled{
+  color: #c9d3e3;
+  background: transparent;
+  border-width: 2px;
+  border-color: #ffffff40;
+}
+.form-select:focus,.form-select:active{
+  color: #c9d3e3;
+  background: #1E2227;
+  border-color: #ffffff7e;
+  box-shadow: none;
+}
+
 input.form-control{
   color: #c9d3e3;
   background: transparent;

@@ -20,7 +20,12 @@
 <!-- pular linha -->
 <br>
 
-<h6><b>ZillaGPT</b></h6>
+<select class="form-select form-select-lg mb-3" id="promptSelect">
+  <option selected value="0">ZillaGPT</option>
+  <option value="1">EDU: Error Diagnostic Utility</option>
+  <option value="2">Next.JS</option>
+  <option value="3">Clean Code</option>
+</select>
 
 <!-- texto terminal -->
 <div id="terminalContainer"></div>
@@ -48,9 +53,47 @@ let configuration;
 let openai;
 let loading = false;
 const gptModelName = "gpt-3.5-turbo";
-const personalidade = `
-Você é a ZillaGPT, uma raposa assistente e prestativa.
-`;
+
+const promptsList = [
+  {
+    "name":"ZillaGPT",
+    "prompt":"Você é a ZillaGPT, uma raposa assistente e prestativa.",
+    "description": "Olá! Eu sou a ZillaGPT"
+  },
+  {
+    "name":"EDU: Error Diagnostic Utility",
+    "prompt":"Você é o Edu",
+    "description": "Olá! Eu sou o Edu"
+  },
+  {
+    "name":"Next.JS",
+    "prompt":"Você é o Next.JS",
+    "description": "Olá! Eu sou o Next.JS"
+  },
+  {
+    "name":"Clean Code",
+    "prompt":"Você é o Clean Code",
+    "description": "Olá! Eu sou o Clean Code"
+  }
+]
+
+let personalidade = promptsList[0].prompt;
+appendChatBot(promptsList[0].description);
+let mensagesObject = await configurar();
+
+const promptSelect = document.getElementById('promptSelect');
+promptSelect.addEventListener('change', async function(event) {
+  const selection = event.target.value;
+  personalidade = promptsList[selection].prompt;
+  mensagesObject = await configurar();
+  cleanChat();
+  appendChatBot(promptsList[selection].description);
+});
+
+function cleanChat(){
+  const container = document.getElementById("terminalContainer");
+  container.innerHTML = "";
+}
 
 function initializeChat(behavior) {
   return [
@@ -130,16 +173,25 @@ function disableButton(){
   btnEnviar.disabled = true;
 }
 
+function disableSelect(){
+  const promptSelect = document.getElementById('promptSelect');
+  promptSelect.disabled = true;
+}
+
 function enableButton(){
   const btnEnviar = document.getElementById('btnEnviar');
   btnEnviar.disabled = false;
+}
+
+function enableSelect(){
+  const promptSelect = document.getElementById('promptSelect');
+  promptSelect.disabled = false;
 }
 
 function clearInput(){
   document.getElementById("formterminal").value = "";
 }
 
-let mensagesObject = await configurar();
 const btnEnviar = document.getElementById('btnEnviar');
 btnEnviar.addEventListener('click', async () => {
   const userInput = getPrompt();
@@ -147,11 +199,13 @@ btnEnviar.addEventListener('click', async () => {
     loading = true;
     console.log("loading");
     disableButton();
+    disableSelect()
     appendChat(userInput);
     mensagesObject = await generateChatMessagesV3(userInput,mensagesObject);
     loading = false;
     clearInput();
     enableButton();
+    enableSelect();
     console.log("mensagesObject: ",mensagesObject);
     const textResponse = lastMessage(mensagesObject);
     console.log("textResponse: ",textResponse);
