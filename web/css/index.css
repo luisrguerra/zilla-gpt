@@ -74,6 +74,9 @@ div.prompt-input{
 }
 
 .form-select,.form-select:disabled{
+  max-width:fit-content;
+  text-align: center;
+  margin-inline: auto;
   color: #c9d3e3;
   background: transparent;
   border-width: 2px;
