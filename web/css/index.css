@@ -8,7 +8,9 @@ div.corpo{
   height: 87vh;
 }
 p.chatBot{
-  margin-right: 2em;
+  width: fit-content;
+  text-align: left;
+  margin-right: auto;
   font-size: 22px;
   background-color:#23272E;
   color: #c9d3e3;
@@ -17,10 +19,12 @@ p.chatBot{
   border-style: solid;
   white-space: pre-line;
   padding: 1em 1em;
-  border-radius: 8px;
+  border-radius: 22px 22px 22px 4px;
 }
 p.chatUser{
-  margin-left: 2em;
+  width: fit-content;
+  text-align: left;
+  margin-left: auto;
   font-size: 22px;
   background-color:#23272E;
   color: #c9d3e3;
@@ -29,7 +33,7 @@ p.chatUser{
   border-style: solid;
   white-space: pre-line;
   padding: 1em 1em;
-  border-radius: 8px;
+  border-radius: 22px 22px 4px 22px;
 }
 div.prompt-container{
   border-top: 1px solid #ffffff17;
@@ -55,7 +59,8 @@ div.prompt-input{
 
 ::-webkit-scrollbar {
   background-color: transparent;
-  width: 10px;
+  width: 6px;
+  
 }
 
 /* Track */
@@ -66,6 +71,7 @@ div.prompt-input{
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #ffffff22;
+  border-radius: 6px;
 }
 
 /* Handle on hover */

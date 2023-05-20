@@ -20,12 +20,7 @@
 <!-- pular linha -->
 <br>
 
-<select class="form-select form-select-lg mb-3" id="promptSelect">
-  <option selected value="0">ZillaGPT</option>
-  <option value="1">EDU: Error Diagnostic Utility</option>
-  <option value="2">Next.JS</option>
-  <option value="3">Clean Code</option>
-</select>
+<select class="form-select form-select-lg mb-3" id="promptSelect"></select>
 
 <!-- texto terminal -->
 <div id="terminalContainer"></div>
@@ -88,6 +83,7 @@ async function initializeAsPrompt(number){
 }
 
 initializeAsPrompt(0);
+loadSelectOptions(promptsList);
 
 const promptSelect = document.getElementById('promptSelect');
 promptSelect.addEventListener('change', async function(event) {
@@ -98,6 +94,21 @@ promptSelect.addEventListener('change', async function(event) {
 function cleanChat(){
   const container = document.getElementById("terminalContainer");
   container.innerHTML = "";
+}
+
+function loadSelectOptions(promptsList){
+  const maxItems = promptsList.length;
+  const promptSelect = document.getElementById('promptSelect');
+  for (let i = 0; i < maxItems; i++) {
+    const option = document.createElement("option");
+    if(i==0){
+      option.selected = true;
+    }
+    option.value = i;
+    option.text = promptsList[i].name;
+    promptSelect.appendChild(option);
+  }
+
 }
 
 function initializeChat(behavior) {
