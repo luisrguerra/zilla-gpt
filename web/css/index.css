@@ -3,12 +3,18 @@ body{
   color: #c9d3e3;
   background-color:#23272E;
 }
-div.corpo{
+div.chatContent{
   overflow: auto;
   background-color:#1E2227; 
   height: 100%;
   padding-bottom: 7em;
 }
+
+::selection {
+  background: #3D4556;
+  color: #d6e2f4;
+}
+
 p.chatBot{
   width: fit-content;
   text-align: left;
@@ -81,7 +87,7 @@ div.prompt-input{
   background: #ffffff22;
 }
 
-.form-select,.form-select:disabled{
+select.form-select,select.form-select:disabled{
   max-width:fit-content;
   text-align: center;
   margin-inline: auto;
@@ -90,7 +96,7 @@ div.prompt-input{
   border-width: 2px;
   border-color: #ffffff40;
 }
-.form-select:focus,.form-select:active{
+select.form-select:focus,select.form-select:active{
   color: #c9d3e3;
   background-color: #1E2227;
   border-color: #ffffff7e;
@@ -112,12 +118,12 @@ input.form-control:focus,input.form-control:active{
 }
 
 @media only screen and (max-width: 800px) {
-  div.corpo{
+  div.chatContent{
     padding-inline: 1em;
   }
 }
 @media only screen and (min-width: 800px) {
-  div.corpo{
-      padding-inline: 20%;
+  div.chatContent{
+      padding-inline: 15%;
   }
 }
