@@ -172,7 +172,7 @@ function initializeChat(behavior) {
   ];
 }
 
-async function completionsChatTextModelV3(messages) {
+async function completionsChatTextModel(messages) {
   const parameters ={
       model: gptModelName,
       messages: messages,
@@ -192,7 +192,7 @@ async function generateChatMessages(promptText, messages) {
   const prompt = {role: "user", content: promptText};
   messages.push(prompt);
 
-  const apiResponse = await completionsChatTextModelV3(messages);
+  const apiResponse = await completionsChatTextModel(messages);
   const textResponse = apiResponse.data.choices[0].message.content;
 
   const assistantResponse = {role: "assistant", content: textResponse};
@@ -223,7 +223,7 @@ function getPrompt(){
 return document.getElementById("formterminal").value;
 }
 
-function appendChat(text){
+function appendChatUser(text){
   const container = document.getElementById("terminalContainer");
   let p = document.createElement("p");
   p.innerHTML = text;
@@ -273,19 +273,21 @@ function enableUserInteraction(){
   enableSelect();
 }
 
+function setButtonEnviarText(text){
+  const btnEnviar = document.getElementById('btnEnviar');
+  btnEnviar.innerHTML = text;
+}
 
 function enableLoading(){
   loading = true;
   disableUserInteraction();
-  const btnEnviar = document.getElementById('btnEnviar');
-  btnEnviar.innerHTML = "Carregando...";
+  setButtonEnviarText("Carregando...");
 }
 
 function disableLoading(){
   loading = false;
   enableUserInteraction();
-  const btnEnviar = document.getElementById('btnEnviar');
-  btnEnviar.innerHTML = "Enviar";
+  setButtonEnviarText("Enviar");
   clearInput()
 }
 
@@ -294,7 +296,7 @@ btnEnviar.addEventListener('click', async () => {
   const userInput = getPrompt();
   if (loading === false){
     enableLoading();
-    appendChat(userInput);
+    appendChatUser(userInput);
     mensagesObject = await generateChatMessages(userInput,mensagesObject);
     disableLoading();
     const textResponse = lastMessage(mensagesObject);
