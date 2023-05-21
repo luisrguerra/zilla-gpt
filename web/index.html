@@ -146,26 +146,6 @@ promptSelect.addEventListener('change', async function(event) {
   initializeAsPrompt(selection);
 });
 
-function cleanChat(){
-  const container = document.getElementById("terminalContainer");
-  container.innerHTML = "";
-}
-
-function loadSelectOptions(promptsList){
-  const maxItems = promptsList.length;
-  const promptSelect = document.getElementById('promptSelect');
-  for (let i = 0; i < maxItems; i++) {
-    const option = document.createElement("option");
-    if(i==0){
-      option.selected = true;
-    }
-    option.value = i;
-    option.text = promptsList[i].name;
-    promptSelect.appendChild(option);
-  }
-
-}
-
 function initializeChat(behavior) {
   return [
     {role: "system", content: behavior}
@@ -184,7 +164,6 @@ async function completionsChatTextModel(messages) {
       presence_penalty: ,
       */
   };
-  //console.log("parameters: ",parameters);
   return await openai.createChatCompletion(parameters);
 }
 
@@ -219,8 +198,30 @@ async function configurar(behavior){
   return initializeChat(behavior);
 }
 
+/* Funcoes de manipulacao do DOM */
+
+function cleanChat(){
+  const container = document.getElementById("terminalContainer");
+  container.innerHTML = "";
+}
+
+function loadSelectOptions(promptsList){
+  const maxItems = promptsList.length;
+  const promptSelect = document.getElementById('promptSelect');
+  for (let i = 0; i < maxItems; i++) {
+    const option = document.createElement("option");
+    if(i==0){
+      option.selected = true;
+    }
+    option.value = i;
+    option.text = promptsList[i].name;
+    promptSelect.appendChild(option);
+  }
+
+}
+
 function getPrompt(){
-return document.getElementById("formterminal").value;
+  return document.getElementById("formterminal").value;
 }
 
 function appendChatUser(text){
@@ -290,6 +291,8 @@ function disableLoading(){
   setButtonEnviarText("Enviar");
   clearInput()
 }
+
+/* Fim de funcoes de manipulacao do DOM */
 
 const btnEnviar = document.getElementById('btnEnviar');
 btnEnviar.addEventListener('click', async () => {
