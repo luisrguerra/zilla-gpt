@@ -146,6 +146,8 @@ promptSelect.addEventListener('change', async function(event) {
   initializeAsPrompt(selection);
 });
 
+/* Funcoes para api do gpt da openai */
+
 function initializeChat(behavior) {
   return [
     {role: "system", content: behavior}
@@ -180,10 +182,6 @@ async function generateChatMessages(promptText, messages) {
   return messages;
 }
 
-function lastMessage(messages){
-  return messages[messages.length - 1].content;
-}
-
 function key (){
   const cripto = "WXpKemRGRXhSbmhVZWtKR1RWaFZlV0p1UW5aWmFteDBUVmhGTVdJd1pGVk5NRXB6V1cxMFIxTnRlRWxOZW1jMVpGZHNWMDlIV2xWaE1qVk5aREZrYkU5VldsQT0=";
   const apiKey = atob(atob(atob(cripto)));
@@ -197,6 +195,12 @@ async function configurar(behavior){
   openai = new openailib.OpenAIApi(configuration);
   return initializeChat(behavior);
 }
+
+function lastMessage(messages){
+  return messages[messages.length - 1].content;
+}
+
+/* Fim de funcoes para api do gpt da openai */
 
 /* Funcoes de manipulacao do DOM */
 
