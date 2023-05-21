@@ -44,11 +44,15 @@
 <script type="module">
 import openailib from 'https://cdn.jsdelivr.net/npm/openai@3.2.1/+esm';
 //console.log("openailib: ",openailib);
+/* variaveis globais */
 let configuration;
 let openai;
+let mensagesObject;
 let loading = false;
+/* fim de variaveis globais */
+/* constantes globais */
 const gptModelName = "gpt-3.5-turbo";
-
+const defaultPrompt = 0;
 const promptsList = [
   {
     "name":"🦊 ZillaGPT",
@@ -126,17 +130,8 @@ const promptsList = [
     "description": "Qual área de negócios você quer que eu analise o mercado?"
   },
 ]
+/* fim de constantes globais */
 
-let mensagesObject;
-
-async function initializeAsPrompt(number){
-  const promptObj= promptsList[number];
-  cleanChat();
-  appendChatBot(promptObj.description);
-  const personalidade = promptsList[number].prompt;
-  mensagesObject = await configurar(personalidade);
-}
-const defaultPrompt = 0;
 initializeAsPrompt(defaultPrompt);
 loadSelectOptions(promptsList);
 
@@ -145,6 +140,18 @@ promptSelect.addEventListener('change', async function(event) {
   const selection = event.target.value;
   initializeAsPrompt(selection);
 });
+
+/* funcoes da logica do chat */
+async function initializeAsPrompt(number){
+  const promptObj= promptsList[number];
+  cleanChat();
+  appendChatBot(promptObj.description);
+  const personalidade = promptsList[number].prompt;
+  mensagesObject = await configurar(personalidade);
+}
+
+
+/* fim de funcoes da logica do chat */
 
 /* Funcoes para api do gpt da openai */
 
