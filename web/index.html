@@ -136,8 +136,8 @@ async function initializeAsPrompt(number){
   const personalidade = promptsList[number].prompt;
   mensagesObject = await configurar(personalidade);
 }
-
-initializeAsPrompt(0);
+const defaultPrompt = 0;
+initializeAsPrompt(defaultPrompt);
 loadSelectOptions(promptsList);
 
 const promptSelect = document.getElementById('promptSelect');
@@ -188,7 +188,7 @@ async function completionsChatTextModelV3(messages) {
   return await openai.createChatCompletion(parameters);
 }
 
-async function generateChatMessagesV3(promptText, messages) {
+async function generateChatMessages(promptText, messages) {
   const prompt = {role: "user", content: promptText};
   messages.push(prompt);
 
@@ -295,7 +295,7 @@ btnEnviar.addEventListener('click', async () => {
   if (loading === false){
     enableLoading();
     appendChat(userInput);
-    mensagesObject = await generateChatMessagesV3(userInput,mensagesObject);
+    mensagesObject = await generateChatMessages(userInput,mensagesObject);
     disableLoading();
     const textResponse = lastMessage(mensagesObject);
     appendChatBot(textResponse);
