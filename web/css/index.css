@@ -16,6 +16,7 @@ div.chatContent{
 }
 
 p.chatBot{
+  white-space: pre-wrap !important;
   width: fit-content;
   text-align: left;
   margin-right: auto;
@@ -30,6 +31,7 @@ p.chatBot{
   border-radius: 22px 22px 22px 4px;
 }
 p.chatUser{
+  white-space: pre-wrap !important;
   width: fit-content;
   text-align: left;
   margin-left: auto;
@@ -108,14 +110,16 @@ option:checked {
   color: #c9d3e3;
 }
 
-input.form-control{
+textarea.form-control{
+  max-height: 40px;
   color: #c9d3e3;
-  background: transparent;
+  background-color: #23272E;
   border-width: 2px;
   border-color: #ffffff40;
   margin-bottom: 1em;
+  resize: none;
 }
-input.form-control:focus,input.form-control:active{
+textarea.form-control:focus,textarea.form-control:active{
   color: #c9d3e3;
   background: #1E2227;
   border-color: #ffffff7e;
