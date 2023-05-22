@@ -103,6 +103,11 @@ select.form-select:focus,select.form-select:active{
   box-shadow: none;
 }
 
+option:checked {
+  background-color: #181b1f;
+  color: #c9d3e3;
+}
+
 input.form-control{
   color: #c9d3e3;
   background: transparent;

@@ -140,11 +140,6 @@ const promptsList = [
 initializeAsPrompt(defaultPrompt);
 loadSelectOptions(promptsList);
 
-const promptSelect = document.getElementById('promptSelect');
-promptSelect.addEventListener('change', async function(event) {
-  const selection = event.target.value;
-  initializeAsPrompt(selection);
-});
 
 /* funcoes da logica do chat */
 async function initializeAsPrompt(number){
@@ -310,17 +305,34 @@ function disableLoading(){
 
 /* Fim de funcoes de manipulacao do DOM */
 
-const btnEnviar = document.getElementById('btnEnviar');
-btnEnviar.addEventListener('click', async () => {
-  const userInput = getPrompt();
-  if (loading === false){
-    enableLoading();
-    appendChatUser(userInput);
-    mensagesObject = await generateChatMessages(userInput,mensagesObject);
-    disableLoading();
-    const textResponse = lastMessage(mensagesObject);
-    appendChatBot(textResponse);
-  }
-});
+/* Funcoes de event listener */
+
+async function onChangePromptSelect(){
+  const promptSelect = document.getElementById('promptSelect');
+  promptSelect.addEventListener('change', async function(event) {
+    const selection = event.target.value;
+    initializeAsPrompt(selection);
+  });
+}
+onChangePromptSelect();
+
+async function onClickEnviarButton(){
+  const btnEnviar = document.getElementById('btnEnviar');
+  btnEnviar.addEventListener('click', async () => {
+   const userInput = getPrompt();
+   if (loading === false){
+     enableLoading();
+     appendChatUser(userInput);
+     mensagesObject = await generateChatMessages(userInput,mensagesObject);
+     disableLoading();
+     const textResponse = lastMessage(mensagesObject);
+     appendChatBot(textResponse);
+   }
+  });
+}
+onClickEnviarButton();
+
+/* Fim de funcoes de event listener */
+
 
 </script>
