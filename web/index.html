@@ -223,7 +223,7 @@ function lastMessage(messages){
 
 function cleanChat(){
   const container = document.getElementById("terminalContainer");
-  container.innerHTML = "";
+  container.innerText = "";
 }
 
 function loadSelectOptions(promptsList){
@@ -297,7 +297,7 @@ function enableUserInteraction(){
 
 function setButtonEnviarText(text){
   const btnEnviar = document.getElementById('btnEnviar');
-  btnEnviar.innerHTML = text;
+  btnEnviar.innerText = text;
 }
 
 function enableLoading(){
