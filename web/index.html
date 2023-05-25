@@ -248,7 +248,7 @@ function getPrompt(){
 function appendChatUser(text){
   const container = document.getElementById("terminalContainer");
   let p = document.createElement("p");
-  p.innerHTML = text;
+  p.innerText = text;
   p.classList.add("chatUser");
   container.appendChild(p);
 }
@@ -256,7 +256,7 @@ function appendChatUser(text){
 function appendChatBot(text){
   const container = document.getElementById("terminalContainer");
   let p = document.createElement("p");
-  p.innerHTML = text;
+  p.innerText = text;
   p.classList.add("chatBot");
   container.appendChild(p);
 }
