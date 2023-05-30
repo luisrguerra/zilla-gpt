@@ -67,6 +67,32 @@ div.prompt-input{
   padding-inline: 0.5em;
 }
 
+.dark-mode.modal-header{
+  border-color: #ffffff17;
+}
+
+.dark-mode.modal-content{
+  border: 1px solid #ffffff17;
+  background-color: #23272E;
+}
+
+button.prompt-view{
+  border-width: 2px;
+  border-color: #ffffff40;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  width:fit-content;
+  float: left;
+  border-radius: 4px;
+  padding-inline: 0.5em;
+}
+button.prompt-view:hover,button.prompt-view:active,button.prompt-view:focus,button.prompt-view:visited{
+  background-color: #ffffff10 !important;
+  border-color: #ffffff40 !important;
+  color: white !important;
+  box-shadow: none;
+}
+
 ::-webkit-scrollbar {
   background-color: transparent;
   width: 6px;

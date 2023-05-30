@@ -32,6 +32,9 @@
 <!-- campo de input de texto -->
 <div class="prompt-container">
 <div style="margin-inline: 1em;">
+ <button class="btn btn-outline-light prompt-view"  data-bs-toggle="modal" data-bs-target="#exemploJanela">
+  Prompt
+ </button>
  <!-- botao enviar -->
  <button id="btnEnviar" class="btn btn-primary enviar">
   Enviar
@@ -42,6 +45,30 @@
 </div>
 
 </body>
+
+<!-- janela -->
+<div class="modal fade" id="exemploJanela" tabindex="-1">
+  <!-- modal-dialog-centered torna centralizado no meio -->
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="dark-mode modal-content">
+        
+       <!-- cabeçalho da janela -->
+       <div class="dark-mode modal-header">
+          <!--Título ao topo da janela à esquerda -->
+          <!-- fs-5 define o tamaho do texto -->
+          <h1 id="prompt-title" class="modal-title fs-5"></h1>
+          <!-- Botão X de sair à direita -->
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+       </div>
+    
+       <!-- corpo, conteúdo do meio -->
+       <div class="modal-body">
+          <h4 id="prompt-text"></h4>
+       </div>
+   
+    </div> <!-- modal-content -->
+  </div> <!-- modal-dialog -->
+</div> <!-- modal -->
 
 <script type="module">
 import openailib from 'https://cdn.jsdelivr.net/npm/openai@3.2.1/+esm';
@@ -169,6 +196,9 @@ async function initializeAsPrompt(number){
   cleanChat();
   appendChatBot(promptObj.description);
   const personalidade = promptsList[number].prompt;
+  const promptName = promptsList[number].name;
+  setPromptModalText(personalidade);
+  setPromptModalTitle(promptName);
   mensagesObject = await configurar(personalidade);
 }
 
@@ -310,6 +340,16 @@ function enableUserInteraction(){
 function setButtonEnviarText(text){
   const btnEnviar = document.getElementById('btnEnviar');
   btnEnviar.innerText = text;
+}
+
+function setPromptModalText(text){
+  const element = document.getElementById('prompt-text');
+  element.innerText = text;
+}//prompt-text
+
+function setPromptModalTitle(text){
+  const element = document.getElementById('prompt-title');
+  element.innerText = text;
 }
 
 function enableLoading(){
