@@ -11,6 +11,9 @@
   <!--Bootstrap -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js" integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css" integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <!-- Material Design Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <!-- css -->
@@ -33,11 +36,11 @@
 <div class="prompt-container">
 <div style="margin-inline: 1em;">
  <button class="btn btn-outline-light prompt-view"  data-bs-toggle="modal" data-bs-target="#exemploJanela">
-  Prompt
+  <span class="mdi mdi-text-account"> Prompt</span>
  </button>
  <!-- botao enviar -->
  <button id="btnEnviar" class="btn btn-primary enviar">
-  Enviar
+  <span class="mdi mdi-send"></span>
  </button>
  <!-- input prompt -->
  <textarea maxlength="4000" class="form-control" type="text" id="formterminal"></textarea>
@@ -339,7 +342,7 @@ function enableUserInteraction(){
 
 function setButtonEnviarText(text){
   const btnEnviar = document.getElementById('btnEnviar');
-  btnEnviar.innerText = text;
+  btnEnviar.innerHTML = text;
 }
 
 function setPromptModalText(text){
@@ -355,13 +358,15 @@ function setPromptModalTitle(text){
 function enableLoading(){
   loading = true;
   disableUserInteraction();
-  setButtonEnviarText("Carregando...");
+  const loadingIcon = '<span class="mdi mdi-loading mdi-spin"></span>';
+  setButtonEnviarText(loadingIcon);
 }
 
 function disableLoading(){
   loading = false;
   enableUserInteraction();
-  setButtonEnviarText("Enviar");
+  const sendIcon = '<span class="mdi mdi-send"></span>';
+  setButtonEnviarText(sendIcon);
   clearInput()
 }
 
