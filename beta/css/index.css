@@ -125,6 +125,7 @@ select.form-select,select.form-select:disabled{
   background-color: transparent;
   border-width: 2px;
   border-color: #ffffff40;
+  /*background-image: url();*/
 }
 select.form-select:focus,select.form-select:active{
   color: #c9d3e3;
