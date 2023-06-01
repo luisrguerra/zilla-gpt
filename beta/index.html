@@ -272,19 +272,28 @@ function cleanChat(){
   container.innerText = "";
 }
 
+function createSelectOption(text, value, selected) {
+  const option = document.createElement("option");
+  option.value = value;
+  option.text = text;
+  if (selected) {
+    option.selected = true;
+  }
+  return option;
+}
+
 function loadSelectOptions(promptsList){
   const maxItems = promptsList.length;
   const promptSelect = document.getElementById('promptSelect');
   for (let i = 0; i < maxItems; i++) {
-    const option = document.createElement("option");
+    const name = promptsList[i].name;
+    let selected = false;
     if(i==0){
-      option.selected = true;
+      selected = true;
     }
-    option.value = i;
-    option.text = promptsList[i].name;
+    const option = createSelectOption(name, i, selected);
     promptSelect.appendChild(option);
   }
-
 }
 
 function getPrompt(){
