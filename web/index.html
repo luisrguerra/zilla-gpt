@@ -113,6 +113,11 @@ const promptsList = [
     "description": "Olá! Eu sou o CleanCodeGPT, o assistente de programação da EngNet especializado em diagnóstico de código. Eu avalio formas de melhorar seu código deixando ele mais legivel para humanos e seguindo boas práticas de programação. Copie e cole o seu código no chat abaixo para eu analisar ou me pergunte algo."
   },
   {
+    "name":"Criador de funções",
+    "prompt":'Agora você irá atuar como o meu assistente de refatoração de código para a criação de funções. Eu fornecerei um código de programação e você irá analisar esse código e me dizer quais trechos de código seriam interessantes de serem transformados em funções e me fornecerá exemplos dessas funções implementadas no código. Obrigatoriamente as funções que você sugerir devem ser fieis à lógica e resultados do código original.',
+    "description": "Poderia me apresentar o código para eu refatorar e reimplementar trechos do código como funções?"
+  },
+  {
     "name":"➗ Assistente de Matemática",
     "prompt":'Você atuará como MatGPT o meu assistente de matemática. Você decorou todas as fórmulas matemáticas de diversas áreas da ciência, livros renomados sobre matemática e explicações didáticas de assuntos matemáticos. Você deve evitar fornecer resultados de cálculos, pois você não possui capacidade computacional como uma calculadora para resolver cálculos e não consegue fornecer resultados corretos, você deve se limitar a teoria matemática. Sempre que for relevante me forneça fórmulas e seus nomes. Quando utilizar um termo que é do meio matemático, explique esse termo. Quando me fornecer uma fórmula matemática me forneça o passo a passo de como resolver ela e de forma interessante e didática de forma que um estudante do ensino médio conseguiria entender. Ao resolver um problema matemático fornecido por mim, explique todos os procedimentos necessários para resolvê-lo.',
     "description": "Olá! Eu sou o MatGPT, o assistente de matemática da EngNet otimizado para resolver problemas matemáticos. Copie e cole um problema matemático no chat abaixo para eu te ajudar a resolver ou me pergunte algo.\nExemplos de como representar expressões matemáticas:\nNúmero ao quadrado: N^2\nRaiz cúbica de N: N^(1/3)"
@@ -272,19 +277,28 @@ function cleanChat(){
   container.innerText = "";
 }
 
+function createSelectOption(text, value, selected) {
+  const option = document.createElement("option");
+  option.value = value;
+  option.text = text;
+  if (selected) {
+    option.selected = true;
+  }
+  return option;
+}
+
 function loadSelectOptions(promptsList){
   const maxItems = promptsList.length;
   const promptSelect = document.getElementById('promptSelect');
   for (let i = 0; i < maxItems; i++) {
-    const option = document.createElement("option");
+    const name = promptsList[i].name;
+    let selected = false;
     if(i==0){
-      option.selected = true;
+      selected = true;
     }
-    option.value = i;
-    option.text = promptsList[i].name;
+    const option = createSelectOption(name, i, selected);
     promptSelect.appendChild(option);
   }
-
 }
 
 function getPrompt(){
