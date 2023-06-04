@@ -289,6 +289,11 @@ function cleanByID(id){
   element.innerText = "";
 }
 
+function cleanInputByID(id){
+  const element = document.getElementById(id);
+  element.value = "";
+}
+
 function cleanChat(){
   cleanByID("terminalContainer");
 }
@@ -353,7 +358,7 @@ function enableByID(id){
 }
 
 function clearInput(){
-  document.getElementById("formterminal").value = "";
+  cleanInputByID("formterminal");
 }
 
 function disableUserInteraction(){
