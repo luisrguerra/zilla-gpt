@@ -371,19 +371,22 @@ function enableUserInteraction(){
   enableByID("promptSelect");
 }
 
+function setTextByID(text, id){
+  const element = document.getElementById(id);
+  element.innerText = text;
+}
+
 function setButtonEnviarText(text){
   const btnEnviar = document.getElementById('btnEnviar');
   btnEnviar.innerHTML = text;
 }
 
 function setPromptModalText(text){
-  const element = document.getElementById('prompt-text');
-  element.innerText = text;
+  setTextByID(text, 'prompt-text');
 }
 
 function setPromptModalTitle(text){
-  const element = document.getElementById('prompt-title');
-  element.innerText = text;
+  setTextByID(text, 'prompt-title');
 }
 
 function enableLoading(){
