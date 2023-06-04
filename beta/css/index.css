@@ -40,7 +40,7 @@ div.prompt-input{
   background-color: #23272E;
 }
 
-button.prompt-view{
+button.prompt-button{
   border-width: 2px;
   border-color: #ffffff40;
   margin-top: 0.5em;
@@ -50,11 +50,15 @@ button.prompt-view{
   border-radius: 4px;
   padding-inline: 0.5em;
 }
-button.prompt-view:hover,button.prompt-view:active,button.prompt-view:focus,button.prompt-view:visited{
+button.prompt-button:hover,button.prompt-button:active,button.prompt-button:focus,button.prompt-button:visited{
   background-color: #ffffff10 !important;
   border-color: #ffffff40 !important;
   color: white !important;
   box-shadow: none;
+}
+
+button.prompt-button-posterior{
+  margin-left: 0.5em;
 }
 
 ::-webkit-scrollbar {
@@ -115,6 +119,12 @@ textarea.form-control:focus,textarea.form-control:active{
   background: #1E2227;
   border-color: #ffffff7e;
   box-shadow: none;
+}
+
+@media only screen and (max-width: 500px) {
+  .unnecessary-text{
+    display: none;
+  }
 }
 
 @media only screen and (max-width: 800px) {

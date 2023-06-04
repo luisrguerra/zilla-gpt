@@ -36,8 +36,11 @@
 <!-- campo de input de texto -->
 <div class="prompt-container">
 <div style="margin-inline: 1em;">
- <button class="btn btn-outline-light prompt-view"  data-bs-toggle="modal" data-bs-target="#exemploJanela">
-  <span class="mdi mdi-text-account"> Prompt</span>
+ <button class="btn btn-outline-light prompt-button"  data-bs-toggle="modal" data-bs-target="#exemploJanela">
+  <span class="mdi mdi-text-account"> <span class="unnecessary-text">Prompt</span></span>
+ </button>
+ <button id="btnClearChat" class="btn btn-outline-light prompt-button prompt-button-posterior">
+  <span class="mdi mdi-delete"> <span class="unnecessary-text">Apagar</span></span>
  </button>
  <!-- botao enviar -->
  <button id="btnEnviar" class="btn btn-primary enviar">
@@ -216,6 +219,10 @@ async function initializeAsPrompt(number){
   mensagesObject = await configurar(personalidade);
 }
 
+function promptSelectUpdateBehavior(){
+  const promptSelected = getValueByID('promptSelect');
+  initializeAsPrompt(promptSelected);
+}
 
 /* fim de funcoes da logica do chat */
 
@@ -306,8 +313,13 @@ function loadSelectOptions(promptsList){
   }
 }
 
+function getValueByID(id){
+  const element = document.getElementById(id);
+  return element.value;
+}
+
 function getPrompt(){
-  return document.getElementById("formterminal").value;
+  return getValueByID("formterminal");
 }
 
 function appendChatUser(text){
@@ -401,9 +413,8 @@ function scrollToBottom(id) {
 
 async function onChangePromptSelect(){
   const promptSelect = document.getElementById('promptSelect');
-  promptSelect.addEventListener('change', async function(event) {
-    const selection = event.target.value;
-    initializeAsPrompt(selection);
+  promptSelect.addEventListener('change', async () => {
+    promptSelectUpdateBehavior();
   });
 }
 onChangePromptSelect();
@@ -424,6 +435,16 @@ async function onClickEnviarButton(){
   });
 }
 onClickEnviarButton();
+
+async function onClickClearChatButton(){
+  const button = document.getElementById('btnClearChat');
+  button.addEventListener('click', async () => {
+    if(confirm("Tem certeza que deseja apagar o chat?")){
+      promptSelectUpdateBehavior();
+    };
+  });
+}
+onClickClearChatButton();
 
 /* Fim de funcoes de event listener */
 
