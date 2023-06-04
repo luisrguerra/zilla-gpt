@@ -22,14 +22,14 @@
 
 <body>
 
-<div class="chatContent">
-<!-- pular linha -->
-<br>
+<div id="scroll" class="chatContent">
+  <!-- pular linha -->
+  <br>
 
-<select class="form-select form-select-lg mb-3" id="promptSelect"></select>
+  <select class="form-select form-select-lg mb-3" id="promptSelect"></select>
 
-<!-- texto terminal -->
-<div id="terminalContainer"></div>
+  <!-- texto terminal -->
+  <div id="terminalContainer"></div>
 
 </div> <!-- fim da div chatContent -->
 
@@ -385,6 +385,11 @@ function disableLoading(){
   clearInput()
 }
 
+function scrollToBottom(id) {
+  const element = document.getElementById(id);
+  element.scrollTop = element.scrollHeight - element.clientHeight;
+}
+
 /* Fim de funcoes de manipulacao do DOM */
 
 /* Funcoes de event listener */
@@ -409,6 +414,7 @@ async function onClickEnviarButton(){
      disableLoading();
      const textResponse = lastMessage(mensagesObject);
      appendChatBot(textResponse);
+     scrollToBottom("scroll");
    }
   });
 }
