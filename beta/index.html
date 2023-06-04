@@ -284,9 +284,13 @@ function lastMessage(messages){
 
 /* Funcoes de manipulacao do DOM */
 
+function cleanByID(id){
+  const element = document.getElementById(id);
+  element.innerText = "";
+}
+
 function cleanChat(){
-  const container = document.getElementById("terminalContainer");
-  container.innerText = "";
+  cleanByID("terminalContainer");
 }
 
 function createSelectOption(text, value, selected) {
