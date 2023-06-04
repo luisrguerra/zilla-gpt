@@ -338,14 +338,9 @@ function appendChatBot(text){
   container.appendChild(p);
 }
 
-function disableButton(){
-  const btnEnviar = document.getElementById('btnEnviar');
-  btnEnviar.disabled = true;
-}
-
-function disableSelect(){
-  const promptSelect = document.getElementById('promptSelect');
-  promptSelect.disabled = true;
+function disableByID(id){
+  const element = document.getElementById(id);
+  element.disabled = true;
 }
 
 function enableButton(){
@@ -363,8 +358,8 @@ function clearInput(){
 }
 
 function disableUserInteraction(){
-  disableButton();
-  disableSelect();
+  disableByID("btnEnviar");
+  disableByID("promptSelect");
 }
 
 function enableUserInteraction(){
