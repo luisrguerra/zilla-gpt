@@ -87,7 +87,8 @@ let mensagesObject;
 let loading = false;
 /* fim de variaveis globais */
 /* constantes globais */
-const gptModelName = "gpt-3.5-turbo";
+const gpt3_5= "gpt-3.5-turbo";
+const gptModelName = gpt3_5;
 const defaultPrompt = 0;
 const promptsList = [
   {
@@ -228,6 +229,13 @@ function promptSelectUpdateBehavior(){
 
 /* Funcoes para api do gpt da openai */
 
+function atoc (){
+  const hash = "c2stQ1Z3B0LTMuNS10dXJibw==FxTzBFMXUybnBvYjltMXE1b0dUM0JsYmtGSmxIMzg5dWlWOGZUa25Md1dlOUZP";
+  const temp = btoa(gpt3_5);
+  const temp2 = hash.replace(temp, "");
+  return atob(temp2);
+}
+
 function initializeChat(behavior) {
   return [
     {role: "system", content: behavior}
@@ -262,15 +270,9 @@ async function generateChatMessages(promptText, messages) {
   return messages;
 }
 
-function key (){
-  const cripto = "WXpKemRGRXhSbmhVZWtKR1RWaFZlV0p1UW5aWmFteDBUVmhGTVdJd1pGVk5NRXB6V1cxMFIxTnRlRWxOZW1jMVpGZHNWMDlIV2xWaE1qVk5aREZrYkU5VldsQT0=";
-  const apiKey = atob(atob(atob(cripto)));
-  return apiKey;
-}
-
 async function configurar(behavior){
   configuration = new openailib.Configuration({
-    apiKey: key(),
+    apiKey: atoc(),
   });
   openai = new openailib.OpenAIApi(configuration);
   return initializeChat(behavior);
@@ -284,9 +286,18 @@ function lastMessage(messages){
 
 /* Funcoes de manipulacao do DOM */
 
+function cleanByID(id){
+  const element = document.getElementById(id);
+  element.innerText = "";
+}
+
+function cleanInputByID(id){
+  const element = document.getElementById(id);
+  element.value = "";
+}
+
 function cleanChat(){
-  const container = document.getElementById("terminalContainer");
-  container.innerText = "";
+  cleanByID("terminalContainer");
 }
 
 function createSelectOption(text, value, selected) {
@@ -338,38 +349,33 @@ function appendChatBot(text){
   container.appendChild(p);
 }
 
-function disableButton(){
-  const btnEnviar = document.getElementById('btnEnviar');
-  btnEnviar.disabled = true;
+function disableByID(id){
+  const element = document.getElementById(id);
+  element.disabled = true;
 }
 
-function disableSelect(){
-  const promptSelect = document.getElementById('promptSelect');
-  promptSelect.disabled = true;
-}
-
-function enableButton(){
-  const btnEnviar = document.getElementById('btnEnviar');
-  btnEnviar.disabled = false;
-}
-
-function enableSelect(){
-  const promptSelect = document.getElementById('promptSelect');
-  promptSelect.disabled = false;
+function enableByID(id){
+  const element = document.getElementById(id);
+  element.disabled = false;
 }
 
 function clearInput(){
-  document.getElementById("formterminal").value = "";
+  cleanInputByID("formterminal");
 }
 
 function disableUserInteraction(){
-  disableButton();
-  disableSelect();
+  disableByID("btnEnviar");
+  disableByID("promptSelect");
 }
 
 function enableUserInteraction(){
-  enableButton();
-  enableSelect();
+  enableByID("btnEnviar");
+  enableByID("promptSelect");
+}
+
+function setTextByID(text, id){
+  const element = document.getElementById(id);
+  element.innerText = text;
 }
 
 function setButtonEnviarText(text){
@@ -378,13 +384,11 @@ function setButtonEnviarText(text){
 }
 
 function setPromptModalText(text){
-  const element = document.getElementById('prompt-text');
-  element.innerText = text;
+  setTextByID(text, 'prompt-text');
 }
 
 function setPromptModalTitle(text){
-  const element = document.getElementById('prompt-title');
-  element.innerText = text;
+  setTextByID(text, 'prompt-title');
 }
 
 function enableLoading(){
