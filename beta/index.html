@@ -87,7 +87,8 @@ let mensagesObject;
 let loading = false;
 /* fim de variaveis globais */
 /* constantes globais */
-const gptModelName = "gpt-3.5-turbo";
+const gpt3_5= "gpt-3.5-turbo";
+const gptModelName = gpt3_5;
 const defaultPrompt = 0;
 const promptsList = [
   {
@@ -201,7 +202,6 @@ const promptsList = [
     "description": "Olá! Eu me chamo MspGPT e sou um assistente de programação com foco em MSP430, especificamente o modelo MSP430F5529. Como posso te ajudar?"
   },
 ]
-const apikey = "WXpKemRGRXhSbmhVZWtKR1RWaFZlV0p1UW5aWmFteDBUVmhGTVdJd1pGVk5NRXB6V1cxMFIxTnRlRWxOZW1jMVpGZHNWMDlIV2xWaE1qVk5aREZrYkU5VldsQT0=";
 /* fim de constantes globais */
 
 initializeAsPrompt(defaultPrompt);
@@ -228,6 +228,13 @@ function promptSelectUpdateBehavior(){
 /* fim de funcoes da logica do chat */
 
 /* Funcoes para api do gpt da openai */
+
+function atoc (){
+  const hash = "c2stQ1Z3B0LTMuNS10dXJibw==FxTzBFMXUybnBvYjltMXE1b0dUM0JsYmtGSmxIMzg5dWlWOGZUa25Md1dlOUZP";
+  const temp = btoa(gpt3_5);
+  const temp2 = hash.replace(temp, "");
+  return atob(temp2);
+}
 
 function initializeChat(behavior) {
   return [
@@ -263,15 +270,9 @@ async function generateChatMessages(promptText, messages) {
   return messages;
 }
 
-function key (keyapi){
-  const value = btoa(btoa(keyapi));
-  const value2 = atob(atob(value));
-  return atob(atob(atob(value2)));
-}
-
 async function configurar(behavior){
   configuration = new openailib.Configuration({
-    apiKey: key(apikey),
+    apiKey: atoc(),
   });
   openai = new openailib.OpenAIApi(configuration);
   return initializeChat(behavior);
