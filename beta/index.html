@@ -343,14 +343,9 @@ function disableByID(id){
   element.disabled = true;
 }
 
-function enableButton(){
-  const btnEnviar = document.getElementById('btnEnviar');
-  btnEnviar.disabled = false;
-}
-
-function enableSelect(){
-  const promptSelect = document.getElementById('promptSelect');
-  promptSelect.disabled = false;
+function enableByID(id){
+  const element = document.getElementById(id);
+  element.disabled = false;
 }
 
 function clearInput(){
@@ -363,8 +358,8 @@ function disableUserInteraction(){
 }
 
 function enableUserInteraction(){
-  enableButton();
-  enableSelect();
+  enableByID("btnEnviar");
+  enableByID("promptSelect");
 }
 
 function setButtonEnviarText(text){
