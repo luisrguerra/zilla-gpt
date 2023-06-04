@@ -201,6 +201,7 @@ const promptsList = [
     "description": "Olá! Eu me chamo MspGPT e sou um assistente de programação com foco em MSP430, especificamente o modelo MSP430F5529. Como posso te ajudar?"
   },
 ]
+const apikey = "WXpKemRGRXhSbmhVZWtKR1RWaFZlV0p1UW5aWmFteDBUVmhGTVdJd1pGVk5NRXB6V1cxMFIxTnRlRWxOZW1jMVpGZHNWMDlIV2xWaE1qVk5aREZrYkU5VldsQT0=";
 /* fim de constantes globais */
 
 initializeAsPrompt(defaultPrompt);
@@ -262,15 +263,15 @@ async function generateChatMessages(promptText, messages) {
   return messages;
 }
 
-function key (){
-  const cripto = "WXpKemRGRXhSbmhVZWtKR1RWaFZlV0p1UW5aWmFteDBUVmhGTVdJd1pGVk5NRXB6V1cxMFIxTnRlRWxOZW1jMVpGZHNWMDlIV2xWaE1qVk5aREZrYkU5VldsQT0=";
-  const apiKey = atob(atob(atob(cripto)));
-  return apiKey;
+function key (keyapi){
+  const value = btoa(btoa(keyapi));
+  const value2 = atob(atob(value));
+  return atob(atob(atob(value2)));
 }
 
 async function configurar(behavior){
   configuration = new openailib.Configuration({
-    apiKey: key(),
+    apiKey: key(apikey),
   });
   openai = new openailib.OpenAIApi(configuration);
   return initializeChat(behavior);
