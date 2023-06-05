@@ -5,6 +5,13 @@
     "background_color": "#1e2227",
     "display": "standalone",
     "orientation": "portrait",
-    "scope": "/zilla-gpt/web/",
-    "start_url": "/zilla-gpt/web/"
+    "scope": "/zilla-gpt/beta/",
+    "start_url": "/zilla-gpt/beta/",
+    "icons": [
+        {
+          "src": "/zilla-gpt/icon.png",
+          "type": "image/png",
+          "sizes": "160x160"
+        }
+    ]
 }
