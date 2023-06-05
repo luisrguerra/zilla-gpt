@@ -339,6 +339,7 @@ function appendChatUser(text){
   p.innerText = text;
   p.classList.add("chatUser");
   container.appendChild(p);
+  scrollToBottom("scroll");
 }
 
 function appendChatBot(text){
@@ -347,6 +348,7 @@ function appendChatBot(text){
   p.innerText = text;
   p.classList.add("chatBot");
   container.appendChild(p);
+  scrollToBottom("scroll");
 }
 
 function disableByID(id){
@@ -430,11 +432,14 @@ async function onClickEnviarButton(){
    if (loading === false){
      enableLoading();
      appendChatUser(userInput);
-     mensagesObject = await generateChatMessages(userInput,mensagesObject);
+     try {
+      mensagesObject = await generateChatMessages(userInput,mensagesObject);
+      const textResponse = lastMessage(mensagesObject);
+      appendChatBot(textResponse);
+     } catch (error) {
+      appendChatBot("Erro de conexão com a API da OpenAI. Mensagem não enviada.");
+     }
      disableLoading();
-     const textResponse = lastMessage(mensagesObject);
-     appendChatBot(textResponse);
-     scrollToBottom("scroll");
    }
   });
 }
