@@ -4,5 +4,7 @@
     "theme_color": "#1e2227",
     "background_color": "#1e2227",
     "display": "standalone",
-    "orientation": "portrait"
+    "orientation": "portrait",
+    "scope": "/zilla-gpt/web/",
+    "start_url": "/zilla-gpt/web/"
 }
