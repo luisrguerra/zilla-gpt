@@ -1,0 +1,10 @@
+{
+    "name": "ZillaGPT",
+    "short_name": "ZillaGPT",
+    "theme_color": "#1e2227",
+    "background_color": "#1e2227",
+    "display": "standalone",
+    "orientation": "portrait",
+    "scope": "/",
+    "start_url": "/"
+}
