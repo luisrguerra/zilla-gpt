@@ -472,6 +472,7 @@ async function onClickEnviarButton(){
   const btnEnviar = document.getElementById('btnEnviar');
   btnEnviar.addEventListener('click', async () => {
    const userInput = getPrompt();
+   appendChatUser(userInput);
    await appendChatMessages (userInput);
   });
 }
