@@ -233,9 +233,20 @@ function promptSelectUpdateBehavior(){
 }
 
 function popLastMessages(){
-  mensagesObject.pop();
-  const lastMessageUserInput = mensagesObject[mensagesObject.length - 1].content;
-  mensagesObject.pop();
+  let lastMessageIndex = mensagesObject.length -1;
+  let lastMessage = mensagesObject[lastMessageIndex];
+  let lastMessageUserInput = "";
+  let lastMessageRole = lastMessage.role;
+  if (lastMessageRole === "assistant"){
+    mensagesObject.pop();
+    lastMessageIndex = mensagesObject.length -1;
+    lastMessage = mensagesObject[lastMessageIndex];
+    lastMessageRole = lastMessage.role;
+    if (lastMessageRole === "user"){
+      lastMessageUserInput = lastMessage.content;
+      mensagesObject.pop();
+    }
+  }
   return lastMessageUserInput;
 }
 
