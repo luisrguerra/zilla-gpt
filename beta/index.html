@@ -41,8 +41,13 @@
  <button class="btn btn-outline-light prompt-button"  data-bs-toggle="modal" data-bs-target="#exemploJanela">
   <span class="mdi mdi-text-account"> <span class="unnecessary-text">Prompt</span></span>
  </button>
+ <!-- botao de limpar chat de mensagens -->
  <button id="btnClearChat" class="btn btn-outline-light prompt-button prompt-button-posterior">
   <span class="mdi mdi-delete"> <span class="unnecessary-text">Apagar</span></span>
+ </button>
+ <!-- botao regerar última mensagem -->
+ <button id="btnRegenerate" class="btn btn-outline-light prompt-button prompt-button-posterior">
+  <span class="mdi mdi-refresh"> <span class="unnecessary-text">Regerar</span></span>
  </button>
  <!-- botao enviar -->
  <button id="btnEnviar" class="btn btn-primary enviar">
@@ -227,6 +232,27 @@ function promptSelectUpdateBehavior(){
   initializeAsPrompt(promptSelected);
 }
 
+function popLastMessages(){
+  mensagesObject.pop();
+  const lastMessageUserInput = mensagesObject[mensagesObject.length - 1].content;
+  mensagesObject.pop();
+  return lastMessageUserInput;
+}
+
+async function appendChatMessages(userInput){
+  if (loading === false){
+    enableLoading();
+    try {
+      mensagesObject = await generateChatMessages(userInput, mensagesObject);
+      const textResponse = lastMessage(mensagesObject);
+      appendChatBot(textResponse);
+    } catch (error) {
+      appendChatBot("Erro de conexão com a API da OpenAI. Mensagem não enviada.");
+    }
+    disableLoading();
+  };
+};
+
 /* fim de funcoes da logica do chat */
 
 /* Funcoes para api do gpt da openai */
@@ -370,11 +396,13 @@ function clearInput(){
 function disableUserInteraction(){
   disableByID("btnEnviar");
   disableByID("promptSelect");
+  disableByID("btnRegenerate");
 }
 
 function enableUserInteraction(){
   enableByID("btnEnviar");
   enableByID("promptSelect");
+  enableByID("btnRegenerate");
 }
 
 function setTextByID(text, id){
@@ -431,18 +459,7 @@ async function onClickEnviarButton(){
   const btnEnviar = document.getElementById('btnEnviar');
   btnEnviar.addEventListener('click', async () => {
    const userInput = getPrompt();
-   if (loading === false){
-     enableLoading();
-     appendChatUser(userInput);
-     try {
-      mensagesObject = await generateChatMessages(userInput,mensagesObject);
-      const textResponse = lastMessage(mensagesObject);
-      appendChatBot(textResponse);
-     } catch (error) {
-      appendChatBot("Erro de conexão com a API da OpenAI. Mensagem não enviada.");
-     }
-     disableLoading();
-   }
+   await appendChatMessages (userInput);
   });
 }
 onClickEnviarButton();
@@ -456,6 +473,15 @@ async function onClickClearChatButton(){
   });
 }
 onClickClearChatButton();
+
+async function onClickRegenerateLastMessageButton(){
+  const button = document.getElementById('btnRegenerate');
+  button.addEventListener('click', async () => {
+    const lastUserInput = popLastMessages();
+    await appendChatMessages (lastUserInput);
+  });
+}
+onClickRegenerateLastMessageButton();
 
 /* Fim de funcoes de event listener */
 
