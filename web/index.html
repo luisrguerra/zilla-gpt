@@ -408,12 +408,14 @@ function disableUserInteraction(){
   disableByID("btnEnviar");
   disableByID("promptSelect");
   disableByID("btnRegenerate");
+  disableByID("btnClearChat");
 }
 
 function enableUserInteraction(){
   enableByID("btnEnviar");
   enableByID("promptSelect");
   enableByID("btnRegenerate");
+  enableByID("btnClearChat");
 }
 
 function setTextByID(text, id){
@@ -470,6 +472,7 @@ async function onClickEnviarButton(){
   const btnEnviar = document.getElementById('btnEnviar');
   btnEnviar.addEventListener('click', async () => {
    const userInput = getPrompt();
+   appendChatUser(userInput);
    await appendChatMessages (userInput);
   });
 }
