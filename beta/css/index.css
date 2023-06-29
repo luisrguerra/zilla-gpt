@@ -7,7 +7,7 @@ body{
   background: #3D4556;
   color: #d6e2f4;
 }
-div.prompt-container{
+div#prompt-container{
   border-top: 1px solid #ffffff17;
   background-color: #23272E;
   width: 100%;
@@ -16,6 +16,12 @@ div.prompt-container{
   bottom: 0;
   right: 0;
   left: 0;
+}
+div#prompt-container.contracted{
+  height: auto;
+}
+div#prompt-container.expanded{
+  height: 100%;
 }
 div.prompt-input{
   width:100%;

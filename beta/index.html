@@ -36,7 +36,7 @@
 </div> <!-- fim da div chatContent -->
 
 <!-- campo de input de texto -->
-<div class="prompt-container">
+<div id="prompt-container" class="contracted">
 <div style="margin-inline: 1em;">
  <button class="btn btn-outline-light prompt-button"  data-bs-toggle="modal" data-bs-target="#exemploJanela">
   <span class="mdi mdi-text-account"> <span class="unnecessary-text">Prompt</span></span>
@@ -538,13 +538,31 @@ async function onClickExpandChatInputButton(){
   const button = document.getElementById('btnExpand');
   button.addEventListener('click', async () => {
     if (expandedChatInput === true){
-      alert("Reduzindo tamanho do input de chat"); //iconExpand
+      alert("Reduzindo tamanho do input de chat");
       expandedChatInput = false;
-      replaceClassByID(/*id:*/ "iconExpand", /*oldClass:*/ "mdi-arrow-collapse-down", /*newClass:*/ "mdi-arrow-expand-up");
+      replaceClassByID(
+        /*id:*/ "iconExpand",
+        /*oldClass:*/ "mdi-arrow-collapse-down",
+        /*newClass:*/ "mdi-arrow-expand-up"
+      );
+      replaceClassByID(
+        /*id:*/ "prompt-container",
+        /*oldClass:*/ "expanded",
+        /*newClass:*/ "contracted"
+      );
     }else{
       alert("Aumentando tamanho do input de chat");
       expandedChatInput = true;
-      replaceClassByID(/*id:*/ "iconExpand", /*oldClass:*/ "mdi-arrow-expand-up", /*newClass:*/ "mdi-arrow-collapse-down");
+      replaceClassByID(
+        /*id:*/ "iconExpand",
+        /*oldClass:*/ "mdi-arrow-expand-up",
+        /*newClass:*/ "mdi-arrow-collapse-down"
+      );
+      replaceClassByID(
+        /*id:*/ "prompt-container",
+        /*oldClass:*/ "contracted",
+        /*newClass:*/ "expanded"
+      );
     };
   });
 }
