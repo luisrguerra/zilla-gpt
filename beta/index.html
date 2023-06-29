@@ -51,7 +51,7 @@
  </button>
  <!-- botao de expandir input de texto -->
  <button id="btnExpand" class="btn btn-outline-light prompt-button prompt-button-posterior">
-  <span class="mdi mdi-arrow-expand-up"> <span class="unnecessary-text">Expandir</span></span>
+  <span id="iconExpand" class="mdi mdi-arrow-expand-up"> <span class="unnecessary-text">Expandir</span></span>
  </button>
  <!-- botao enviar -->
  <button id="btnEnviar" class="btn btn-primary enviar">
@@ -488,6 +488,11 @@ function scrollToBottom(id) {
   element.scrollTop = element.scrollHeight - element.clientHeight;
 }
 
+function replaceClassByID(id, oldClass, newClass){
+  const element = document.getElementById(id);
+  element.classList.replace(oldClass, newClass);
+};
+
 /* Fim de funcoes de manipulacao do DOM */
 
 /* Funcoes de event listener */
@@ -532,7 +537,15 @@ onClickRegenerateLastMessageButton();
 async function onClickExpandChatInputButton(){
   const button = document.getElementById('btnExpand');
   button.addEventListener('click', async () => {
-    alert("Em desenvolvimento");
+    if (expandedChatInput === true){
+      alert("Reduzindo tamanho do input de chat"); //iconExpand
+      expandedChatInput = false;
+      replaceClassByID(/*id:*/ "iconExpand", /*oldClass:*/ "mdi-arrow-collapse-down", /*newClass:*/ "mdi-arrow-expand-up");
+    }else{
+      alert("Aumentando tamanho do input de chat");
+      expandedChatInput = true;
+      replaceClassByID(/*id:*/ "iconExpand", /*oldClass:*/ "mdi-arrow-expand-up", /*newClass:*/ "mdi-arrow-collapse-down");
+    };
   });
 }
 onClickExpandChatInputButton();
