@@ -21,6 +21,7 @@
 <!-- css -->
 <link rel="stylesheet" href="css/index.css">
 <link rel="stylesheet" href="css/chat.css">
+<link rel="stylesheet" href="css/prompt.css">
 
 <body>
 
@@ -493,6 +494,7 @@ function replaceClassByID(id, oldClass, newClass){
   element.classList.replace(oldClass, newClass);
 };
 
+//diminuir a area do de escrever a mensagem
 function contractChatInput(){
   expandedChatInput = false;
   replaceClassByID(
@@ -507,6 +509,7 @@ function contractChatInput(){
   );
 };
 
+//expandir a area do de escrever a mensagem
 function expandChatInput(){
   expandedChatInput = true;
   replaceClassByID(
