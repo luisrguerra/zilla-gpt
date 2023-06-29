@@ -52,7 +52,7 @@
  </button>
  <!-- botao de expandir input de texto -->
  <button id="btnExpand" class="btn btn-outline-light prompt-button prompt-button-posterior">
-  <span id="iconExpand" class="mdi mdi-arrow-expand-up"> <span class="unnecessary-text">Expandir</span></span>
+  <span id="iconExpand" class="mdi mdi-arrow-expand-up"> <span id="btnExpandText" class="unnecessary-text">Expandir</span></span>
  </button>
  <!-- botao enviar -->
  <button id="btnEnviar" class="btn btn-primary enviar">
@@ -507,6 +507,7 @@ function contractChatInput(){
     /*oldClass:*/ "expanded",
     /*newClass:*/ "contracted"
   );
+  setTextByID("Expandir", "btnExpandText");
 };
 
 //expandir a area do de escrever a mensagem
@@ -522,6 +523,7 @@ function expandChatInput(){
     /*oldClass:*/ "contracted",
     /*newClass:*/ "expanded"
   );
+  setTextByID("Encolher", "btnExpandText");
 };
 
 /* Fim de funcoes de manipulacao do DOM */
