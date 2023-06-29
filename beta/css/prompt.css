@@ -17,6 +17,10 @@ div#prompt-container.expanded > div > textarea.form-control{
   margin-bottom: 0%;
 }
 #btnEnviar{
+  border-width: 1px;
+  border-color: rgb(255 255 255 /0%);
+  border-top-color: rgb(255 255 255 / 15%);
+  border-bottom-color: rgb(0 0 0 / 10%);
   margin-top: 0.5em;
   margin-bottom: 0.5em;
   width:fit-content;
