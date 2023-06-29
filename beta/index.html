@@ -49,6 +49,10 @@
  <button id="btnRegenerate" class="btn btn-outline-light prompt-button prompt-button-posterior">
   <span class="mdi mdi-refresh"> <span class="unnecessary-text">Regerar</span></span>
  </button>
+ <!-- botao de expandir input de texto -->
+ <button id="btnExpand" class="btn btn-outline-light prompt-button prompt-button-posterior">
+  <span class="mdi mdi-arrow-expand-up"> <span class="unnecessary-text">Expandir</span></span>
+ </button>
  <!-- botao enviar -->
  <button id="btnEnviar" class="btn btn-primary enviar">
   <span class="mdi mdi-send"></span>
@@ -92,6 +96,7 @@ let configuration;
 let openai;
 let mensagesObject;
 let loading = false;
+let expandedChatInput = false;
 /* fim de variaveis globais */
 /* constantes globais */
 const gpt3_5= "gpt-3.5-turbo";
@@ -433,6 +438,7 @@ function disableUserInteraction(){
   disableByID("btnEnviar");
   disableByID("promptSelect");
   disableByID("btnRegenerate");
+  disableByID("btnExpand");
   disableByID("btnClearChat");
 }
 
@@ -440,6 +446,7 @@ function enableUserInteraction(){
   enableByID("btnEnviar");
   enableByID("promptSelect");
   enableByID("btnRegenerate");
+  enableByID("btnExpand");
   enableByID("btnClearChat");
 }
 
@@ -521,6 +528,14 @@ async function onClickRegenerateLastMessageButton(){
   });
 }
 onClickRegenerateLastMessageButton();
+
+async function onClickExpandChatInputButton(){
+  const button = document.getElementById('btnExpand');
+  button.addEventListener('click', async () => {
+    alert("Em desenvolvimento");
+  });
+}
+onClickExpandChatInputButton();
 
 /* Fim de funcoes de event listener */
 
