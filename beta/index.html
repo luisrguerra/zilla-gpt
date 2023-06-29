@@ -538,7 +538,6 @@ async function onClickExpandChatInputButton(){
   const button = document.getElementById('btnExpand');
   button.addEventListener('click', async () => {
     if (expandedChatInput === true){
-      alert("Reduzindo tamanho do input de chat");
       expandedChatInput = false;
       replaceClassByID(
         /*id:*/ "iconExpand",
@@ -551,7 +550,6 @@ async function onClickExpandChatInputButton(){
         /*newClass:*/ "contracted"
       );
     }else{
-      alert("Aumentando tamanho do input de chat");
       expandedChatInput = true;
       replaceClassByID(
         /*id:*/ "iconExpand",
