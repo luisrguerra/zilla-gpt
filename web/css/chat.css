@@ -14,7 +14,9 @@ p.chatBot{
     background-color:#23272E;
     color: #c9d3e3;
     border-width: 2px;
-    border-color: #ffffff7e;
+    border-top-color: rgb(255 255 255 / 49%);
+    border-inline-color: rgb(255 255 255 / 40%);
+    border-bottom-color: rgb(255 255 255 / 35%);
     border-style: solid;
     white-space: pre-line;
     padding: 1em 1em;
@@ -30,7 +32,9 @@ p.chatUser{
     background-color:#23272E;
     color: #c9d3e3;
     border-width: 2px;
-    border-color: #ffffff3d;
+    border-top-color: rgb(255 255 255 / 24%);
+    border-inline-color: rgb(255 255 255 / 18%);
+    border-bottom-color: rgb(255 255 255 / 13%);
     border-style: solid;
     white-space: pre-line;
     padding: 1em 1em;
