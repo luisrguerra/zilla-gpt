@@ -21,6 +21,7 @@
 <!-- css -->
 <link rel="stylesheet" href="css/index.css">
 <link rel="stylesheet" href="css/chat.css">
+<link rel="stylesheet" href="css/prompt.css">
 
 <body>
 
@@ -36,7 +37,7 @@
 </div> <!-- fim da div chatContent -->
 
 <!-- campo de input de texto -->
-<div class="prompt-container">
+<div id="prompt-container" class="contracted">
 <div style="margin-inline: 1em;">
  <button class="btn btn-outline-light prompt-button"  data-bs-toggle="modal" data-bs-target="#exemploJanela">
   <span class="mdi mdi-text-account"> <span class="unnecessary-text">Prompt</span></span>
@@ -48,6 +49,10 @@
  <!-- botao regerar última mensagem -->
  <button id="btnRegenerate" class="btn btn-outline-light prompt-button prompt-button-posterior">
   <span class="mdi mdi-refresh"> <span class="unnecessary-text">Regerar</span></span>
+ </button>
+ <!-- botao de expandir input de texto -->
+ <button id="btnExpand" class="btn btn-outline-light prompt-button prompt-button-posterior">
+  <span id="iconExpand" class="mdi mdi-arrow-expand-up"> <span class="unnecessary-text">Expandir</span></span>
  </button>
  <!-- botao enviar -->
  <button id="btnEnviar" class="btn btn-primary enviar">
@@ -92,6 +97,7 @@ let configuration;
 let openai;
 let mensagesObject;
 let loading = false;
+let expandedChatInput = false;
 /* fim de variaveis globais */
 /* constantes globais */
 const gpt3_5= "gpt-3.5-turbo";
@@ -433,6 +439,7 @@ function disableUserInteraction(){
   disableByID("btnEnviar");
   disableByID("promptSelect");
   disableByID("btnRegenerate");
+  disableByID("btnExpand");
   disableByID("btnClearChat");
 }
 
@@ -440,6 +447,7 @@ function enableUserInteraction(){
   enableByID("btnEnviar");
   enableByID("promptSelect");
   enableByID("btnRegenerate");
+  enableByID("btnExpand");
   enableByID("btnClearChat");
 }
 
@@ -481,6 +489,41 @@ function scrollToBottom(id) {
   element.scrollTop = element.scrollHeight - element.clientHeight;
 }
 
+function replaceClassByID(id, oldClass, newClass){
+  const element = document.getElementById(id);
+  element.classList.replace(oldClass, newClass);
+};
+
+//diminuir a area do de escrever a mensagem
+function contractChatInput(){
+  expandedChatInput = false;
+  replaceClassByID(
+    /*id:*/ "iconExpand",
+    /*oldClass:*/ "mdi-arrow-collapse-down",
+    /*newClass:*/ "mdi-arrow-expand-up"
+  );
+  replaceClassByID(
+    /*id:*/ "prompt-container",
+    /*oldClass:*/ "expanded",
+    /*newClass:*/ "contracted"
+  );
+};
+
+//expandir a area do de escrever a mensagem
+function expandChatInput(){
+  expandedChatInput = true;
+  replaceClassByID(
+    /*id:*/ "iconExpand",
+    /*oldClass:*/ "mdi-arrow-expand-up",
+    /*newClass:*/ "mdi-arrow-collapse-down"
+  );
+  replaceClassByID(
+    /*id:*/ "prompt-container",
+    /*oldClass:*/ "contracted",
+    /*newClass:*/ "expanded"
+  );
+};
+
 /* Fim de funcoes de manipulacao do DOM */
 
 /* Funcoes de event listener */
@@ -499,6 +542,7 @@ async function onClickEnviarButton(){
    const userInput = getPrompt();
    appendChatUser(userInput);
    await appendChatMessages (userInput);
+   contractChatInput();
   });
 }
 onClickEnviarButton();
@@ -521,6 +565,18 @@ async function onClickRegenerateLastMessageButton(){
   });
 }
 onClickRegenerateLastMessageButton();
+
+async function onClickExpandChatInputButton(){
+  const button = document.getElementById('btnExpand');
+  button.addEventListener('click', async () => {
+    if (expandedChatInput === true){
+      contractChatInput();
+    }else{
+      expandChatInput();
+    };
+  });
+}
+onClickExpandChatInputButton();
 
 /* Fim de funcoes de event listener */
 
