@@ -539,6 +539,7 @@ async function onClickEnviarButton(){
    const userInput = getPrompt();
    appendChatUser(userInput);
    await appendChatMessages (userInput);
+   contractChatInput();
   });
 }
 onClickEnviarButton();
