@@ -5,26 +5,23 @@ div.chatContent{
     padding-bottom: 8em;
 }
 p.chatBot{
-    white-space: pre-wrap !important;
     margin-right: auto;
     border-top-color: rgb(255 255 255 / 49%);
     border-inline-color: rgb(255 255 255 / 40%);
     border-bottom-color: rgb(255 255 255 / 35%);
-    white-space: pre-line;
     border-radius: 22px 22px 22px 4px;
 }
 p.chatUser{
-    white-space: pre-wrap !important;
     margin-left: auto;
     border-top-color: rgb(255 255 255 / 24%);
     border-inline-color: rgb(255 255 255 / 18%);
     border-bottom-color: rgb(255 255 255 / 13%);
-    white-space: pre-line;
     border-radius: 22px 22px 4px 22px;
 }
 p.chatBot, p.chatUser{
     width: fit-content;
     max-width: 95vw;
+    white-space: pre-wrap;
     font-size: 22px;
     text-align: left;
     color: #c9d3e3;
