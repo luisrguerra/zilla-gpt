@@ -22,7 +22,6 @@ p.chatBot, p.chatUser{
     width: fit-content;
     max-width: 100%;
     white-space: pre-wrap;
-    word-wrap: break-word;
     overflow-wrap: break-word;
     font-size: 22px;
     text-align: left;
