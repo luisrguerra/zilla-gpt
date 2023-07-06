@@ -18,9 +18,6 @@ div#prompt-container.expanded > div > textarea.form-control{
 }
 #btnEnviar{
   border-width: 1px;
-  border-color: rgb(255 255 255 /0%);
-  border-top-color: rgb(255 255 255 / 15%);
-  border-bottom-color: rgb(0 0 0 / 10%);
   margin-top: 0.5em;
   margin-bottom: 0.5em;
   width:fit-content;
@@ -33,7 +30,9 @@ div#prompt-container.expanded > div > textarea.form-control{
 
 button.prompt-button{
   border-width: 2px;
-  border-color: #ffffff40;
+  border-top-color: hsla(0, 0%, 100%, 0.30);
+  border-inline-color: hsla(0, 0%, 100%, 0.25);
+  border-bottom-color: hsla(0, 0%, 100%, 0.20);
   margin-top: 0.5em;
   margin-bottom: 0.5em;
   width:fit-content;
