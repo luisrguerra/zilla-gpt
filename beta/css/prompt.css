@@ -59,7 +59,9 @@ textarea.form-control{
   color: #c9d3e3;
   background-color: #23272E;
   border-width: 2px;
-  border-color: #ffffff40;
+  border-top-color: hsla(0, 0%, 100%, 0.20);
+  border-inline-color: hsla(0, 0%, 100%, 0.175);
+  border-bottom-color: hsla(0, 0%, 100%, 0.175);
   margin-bottom: 1em;
   resize: none;
 }
