@@ -15,11 +15,6 @@ div.dark-mode.modal-content{
   background-color: #23272E;
 }
 
-option:checked {
-  background-color: #181b1f;
-  color: #c9d3e3;
-}
-
 @media only screen and (max-width: 500px) {
   .unnecessary-text{
     display: none;
