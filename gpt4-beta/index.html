@@ -104,10 +104,9 @@ let expandedChatInput = false;
 /* fim de variaveis globais */
 /* constantes globais */
 const gpt3_5= "gpt-3.5-turbo";
-const gpt4= "gpt-4";
-let   gptModelName = gpt4;
+let   gptModelName = "gpt-4";
 const defaultPrompt = 0;
-const modelList = ["gpt-3.5-turbo","gpt-3.5-turbo-16k","gpt-4"];
+const modelList = ["gpt-4","gpt-3.5-turbo-16k","gpt-3.5-turbo"];
 const promptsList = [
   {
     "name":"ZillaGPT",
@@ -274,7 +273,6 @@ function promptSelectUpdateBehavior(){
   gptModelName = getModelSelect();
   const promptSelected = getValueByID('promptSelect');
   initializeAsPrompt(promptSelected);
-  console.log("gptModel", gptModelName);
 }
 
 function popLastMessages(){
@@ -327,6 +325,7 @@ function initializeChat(behavior) {
 }
 
 async function completionsChatTextModel(messages) {
+  console.log("GPT model:", gptModelName);
   const parameters ={
       model: gptModelName,
       messages: messages,
