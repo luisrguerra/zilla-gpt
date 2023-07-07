@@ -37,15 +37,19 @@ body{
   background: #ffffff22;
 }
 
+div.selectors{
+  max-width: 100%;
+  margin-inline: auto;
+}
+
 select.form-select,select.form-select:disabled{
-  max-width:fit-content;
+  width:100%;
   text-align: center;
   margin-inline: auto;
   color: #c9d3e3;
   background-color: transparent;
   border-width: 2px;
   border-color: #ffffff40;
-  /*background-image: url();*/
 }
 select.form-select:focus,select.form-select:active{
   color: #c9d3e3;
@@ -71,6 +75,15 @@ option:checked {
   }
 }
 @media only screen and (min-width: 800px) {
+  div.selectors{
+    max-width: fit-content;
+    display: flex;
+    margin-inline: auto;
+  }
+  select.form-select,select.form-select:disabled{
+    margin-inline: 0.25em;
+  }
+
   div.chatContent{
       padding-inline: 15%;
   }
