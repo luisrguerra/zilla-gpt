@@ -28,8 +28,11 @@
 <div id="scroll" class="chatContent">
   <!-- pular linha -->
   <br>
-
+  
+  <div style="max-width: fit-content; margin-inline: auto;">
   <select class="form-select form-select-lg mb-3" id="promptSelect"></select>
+  <select class="form-select form-select-lg mb-3" id="modelSelect" style="max-width: 100%;"></select>
+  </div>
 
   <!-- texto terminal -->
   <div id="terminalContainer"></div>
@@ -102,8 +105,9 @@ let expandedChatInput = false;
 /* constantes globais */
 const gpt3_5= "gpt-3.5-turbo";
 const gpt4= "gpt-4";
-const gptModelName = gpt4;
+let   gptModelName = gpt4;
 const defaultPrompt = 0;
+const modelList = ["gpt-3.5-turbo","gpt-3.5-turbo-16k","gpt-4"];
 const promptsList = [
   {
     "name":"ZillaGPT",
@@ -245,6 +249,7 @@ const promptsList = [
 
 initializeAsPrompt(defaultPrompt);
 loadSelectOptions(promptsList);
+loadModelSelectOptions(modelList);
 
 
 /* funcoes da logica do chat */
@@ -259,9 +264,17 @@ async function initializeAsPrompt(number){
   mensagesObject = await configurar(personalidade);
 }
 
+function getModelSelect(){
+  const modelSelected = parseInt(getValueByID('modelSelect'));
+  const modelSelectedName = modelList[modelSelected];
+  return modelSelectedName;
+}
+
 function promptSelectUpdateBehavior(){
+  gptModelName = getModelSelect();
   const promptSelected = getValueByID('promptSelect');
   initializeAsPrompt(promptSelected);
+  console.log("gptModel", gptModelName);
 }
 
 function popLastMessages(){
@@ -395,6 +408,21 @@ function loadSelectOptions(promptsList){
   }
 }
 
+function loadModelSelectOptions(modelList){
+  const maxItems = modelList.length;
+  const modeltSelect = document.getElementById('modelSelect');
+  for (let i = 0; i < maxItems; i++) {
+    const name = modelList[i];
+    let selected = false;
+    if(i==0){
+      selected = true;
+    }
+    const option = createSelectOption(name, i, selected);
+    modeltSelect.appendChild(option);
+  }
+};
+
+
 function getValueByID(id){
   const element = document.getElementById(id);
   return element.value;
@@ -439,6 +467,7 @@ function clearInput(){
 function disableUserInteraction(){
   disableByID("btnEnviar");
   disableByID("promptSelect");
+  disableByID("modelSelect");
   disableByID("btnRegenerate");
   disableByID("btnExpand");
   disableByID("btnClearChat");
@@ -447,6 +476,7 @@ function disableUserInteraction(){
 function enableUserInteraction(){
   enableByID("btnEnviar");
   enableByID("promptSelect");
+  enableByID("modelSelect");
   enableByID("btnRegenerate");
   enableByID("btnExpand");
   enableByID("btnClearChat");
@@ -538,6 +568,14 @@ async function onChangePromptSelect(){
   });
 }
 onChangePromptSelect();
+
+async function onChangeModelSelect(){
+  const modelSelect = document.getElementById('modelSelect');
+  modelSelect.addEventListener('change', async () => {
+    promptSelectUpdateBehavior();
+  });
+}
+onChangeModelSelect();
 
 async function onClickEnviarButton(){
   const btnEnviar = document.getElementById('btnEnviar');
