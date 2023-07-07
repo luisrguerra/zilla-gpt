@@ -109,6 +109,7 @@ let expandedChatInput = false;
 const gpt3_5= "gpt-3.5-turbo";
 const defaultPrompt = 0;
 const modelList = ["gpt-4","gpt-3.5-turbo-16k","gpt-3.5-turbo"];
+const promptJspon = getJson("prompts.json");
 const promptsList = [
   {
     "name":"ZillaGPT",
@@ -257,6 +258,15 @@ loadSelectOptions(promptsList);
 loadModelSelectOptions(modelList);
 updateModel();
 initializeAsPrompt(defaultPrompt);
+
+function getJson(fileName){
+  fetch(fileName)
+    .then(response => response.json())
+    .then(data => {
+        return data; 
+    })
+    .catch(error => console.log('Erro ao obter Json: ', error));
+};
 
 /* funcoes da logica do chat */
 async function initializeAsPrompt(number){
