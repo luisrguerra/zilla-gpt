@@ -28,7 +28,7 @@ option:checked {
   color: #c9d3e3;
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 600px) {
     div.selectors{
       max-width: fit-content;
       display: flex;
