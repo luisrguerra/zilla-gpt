@@ -20,6 +20,8 @@
 
 <!-- css -->
 <link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/scrollbar.css">
+<link rel="stylesheet" href="css/select.css">
 <link rel="stylesheet" href="css/chat.css">
 <link rel="stylesheet" href="css/prompt.css">
 
@@ -28,8 +30,11 @@
 <div id="scroll" class="chatContent">
   <!-- pular linha -->
   <br>
-
-  <select class="form-select form-select-lg mb-3" id="promptSelect"></select>
+  
+  <div class="selectors">
+  <select class="form-select form-select-lg mb-3 dark-mode" id="promptSelect"></select>
+  <select class="form-select form-select-lg mb-3 dark-mode" id="modelSelect" style="max-width: 100%;"></select>
+  </div>
 
   <!-- texto terminal -->
   <div id="terminalContainer"></div>
@@ -90,20 +95,20 @@
 </div> <!-- modal -->
 
 <script type="module">
-import openailib from 'https://cdn.jsdelivr.net/npm/openai@3.2.1/+esm';
+import openailib from 'https://cdn.jsdelivr.net/npm/openai@3.3.0/+esm';
 //console.log("openailib: ",openailib);
 /* variaveis globais */
 let configuration;
 let openai;
+let gptModelName;
 let mensagesObject;
 let loading = false;
 let expandedChatInput = false;
 /* fim de variaveis globais */
 /* constantes globais */
 const gpt3_5= "gpt-3.5-turbo";
-const gpt4= "gpt-4";
-const gptModelName = gpt4;
 const defaultPrompt = 0;
+const modelList = ["gpt-4","gpt-3.5-turbo-16k","gpt-3.5-turbo"];
 const promptsList = [
   {
     "name":"ZillaGPT",
@@ -243,9 +248,10 @@ const promptsList = [
 ]
 /* fim de constantes globais */
 
-initializeAsPrompt(defaultPrompt);
 loadSelectOptions(promptsList);
-
+loadModelSelectOptions(modelList);
+updateModel();
+initializeAsPrompt(defaultPrompt);
 
 /* funcoes da logica do chat */
 async function initializeAsPrompt(number){
@@ -259,7 +265,19 @@ async function initializeAsPrompt(number){
   mensagesObject = await configurar(personalidade);
 }
 
+function getModelSelect(){
+  const modelSelected = parseInt(getValueByID('modelSelect'));
+  const modelSelectedName = modelList[modelSelected];
+  return modelSelectedName;
+}
+
+function updateModel(){
+  gptModelName = getModelSelect();
+  console.log("Updated model to:", gptModelName);
+};
+
 function promptSelectUpdateBehavior(){
+  updateModel();
   const promptSelected = getValueByID('promptSelect');
   initializeAsPrompt(promptSelected);
 }
@@ -314,6 +332,7 @@ function initializeChat(behavior) {
 }
 
 async function completionsChatTextModel(messages) {
+  console.log("GPT model:", gptModelName);
   const parameters ={
       model: gptModelName,
       messages: messages,
@@ -395,6 +414,21 @@ function loadSelectOptions(promptsList){
   }
 }
 
+function loadModelSelectOptions(modelList){
+  const maxItems = modelList.length;
+  const modeltSelect = document.getElementById('modelSelect');
+  for (let i = 0; i < maxItems; i++) {
+    const name = modelList[i];
+    let selected = false;
+    if(i==0){
+      selected = true;
+    }
+    const option = createSelectOption(name, i, selected);
+    modeltSelect.appendChild(option);
+  }
+};
+
+
 function getValueByID(id){
   const element = document.getElementById(id);
   return element.value;
@@ -439,6 +473,7 @@ function clearInput(){
 function disableUserInteraction(){
   disableByID("btnEnviar");
   disableByID("promptSelect");
+  disableByID("modelSelect");
   disableByID("btnRegenerate");
   disableByID("btnExpand");
   disableByID("btnClearChat");
@@ -447,6 +482,7 @@ function disableUserInteraction(){
 function enableUserInteraction(){
   enableByID("btnEnviar");
   enableByID("promptSelect");
+  enableByID("modelSelect");
   enableByID("btnRegenerate");
   enableByID("btnExpand");
   enableByID("btnClearChat");
@@ -538,6 +574,14 @@ async function onChangePromptSelect(){
   });
 }
 onChangePromptSelect();
+
+async function onChangeModelSelect(){
+  const modelSelect = document.getElementById('modelSelect');
+  modelSelect.addEventListener('change', async () => {
+    promptSelectUpdateBehavior();
+  });
+}
+onChangeModelSelect();
 
 async function onClickEnviarButton(){
   const btnEnviar = document.getElementById('btnEnviar');
