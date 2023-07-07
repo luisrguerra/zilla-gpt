@@ -98,13 +98,13 @@ import openailib from 'https://cdn.jsdelivr.net/npm/openai@3.3.0/+esm';
 /* variaveis globais */
 let configuration;
 let openai;
+let gptModelName;
 let mensagesObject;
 let loading = false;
 let expandedChatInput = false;
 /* fim de variaveis globais */
 /* constantes globais */
 const gpt3_5= "gpt-3.5-turbo";
-let   gptModelName = "gpt-4";
 const defaultPrompt = 0;
 const modelList = ["gpt-4","gpt-3.5-turbo-16k","gpt-3.5-turbo"];
 const promptsList = [
@@ -246,10 +246,10 @@ const promptsList = [
 ]
 /* fim de constantes globais */
 
-initializeAsPrompt(defaultPrompt);
 loadSelectOptions(promptsList);
 loadModelSelectOptions(modelList);
-
+updateModel();
+initializeAsPrompt(defaultPrompt);
 
 /* funcoes da logica do chat */
 async function initializeAsPrompt(number){
@@ -269,8 +269,13 @@ function getModelSelect(){
   return modelSelectedName;
 }
 
-function promptSelectUpdateBehavior(){
+function updateModel(){
   gptModelName = getModelSelect();
+  console.log("Updated model to:", gptModelName);
+};
+
+function promptSelectUpdateBehavior(){
+  updateModel();
   const promptSelected = getValueByID('promptSelect');
   initializeAsPrompt(promptSelected);
 }
