@@ -1,6 +1,6 @@
 div.chatContent{
     overflow: auto;
-    background-color:#1E2227; 
+    background-image: linear-gradient( 180deg, hsl(218, 14%, 15%) 0%, hsl(218, 14%, 13%) 100% );
     height: 100%;
     padding-bottom: 8em;
 }
