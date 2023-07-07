@@ -109,7 +109,8 @@ let expandedChatInput = false;
 const gpt3_5= "gpt-3.5-turbo";
 const defaultPrompt = 0;
 const modelList = ["gpt-4","gpt-3.5-turbo-16k","gpt-3.5-turbo"];
-const promptJspon = getJson("prompts.json");
+const promptJson = getJson("prompts.json");
+console.log("promptJson: ",promptJson);
 const promptsList = [
   {
     "name":"ZillaGPT",
