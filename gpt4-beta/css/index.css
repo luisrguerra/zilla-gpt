@@ -6,11 +6,11 @@ body{
   background: #3D4556;
   color: #d6e2f4;
 }
-.dark-mode.modal-header{
+div.dark-mode.modal-header{
   border-color: #ffffff17;
 }
 
-.dark-mode.modal-content{
+div.dark-mode.modal-content{
   border: 1px solid #ffffff17;
   background-color: #23272E;
 }
