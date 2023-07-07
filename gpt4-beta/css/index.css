@@ -15,28 +15,6 @@ div.dark-mode.modal-content{
   background-color: #23272E;
 }
 
-::-webkit-scrollbar {
-  background-color: transparent;
-  width: 6px;
-  
-}
-
-/* Track */
-::-webkit-scrollbar-track,::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #ffffff22;
-  border-radius: 6px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #ffffff22;
-}
-
 option:checked {
   background-color: #181b1f;
   color: #c9d3e3;
@@ -45,16 +23,5 @@ option:checked {
 @media only screen and (max-width: 500px) {
   .unnecessary-text{
     display: none;
-  }
-}
-
-@media only screen and (max-width: 800px) {
-  div.chatContent{
-    padding-inline: 1em;
-  }
-}
-@media only screen and (min-width: 800px) {
-  div.chatContent{
-      padding-inline: 15%;
   }
 }
