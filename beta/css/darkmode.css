@@ -33,13 +33,13 @@ div.chatContent{
 
 select.theme,select.theme:disabled{
   color: var(--font-color);
-  background-color: transparent;
+  background-color: var(--chat-background-color);
   border-color: #ffffff40;
 }
   
 select.theme:focus,select.theme:active{
   color: var(--font-color);
-  background-color: #1E2227;
+  background-color: var(--chat-background-color);
   border-color: #ffffff7e;
 }
 
