@@ -1,5 +1,6 @@
 :root {
   --font-color: #c9d3e3;
+  --font-color2: white;
 }
 
 body{
@@ -76,7 +77,7 @@ div#prompt-container{
 }
 
 button.prompt-button{
-  color: white;
+  color: var(--font-color2);
   border-top-color: hsla(0, 0%, 100%, 0.30);
   border-inline-color: hsla(0, 0%, 100%, 0.25);
   border-bottom-color: hsla(0, 0%, 100%, 0.20);
@@ -85,7 +86,7 @@ button.prompt-button{
 button.prompt-button:hover,button.prompt-button:active,button.prompt-button:focus,button.prompt-button:visited{
   background-color: #ffffff10 !important;
   border-color: #ffffff40 !important;
-  color: white !important;
+  color: var(--font-color2) !important;
 }
 
 button.prompt-button:disabled{
