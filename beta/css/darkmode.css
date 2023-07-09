@@ -1,28 +1,30 @@
 body{
-    color: #c9d3e3;
-    background-color:#23272E;
+  color: #c9d3e3;
+  background-color:#23272E;
 }
 
+/* selecao de texto para copiar */
 ::selection {
-    background: #3D4556;
-    color: #d6e2f4;
+  background: #3D4556;
+  color: #d6e2f4;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #ffffff22;
 }
 
-/* Handle on hover */
+/* Selecionar o scrollbar */
 ::-webkit-scrollbar-thumb:hover {
   background: #ffffff22;
 }
 
+/* fundo da tela do chat */
 div.chatContent{
-    background-image: linear-gradient(
-        180deg,
-      hsl(218, 14%, 15%) 0%,
-      hsl(218, 14%, 13%) 100% 
-      );
+  background-image: linear-gradient(
+      180deg,
+    hsl(218, 14%, 15%) 0%,
+    hsl(218, 14%, 13%) 100% 
+  );
 }
 
 select.dark-mode,select.dark-mode:disabled{
@@ -53,15 +55,15 @@ p.chatBot, p.chatUser{
 }
 
 p.chatBot{
-    border-top-color: rgb(255 255 255 / 49%);
-    border-inline-color: rgb(255 255 255 / 40%);
-    border-bottom-color: rgb(255 255 255 / 35%);
+  border-top-color: rgb(255 255 255 / 49%);
+  border-inline-color: rgb(255 255 255 / 40%);
+  border-bottom-color: rgb(255 255 255 / 35%);
 }
 
 p.chatUser{
-    border-top-color: rgb(255 255 255 / 24%);
-    border-inline-color: rgb(255 255 255 / 18%);
-    border-bottom-color: rgb(255 255 255 / 13%);
+  border-top-color: rgb(255 255 255 / 24%);
+  border-inline-color: rgb(255 255 255 / 18%);
+  border-bottom-color: rgb(255 255 255 / 13%);
 }
 
 div#prompt-container{
@@ -100,10 +102,10 @@ textarea.form-control:focus,textarea.form-control:active{
 }
 
 div.dark-mode.modal-header{
-    border-color: #ffffff17;
+  border-color: #ffffff17;
 }
   
 div.dark-mode.modal-content{
-    border: 1px solid #ffffff17;
-    background-color: #23272E;
+  border: 1px solid #ffffff17;
+  background-color: #23272E;
 }
