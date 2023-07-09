@@ -1,5 +1,9 @@
+:root {
+  --font-color: #c9d3e3;
+}
+
 body{
-  color: #c9d3e3;
+  color: var(--font-color);
   background-color:#23272E;
 }
 
@@ -28,24 +32,24 @@ div.chatContent{
 }
 
 select.theme,select.theme:disabled{
-  color: #c9d3e3;
+  color: var(--font-color);
   background-color: transparent;
   border-color: #ffffff40;
 }
   
 select.theme:focus,select.theme:active{
-  color: #c9d3e3;
+  color: var(--font-color);
   background-color: #1E2227;
   border-color: #ffffff7e;
 }
 
 option:checked {
   background-color: #181b1f;
-  color: #c9d3e3;
+  color: var(--font-color);
 }
 
 p.chatBot, p.chatUser{
-  color: #c9d3e3;
+  color: var(--font-color);
   background-color:#23272E;
   background-image: linear-gradient(
     150deg,
@@ -89,7 +93,7 @@ button.prompt-button:disabled{
 }
 
 textarea.form-control{
-  color: #c9d3e3;
+  color: var(--font-color);
   background-color: #23272E;
   border-top-color: hsla(0, 0%, 100%, 0.20);
   border-inline-color: hsla(0, 0%, 100%, 0.175);
@@ -97,7 +101,7 @@ textarea.form-control{
 }
 
 textarea.form-control:focus,textarea.form-control:active{
-  color: #c9d3e3;
+  color: var(--font-color);
   background: #1E2227;
   border-color: #ffffff7e;
 }
