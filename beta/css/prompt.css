@@ -1,6 +1,4 @@
 div#prompt-container{
-  border-top: 1px solid #ffffff17;
-  background-color: #23272E;
   width: 100%;
   text-align: center;
   position: fixed;
@@ -30,9 +28,6 @@ div#prompt-container.expanded > div > textarea.form-control{
 
 button.prompt-button{
   border-width: 2px;
-  border-top-color: hsla(0, 0%, 100%, 0.30);
-  border-inline-color: hsla(0, 0%, 100%, 0.25);
-  border-bottom-color: hsla(0, 0%, 100%, 0.20);
   margin-top: 0.5em;
   margin-bottom: 0.5em;
   width:fit-content;
@@ -40,14 +35,9 @@ button.prompt-button{
   border-radius: 4px;
   padding-inline: 0.5em;
 }
+
 button.prompt-button:hover,button.prompt-button:active,button.prompt-button:focus,button.prompt-button:visited{
-  background-color: #ffffff10 !important;
-  border-color: #ffffff40 !important;
-  color: white !important;
   box-shadow: none;
-}
-button.prompt-button:disabled{
-  border-color: rgba(255, 255, 255, 0.15);
 }
 
 button.prompt-button-posterior{
@@ -56,18 +46,10 @@ button.prompt-button-posterior{
 
 textarea.form-control{
   max-height: 60px;
-  color: #c9d3e3;
-  background-color: #23272E;
   border-width: 2px;
-  border-top-color: hsla(0, 0%, 100%, 0.20);
-  border-inline-color: hsla(0, 0%, 100%, 0.175);
-  border-bottom-color: hsla(0, 0%, 100%, 0.175);
   margin-bottom: 1em;
   resize: none;
 }
 textarea.form-control:focus,textarea.form-control:active{
-  color: #c9d3e3;
-  background: #1E2227;
-  border-color: #ffffff7e;
   box-shadow: none;
 }

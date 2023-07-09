@@ -35,7 +35,6 @@ select.dark-mode:focus,select.dark-mode:active{
   color: #c9d3e3;
   background-color: #1E2227;
   border-color: #ffffff7e;
-  box-shadow: none;
 }
 
 option:checked {
@@ -63,6 +62,41 @@ p.chatUser{
     border-top-color: rgb(255 255 255 / 24%);
     border-inline-color: rgb(255 255 255 / 18%);
     border-bottom-color: rgb(255 255 255 / 13%);
+}
+
+div#prompt-container{
+  border-top: 1px solid #ffffff17;
+  background-color: #23272E;
+}
+
+button.prompt-button{
+  border-top-color: hsla(0, 0%, 100%, 0.30);
+  border-inline-color: hsla(0, 0%, 100%, 0.25);
+  border-bottom-color: hsla(0, 0%, 100%, 0.20);
+}
+
+button.prompt-button:hover,button.prompt-button:active,button.prompt-button:focus,button.prompt-button:visited{
+  background-color: #ffffff10 !important;
+  border-color: #ffffff40 !important;
+  color: white !important;
+}
+
+button.prompt-button:disabled{
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+textarea.form-control{
+  color: #c9d3e3;
+  background-color: #23272E;
+  border-top-color: hsla(0, 0%, 100%, 0.20);
+  border-inline-color: hsla(0, 0%, 100%, 0.175);
+  border-bottom-color: hsla(0, 0%, 100%, 0.175);
+}
+
+textarea.form-control:focus,textarea.form-control:active{
+  color: #c9d3e3;
+  background: #1E2227;
+  border-color: #ffffff7e;
 }
 
 div.dark-mode.modal-header{
