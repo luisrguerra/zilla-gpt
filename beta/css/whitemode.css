@@ -2,6 +2,6 @@
   --font-color: black;
   --font-color2: black;
   --prompt-border-color: hsl(0, 0%, 90%);
-  --prompt-background-color: white;
+  --prompt-background-color: hsl(0, 0%, 98%);
   --chat-background-color: white;
 }

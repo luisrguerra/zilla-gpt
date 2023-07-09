@@ -1,9 +1,9 @@
 :root {
   --font-color: #c9d3e3;
   --font-color2: white;
-  --prompt-border-color: #ffffff17;
-  --prompt-background-color: #23272E;
-  --chat-background-color: #1E2227;
+  --prompt-border-color: hsla(0, 0%, 100%, 0.09);
+  --prompt-background-color: hsl(218, 14%, 16%);
+  --chat-background-color: hsl(213, 13%, 14%);
 }
 
 body{
