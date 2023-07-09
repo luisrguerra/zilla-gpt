@@ -2,11 +2,12 @@
   --font-color: #c9d3e3;
   --font-color2: white;
   --prompt-border-color: #ffffff17;
+  --prompt-background-color: #23272E;
 }
 
 body{
   color: var(--font-color);
-  background-color:#23272E;
+  background-color:var(--prompt-background-color);
 }
 
 /* selecao de texto para copiar */
@@ -52,7 +53,7 @@ option:checked {
 
 p.chatBot, p.chatUser{
   color: var(--font-color);
-  background-color:#23272E;
+  background-color:var(--prompt-background-color);
   background-image: linear-gradient(
     150deg,
   hsl(218, 14%, 18%) 0%,
@@ -74,7 +75,7 @@ p.chatUser{
 
 div#prompt-container{
   border-top: 1px solid var(--prompt-border-color);
-  background-color: #23272E;
+  background-color: var(--prompt-background-color);
 }
 
 button.prompt-button{
@@ -96,7 +97,7 @@ button.prompt-button:disabled{
 
 textarea.form-control{
   color: var(--font-color);
-  background-color: #23272E;
+  background-color: var(--prompt-background-color);
   border-top-color: hsla(0, 0%, 100%, 0.20);
   border-inline-color: hsla(0, 0%, 100%, 0.175);
   border-bottom-color: hsla(0, 0%, 100%, 0.175);
@@ -114,5 +115,5 @@ div.theme.modal-header{
   
 div.theme.modal-content{
   border: 1px solid var(--prompt-border-color);
-  background-color: #23272E;
+  background-color: var(--prompt-background-color);
 }
