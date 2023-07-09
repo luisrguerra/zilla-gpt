@@ -10,7 +10,7 @@ select.form-select,select.form-select:disabled{
     border-width: 2px;
 }
 
-select.dark-mode:focus,select.dark-mode:active{
+select.theme:focus,select.theme:active{
     box-shadow: none;
 }
 

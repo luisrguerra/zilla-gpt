@@ -27,13 +27,13 @@ div.chatContent{
   );
 }
 
-select.dark-mode,select.dark-mode:disabled{
+select.theme,select.theme:disabled{
   color: #c9d3e3;
   background-color: transparent;
   border-color: #ffffff40;
 }
   
-select.dark-mode:focus,select.dark-mode:active{
+select.theme:focus,select.theme:active{
   color: #c9d3e3;
   background-color: #1E2227;
   border-color: #ffffff7e;
@@ -101,11 +101,11 @@ textarea.form-control:focus,textarea.form-control:active{
   border-color: #ffffff7e;
 }
 
-div.dark-mode.modal-header{
+div.theme.modal-header{
   border-color: #ffffff17;
 }
   
-div.dark-mode.modal-content{
+div.theme.modal-content{
   border: 1px solid #ffffff17;
   background-color: #23272E;
 }
