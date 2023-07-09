@@ -5,6 +5,7 @@ div#prompt-container{
   bottom: 0;
   right: 0;
   left: 0;
+  background-color: white;
 }
 div#prompt-container.expanded{
   height: 100%;
@@ -27,6 +28,8 @@ div#prompt-container.expanded > div > textarea.form-control{
 }
 
 button.prompt-button{
+  color: initial;
+  border-color: initial;
   border-width: 2px;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
@@ -37,6 +40,7 @@ button.prompt-button{
 }
 
 button.prompt-button:hover,button.prompt-button:active,button.prompt-button:focus,button.prompt-button:visited{
+  border-color: initial;
   box-shadow: none;
 }
 

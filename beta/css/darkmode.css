@@ -72,6 +72,7 @@ div#prompt-container{
 }
 
 button.prompt-button{
+  color: white;
   border-top-color: hsla(0, 0%, 100%, 0.30);
   border-inline-color: hsla(0, 0%, 100%, 0.25);
   border-bottom-color: hsla(0, 0%, 100%, 0.20);
