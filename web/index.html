@@ -24,6 +24,8 @@
 <link rel="stylesheet" href="css/select.css">
 <link rel="stylesheet" href="css/chat.css">
 <link rel="stylesheet" href="css/prompt.css">
+<link rel="stylesheet" href="css/darkmode.css">
+<link disabled rel="stylesheet" href="css/whitemode.css">
 
 <body>
 
@@ -32,8 +34,8 @@
   <br>
   
   <div class="selectors">
-  <select class="form-select form-select-lg mb-3 dark-mode" id="promptSelect"></select>
-  <select class="form-select form-select-lg mb-3 dark-mode" id="modelSelect" style="max-width: 100%;"></select>
+  <select class="form-select form-select-lg mb-3 theme" id="promptSelect"></select>
+  <select class="form-select form-select-lg mb-3 theme" id="modelSelect" style="max-width: 100%;"></select>
   </div>
 
   <!-- texto terminal -->
@@ -74,10 +76,10 @@
 <div class="modal fade" id="exemploJanela" tabindex="-1">
   <!-- modal-dialog-centered torna centralizado no meio -->
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="dark-mode modal-content">
+    <div class="theme modal-content">
         
        <!-- cabeçalho da janela -->
-       <div class="dark-mode modal-header">
+       <div class="theme modal-header">
           <!--Título ao topo da janela à esquerda -->
           <!-- fs-5 define o tamaho do texto -->
           <h1 id="prompt-title" class="modal-title fs-5"></h1>
@@ -108,7 +110,7 @@ let expandedChatInput = false;
 /* constantes globais */
 const gpt3_5= "gpt-3.5-turbo";
 const defaultPrompt = 0;
-const modelList = ["gpt-3.5-turbo","gpt-4"];
+const modelList = ["gpt-3.5-turbo","gpt-3.5-turbo-0613","gpt-3.5-turbo-0301","gpt-4","gpt-4-0613","gpt-4-0314"];
 const promptsList = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts.json");
 /* fim de constantes globais */
 

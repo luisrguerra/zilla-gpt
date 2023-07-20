@@ -2,19 +2,6 @@ div.selectors{
     max-width: 100%;
     margin-inline: auto;
 }
-
-select.dark-mode,select.dark-mode:disabled{
-  color: #c9d3e3;
-  background-color: transparent;
-  border-color: #ffffff40;
-}
-
-select.dark-mode:focus,select.dark-mode:active{
-  color: #c9d3e3;
-  background-color: #1E2227;
-  border-color: #ffffff7e;
-  box-shadow: none;
-}
   
 select.form-select,select.form-select:disabled{
     width:100%;
@@ -23,9 +10,8 @@ select.form-select,select.form-select:disabled{
     border-width: 2px;
 }
 
-option:checked {
-  background-color: #181b1f;
-  color: #c9d3e3;
+select.theme:focus,select.theme:active{
+    box-shadow: none;
 }
 
 @media only screen and (min-width: 600px) {
