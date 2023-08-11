@@ -104,6 +104,7 @@ import openailib from 'https://cdn.jsdelivr.net/npm/openai@3.3.0/+esm';
 let configuration;
 let openai;
 let gptModelName;
+let gptTemperature;
 let mensagesObject;
 let loading = false;
 let expandedChatInput = false;
@@ -120,7 +121,8 @@ const modelList = [
   {name:"GPT 4 14/3/23",value:"gpt-4-0314"},
 ];
 const modeList = [
-  {name:"Normal",value:0.5},
+  {name:"Normal",value:1},
+  {name:"Invariável",value:0},
 ];
 const promptsList = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts.json");
 /* fim de constantes globais */
@@ -129,6 +131,7 @@ loadPromptSelectOptions('promptSelect',promptsList);
 loadSelectOptions('modelSelect',modelList);
 loadSelectOptions('modelMode',modeList);
 updateModel();
+updateTemperature();
 initializeAsPrompt(defaultPrompt);
 
 async function getJson(fileName){
@@ -169,8 +172,14 @@ function updateModel(){
   console.log("Updated model to:", gptModelName);
 };
 
+function updateTemperature(){
+  gptTemperature = getModelMode();
+  console.log("Updated temperature to:", gptTemperature);
+};
+
 function promptSelectUpdateBehavior(){
   updateModel();
+  updateTemperature();
   const promptSelected = getValueByID('promptSelect');
   initializeAsPrompt(promptSelected);
 }
@@ -229,6 +238,7 @@ async function completionsChatTextModel(messages) {
   const parameters ={
       model: gptModelName,
       messages: messages,
+      temperature: gptTemperature,
       /*
       temperature: ,
       max_tokens: ,
@@ -472,12 +482,20 @@ async function onChangePromptSelect(){
 onChangePromptSelect();
 
 async function onChangeModelSelect(){
-  const modelSelect = document.getElementById('modelSelect');
-  modelSelect.addEventListener('change', async () => {
+  const element = document.getElementById('modelSelect');
+  element.addEventListener('change', async () => {
     promptSelectUpdateBehavior();
   });
 }
 onChangeModelSelect();
+
+async function onChangeModeSelect(){
+  const element = document.getElementById('modelMode');
+  element.addEventListener('change', async () => {
+    promptSelectUpdateBehavior();
+  });
+}
+onChangeModeSelect();
 
 async function onClickEnviarButton(){
   const btnEnviar = document.getElementById('btnEnviar');
