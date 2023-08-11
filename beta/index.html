@@ -115,8 +115,9 @@ const modelList = ["gpt-3.5-turbo","gpt-3.5-turbo-0613","gpt-3.5-turbo-0301","gp
 const promptsList = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts.json");
 /* fim de constantes globais */
 
-loadSelectOptions(promptsList);
+loadSelectOptions('promptSelect',promptsList);
 loadModelSelectOptions(modelList);
+//loadModeSelectOptions(modelList);
 updateModel();
 initializeAsPrompt(defaultPrompt);
 
@@ -283,9 +284,9 @@ function createSelectOption(text, value, selected) {
   return option;
 }
 
-function loadSelectOptions(promptsList){
+function loadSelectOptions(ID, promptsList){
   const maxItems = promptsList.length;
-  const promptSelect = document.getElementById('promptSelect');
+  const promptSelect = document.getElementById(ID);
   for (let i = 0; i < maxItems; i++) {
     const name = promptsList[i].name;
     let selected = false;
