@@ -36,6 +36,7 @@
   <div class="selectors">
   <select class="form-select form-select-lg mb-3 theme" id="promptSelect"></select>
   <select class="form-select form-select-lg mb-3 theme" id="modelSelect" style="max-width: 100%;"></select>
+  <select class="form-select form-select-lg mb-3 theme" id="modelMode" style="max-width: 100%;"></select>
   </div>
 
   <!-- texto terminal -->
@@ -146,6 +147,11 @@ function getModelSelect(){
   const modelSelected = parseInt(getValueByID('modelSelect'));
   const modelSelectedName = modelList[modelSelected];
   return modelSelectedName;
+}
+
+function getModelMode(){
+  const modelMode = parseFloat(getValueByID('modelMode'));
+  return modelMode;
 }
 
 function updateModel(){
@@ -351,6 +357,7 @@ function disableUserInteraction(){
   disableByID("btnEnviar");
   disableByID("promptSelect");
   disableByID("modelSelect");
+  disableByID("modelMode");
   disableByID("btnRegenerate");
   disableByID("btnExpand");
   disableByID("btnClearChat");
@@ -360,6 +367,7 @@ function enableUserInteraction(){
   enableByID("btnEnviar");
   enableByID("promptSelect");
   enableByID("modelSelect");
+  enableByID("modelMode");
   enableByID("btnRegenerate");
   enableByID("btnExpand");
   enableByID("btnClearChat");
