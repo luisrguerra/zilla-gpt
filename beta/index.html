@@ -112,12 +112,13 @@ let expandedChatInput = false;
 const gpt3_5= "gpt-3.5-turbo";
 const defaultPrompt = 0;
 const modelList = ["gpt-3.5-turbo","gpt-3.5-turbo-0613","gpt-3.5-turbo-0301","gpt-4","gpt-4-0613","gpt-4-0314"];
+const modeList = ["Normal"];
 const promptsList = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts.json");
 /* fim de constantes globais */
 
-loadSelectOptions('promptSelect',promptsList);
-loadModelSelectOptions(modelList);
-//loadModeSelectOptions(modelList);
+loadPromptSelectOptions('promptSelect',promptsList);
+loadSelectOptions('modelSelect',modelList);
+loadSelectOptions('modelMode',modeList);
 updateModel();
 initializeAsPrompt(defaultPrompt);
 
@@ -284,7 +285,7 @@ function createSelectOption(text, value, selected) {
   return option;
 }
 
-function loadSelectOptions(ID, promptsList){
+function loadPromptSelectOptions(ID, promptsList){
   const maxItems = promptsList.length;
   const promptSelect = document.getElementById(ID);
   for (let i = 0; i < maxItems; i++) {
@@ -298,9 +299,9 @@ function loadSelectOptions(ID, promptsList){
   }
 }
 
-function loadModelSelectOptions(modelList){
+function loadSelectOptions(ID,modelList){
   const maxItems = modelList.length;
-  const modeltSelect = document.getElementById('modelSelect');
+  const modeltSelect = document.getElementById(ID);
   for (let i = 0; i < maxItems; i++) {
     const name = modelList[i];
     let selected = false;
