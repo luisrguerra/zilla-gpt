@@ -36,6 +36,7 @@
   <div class="selectors">
   <select class="form-select form-select-lg mb-3 theme" id="promptSelect"></select>
   <select class="form-select form-select-lg mb-3 theme" id="modelSelect" style="max-width: 100%;"></select>
+  <select class="form-select form-select-lg mb-3 theme" id="modelMode" style="max-width: 100%;"></select>
   </div>
 
   <!-- texto terminal -->
@@ -103,6 +104,7 @@ import openailib from 'https://cdn.jsdelivr.net/npm/openai@3.3.0/+esm';
 let configuration;
 let openai;
 let gptModelName;
+let gptTemperature;
 let mensagesObject;
 let loading = false;
 let expandedChatInput = false;
@@ -110,13 +112,31 @@ let expandedChatInput = false;
 /* constantes globais */
 const gpt3_5= "gpt-3.5-turbo";
 const defaultPrompt = 0;
-const modelList = ["gpt-3.5-turbo","gpt-3.5-turbo-0613","gpt-3.5-turbo-0301","gpt-4","gpt-4-0613","gpt-4-0314"];
+const modelList = [
+  {name:"GPT 3.5",value:"gpt-3.5-turbo"},
+  {name:"GPT 3.5 13/6/23",value:"gpt-3.5-turbo-0613"},
+  {name:"GPT 3.5 1/3/23",value:"gpt-3.5-turbo-0301"},
+  {name:"GPT 4",value:"gpt-4"},
+  {name:"GPT 4 13/6/23",value:"gpt-4-0613"},
+  {name:"GPT 4 14/3/23",value:"gpt-4-0314"},
+];
+const modeList = [
+  {name:"Normal",value:1},
+  {name:"Invariável 0",value:0},
+  {name:"Cabeça dura 0.25",value:0.25},
+  {name:"Pouco criativo 0.5",value:0.5},
+  {name:"Pouco criativo 0.75",value:0.75},
+  {name:"Criativo 1.1",value:1.1},
+  {name:"Impreciso 1.2",value:1.2},
+];
 const promptsList = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts.json");
 /* fim de constantes globais */
 
-loadSelectOptions(promptsList);
-loadModelSelectOptions(modelList);
+loadPromptSelectOptions('promptSelect',promptsList);
+loadSelectOptions('modelSelect',modelList);
+loadSelectOptions('modelMode',modeList);
 updateModel();
+updateTemperature();
 initializeAsPrompt(defaultPrompt);
 
 async function getJson(fileName){
@@ -143,9 +163,13 @@ async function initializeAsPrompt(number){
 }
 
 function getModelSelect(){
-  const modelSelected = parseInt(getValueByID('modelSelect'));
-  const modelSelectedName = modelList[modelSelected];
-  return modelSelectedName;
+  const modelSelected = getValueByID('modelSelect');
+  return modelSelected;
+}
+
+function getModelMode(){
+  const modelMode = parseFloat(getValueByID('modelMode'));
+  return modelMode;
 }
 
 function updateModel(){
@@ -153,8 +177,14 @@ function updateModel(){
   console.log("Updated model to:", gptModelName);
 };
 
+function updateTemperature(){
+  gptTemperature = getModelMode();
+  console.log("Updated temperature to:", gptTemperature);
+};
+
 function promptSelectUpdateBehavior(){
   updateModel();
+  updateTemperature();
   const promptSelected = getValueByID('promptSelect');
   initializeAsPrompt(promptSelected);
 }
@@ -213,8 +243,8 @@ async function completionsChatTextModel(messages) {
   const parameters ={
       model: gptModelName,
       messages: messages,
+      temperature: gptTemperature,
       /*
-      temperature: ,
       max_tokens: ,
       top_p: ,
       frequency_penalty: ,
@@ -277,9 +307,9 @@ function createSelectOption(text, value, selected) {
   return option;
 }
 
-function loadSelectOptions(promptsList){
+function loadPromptSelectOptions(ID, promptsList){
   const maxItems = promptsList.length;
-  const promptSelect = document.getElementById('promptSelect');
+  const promptSelect = document.getElementById(ID);
   for (let i = 0; i < maxItems; i++) {
     const name = promptsList[i].name;
     let selected = false;
@@ -291,17 +321,18 @@ function loadSelectOptions(promptsList){
   }
 }
 
-function loadModelSelectOptions(modelList){
-  const maxItems = modelList.length;
-  const modeltSelect = document.getElementById('modelSelect');
+function loadSelectOptions(ID,optionList){
+  const maxItems = optionList.length;
+  const Selectelement = document.getElementById(ID);
   for (let i = 0; i < maxItems; i++) {
-    const name = modelList[i];
+    const name = optionList[i].name;
+    const value = optionList[i].value;
     let selected = false;
     if(i==0){
       selected = true;
     }
-    const option = createSelectOption(name, i, selected);
-    modeltSelect.appendChild(option);
+    const option = createSelectOption(name, value, selected);
+    Selectelement.appendChild(option);
   }
 };
 
@@ -351,6 +382,7 @@ function disableUserInteraction(){
   disableByID("btnEnviar");
   disableByID("promptSelect");
   disableByID("modelSelect");
+  disableByID("modelMode");
   disableByID("btnRegenerate");
   disableByID("btnExpand");
   disableByID("btnClearChat");
@@ -360,6 +392,7 @@ function enableUserInteraction(){
   enableByID("btnEnviar");
   enableByID("promptSelect");
   enableByID("modelSelect");
+  enableByID("modelMode");
   enableByID("btnRegenerate");
   enableByID("btnExpand");
   enableByID("btnClearChat");
@@ -453,12 +486,20 @@ async function onChangePromptSelect(){
 onChangePromptSelect();
 
 async function onChangeModelSelect(){
-  const modelSelect = document.getElementById('modelSelect');
-  modelSelect.addEventListener('change', async () => {
+  const element = document.getElementById('modelSelect');
+  element.addEventListener('change', async () => {
     promptSelectUpdateBehavior();
   });
 }
 onChangeModelSelect();
+
+async function onChangeModeSelect(){
+  const element = document.getElementById('modelMode');
+  element.addEventListener('change', async () => {
+    promptSelectUpdateBehavior();
+  });
+}
+onChangeModeSelect();
 
 async function onClickEnviarButton(){
   const btnEnviar = document.getElementById('btnEnviar');
