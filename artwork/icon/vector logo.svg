@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fd6818;
+      }
+
+      .cls-2 {
+        fill: #fac802;
+      }
+
+      .cls-3 {
+        fill: #eb4310;
+      }
+
+      .cls-4 {
+        fill: #fd9307;
+      }
+
+      .cls-5, .cls-6, .cls-7 {
+        fill: none;
+      }
+
+      .cls-6 {
+        clip-path: url(#clippath);
+      }
+
+      .cls-8 {
+        fill: #fe6718;
+      }
+
+      .cls-7 {
+        clip-path: url(#clippath-1);
+      }
+
+      .cls-9 {
+        fill: #ff8d05;
+      }
+    </style>
+    <clipPath id="clippath">
+      <polygon class="cls-5" points="16 9.5 8 16 8 3 16 9.5"/>
+    </clipPath>
+    <clipPath id="clippath-1">
+      <polygon class="cls-5" points="0 9.5 8 16 8 3 0 9.5"/>
+    </clipPath>
+  </defs>
+  <polygon class="cls-3" points="8 8 2 8 2 0 8 3 8 8"/>
+  <polygon class="cls-1" points="8 8 14 8 14 0 8 3 8 8"/>
+  <polygon class="cls-8" points="0 9.5 8 16 8 3 0 9.5"/>
+  <polygon class="cls-9" points="16 9.5 8 16 8 3 16 9.5"/>
+  <g class="cls-6">
+    <polygon class="cls-2" points="16 8 8 13.21 8 16 16 9.5 16 8"/>
+  </g>
+  <g class="cls-7">
+    <polygon class="cls-4" points="0 8 8 13.21 8 16 0 9.5 0 8"/>
+  </g>
+</svg>
