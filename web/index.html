@@ -116,10 +116,15 @@ const modelList = [
   {name:"GPT 3.5",value:"gpt-3.5-turbo"},
   {name:"GPT 3.5 13/6/23",value:"gpt-3.5-turbo-0613"},
   {name:"GPT 3.5 1/3/23",value:"gpt-3.5-turbo-0301"},
+];
+/*const modelList = [
+  {name:"GPT 3.5",value:"gpt-3.5-turbo"},
+  {name:"GPT 3.5 13/6/23",value:"gpt-3.5-turbo-0613"},
+  {name:"GPT 3.5 1/3/23",value:"gpt-3.5-turbo-0301"},
   {name:"GPT 4",value:"gpt-4"},
   {name:"GPT 4 13/6/23",value:"gpt-4-0613"},
   {name:"GPT 4 14/3/23",value:"gpt-4-0314"},
-];
+];*/
 const modeList = [
   {name:"Normal",value:1},
   {name:"Invariável 0",value:0},
@@ -225,11 +230,9 @@ async function appendChatMessages(userInput){
 
 /* Funcoes para api do gpt da openai */
 
-function atoc (){
-  const hash = "c2stQ1Z3B0LTMuNS10dXJibw==FxTzBFMXUybnBvYjltMXE1b0dUM0JsYmtGSmxIMzg5dWlWOGZUa25Md1dlOUZP";
-  const temp = btoa(gpt3_5);
-  const temp2 = hash.replace(temp, "");
-  return atob(temp2);
+function atoc(){
+  const hash = 'eyJhcGlLZXkiOiJzay1raW9kTFo4OHV0TDJCWUs2c2xGSVQzQmxia0ZKamcycmtjeWpuMGZwRm9oRGZXZ0ciLCJiYXNlT3B0aW9ucyI6eyJoZWFkZXJzIjp7IlVzZXItQWdlbnQiOiJPcGVuQUkvTm9kZUpTLzMuMy4wIiwiQXV0aG9yaXphdGlvbiI6IkJlYXJlciBzay1raW9kTFo4OHV0TDJCWUs2c2xGSVQzQmxia0ZKamcycmtjeWpuMGZwRm9oRGZXZ0cifX19';
+  return JSON.parse(atob(hash));
 }
 
 function initializeChat(behavior) {
@@ -268,9 +271,7 @@ async function generateChatMessages(promptText, messages) {
 }
 
 async function configurar(behavior){
-  configuration = new openailib.Configuration({
-    apiKey: atoc(),
-  });
+  configuration = new openailib.Configuration(atoc());
   openai = new openailib.OpenAIApi(configuration);
   return initializeChat(behavior);
 }
