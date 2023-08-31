@@ -60,6 +60,10 @@
  <button class="btn btn-outline-light prompt-button"  data-bs-toggle="modal" data-bs-target="#exemploJanela">
   <span class="mdi mdi-text-account"> <span class="unnecessary-text">Prompt</span></span>
  </button>
+ <!-- botao ativar text to speech -->
+ <button id="btnTextToSpeech" class="btn btn-outline-light prompt-button prompt-button-posterior">
+  <span id="iconTextToSpeech" class="mdi mdi-volume-off"> <span class="unnecessary-text">Voz</span></span>
+ </button>
  <!-- botao de limpar chat de mensagens -->
  <button id="btnClearChat" class="btn btn-outline-light prompt-button prompt-button-posterior">
   <span class="mdi mdi-delete"> <span class="unnecessary-text">Apagar</span></span>
@@ -118,6 +122,7 @@ let gptTemperature;
 let mensagesObject;
 let loading = false;
 let expandedChatInput = false;
+let textToSpeechEnabled = false;
 /* fim de variaveis globais */
 /* constantes globais */
 const gpt3_5= "gpt-3.5-turbo";
@@ -396,6 +401,7 @@ function disableUserInteraction(){
   disableByID("modelMode");
   disableByID("btnRegenerate");
   disableByID("btnExpand");
+  disableByID("btnTextToSpeech")
   disableByID("btnClearChat");
 }
 
@@ -406,6 +412,7 @@ function enableUserInteraction(){
   enableByID("modelMode");
   enableByID("btnRegenerate");
   enableByID("btnExpand");
+  enableByID("btnTextToSpeech")
   enableByID("btnClearChat");
 }
 
@@ -468,6 +475,15 @@ function contractChatInput(){
   setTextByID("Expandir", "btnExpandText");
 };
 
+function disableTextToSpeech(){
+  textToSpeechEnabled = false;
+  replaceClassByID(
+    /*id:*/ "iconTextToSpeech",
+    /*oldClass:*/ "mdi-volume-high",
+    /*newClass:*/ "mdi-volume-off"
+  );
+};
+
 //expandir a area do de escrever a mensagem
 function expandChatInput(){
   expandedChatInput = true;
@@ -482,6 +498,15 @@ function expandChatInput(){
     /*newClass:*/ "expanded"
   );
   setTextByID("Encolher", "btnExpandText");
+};
+
+function enableTextToSpeech(){
+  textToSpeechEnabled = true;
+  replaceClassByID(
+    /*id:*/ "iconTextToSpeech",
+    /*oldClass:*/ "mdi-volume-off",
+    /*newClass:*/ "mdi-volume-high"
+  );
 };
 
 /* Fim de funcoes de manipulacao do DOM */
@@ -553,6 +578,19 @@ async function onClickExpandChatInputButton(){
   });
 }
 onClickExpandChatInputButton();
+
+async function onClickTextToSpeechButton(){
+  const button = document.getElementById('btnTextToSpeech');
+  button.addEventListener('click', async () => {
+    if (textToSpeechEnabled === true){
+      disableTextToSpeech();
+    }else{
+      enableTextToSpeech();
+    };
+  });
+}
+onClickTextToSpeechButton();
+
 
 /* Fim de funcoes de event listener */
 
