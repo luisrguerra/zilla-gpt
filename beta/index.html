@@ -234,6 +234,7 @@ async function appendChatMessages(userInput){
       mensagesObject = await generateChatMessages(userInput, mensagesObject);
       const textResponse = lastMessage(mensagesObject);
       appendChatBot(textResponse);
+      readMessageWithVoice(textResponse);
     } catch (error) {
       appendChatBot("Erro de conexão com a API da OpenAI. Mensagem não enviada.");
     }
@@ -296,6 +297,22 @@ function lastMessage(messages){
 }
 
 /* Fim de funcoes para api do gpt da openai */
+
+/* Funcoes de text to speech */
+function reader(text, language){
+  let voice = new SpeechSynthesisUtterance();
+  voice.lang = language;
+  voice.text = text;
+  voice.volume = 1;
+  voice.rate = 0.8;
+
+  voice.onend = function() {
+	  console.log('Speech has finished');
+  }
+
+  speechSynthesis.speak(voice);
+};
+/* Fim de funcoes de text to speech */
 
 /* Funcoes de manipulacao do DOM */
 
@@ -369,6 +386,13 @@ function appendChatUser(text){
   p.classList.add("chatUser");
   container.appendChild(p);
   scrollToBottom("scroll");
+}
+
+function readMessageWithVoice(text){
+  if(textToSpeechEnabled === true){
+    const waitText = "resultado. ";
+    reader(waitText + text, "pt-BR");
+  }
 }
 
 function appendChatBot(text){
