@@ -300,6 +300,7 @@ function lastMessage(messages){
 
 /* Funcoes de text to speech */
 function reader(text, language){
+  window.speechSynthesis.cancel();
   let voice = new SpeechSynthesisUtterance();
   voice.lang = language;
   voice.text = text;
@@ -312,6 +313,13 @@ function reader(text, language){
 
   speechSynthesis.speak(voice);
 };
+
+function readMessageWithVoice(text){
+  if(textToSpeechEnabled === true){
+    reader(text, "pt-BR");
+  }
+}
+
 /* Fim de funcoes de text to speech */
 
 /* Funcoes de manipulacao do DOM */
@@ -386,13 +394,6 @@ function appendChatUser(text){
   p.classList.add("chatUser");
   container.appendChild(p);
   scrollToBottom("scroll");
-}
-
-function readMessageWithVoice(text){
-  if(textToSpeechEnabled === true){
-    const waitText = "resultado. ";
-    reader(waitText + text, "pt-BR");
-  }
 }
 
 function appendChatBot(text){
