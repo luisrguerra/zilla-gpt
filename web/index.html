@@ -203,6 +203,7 @@ function updateTemperature(){
 };
 
 function promptSelectUpdateBehavior(){
+  interruptTextToSpeech();
   updateModel();
   updateTemperature();
   const promptSelected = getValueByID('promptSelect');
@@ -299,13 +300,45 @@ function lastMessage(messages){
 /* Fim de funcoes para api do gpt da openai */
 
 /* Funcoes de text to speech */
-function reader(text, language){
+function interruptTextToSpeech(){
   window.speechSynthesis.cancel();
+}
+
+let textToSpeechVoices;
+speechSynthesis.addEventListener("voiceschanged", () => {
+  textToSpeechVoices = speechSynthesis.getVoices()
+});
+
+function isVoiceAvailable(voiceName) {
+  for (const voice of textToSpeechVoices) {
+    if (voice.name === voiceName) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function findVoiceByName(voiceName) {
+  return textToSpeechVoices.find(voice => voice.name === voiceName);
+}
+
+function setupVoice(voice){
+  const preferenceVoice = "Microsoft Antonio Online (Natural) - Portuguese (Brazil)";
+  //const preferenceVoice = "Microsoft Francisca Online (Natural) - Portuguese (Brazil)";
+  if (isVoiceAvailable(preferenceVoice)){
+    voice.voice = findVoiceByName(preferenceVoice);
+  }
+  return voice;
+}
+
+function reader(text, language){
+  interruptTextToSpeech();
   let voice = new SpeechSynthesisUtterance();
+  voice = setupVoice(voice);
   voice.lang = language;
   voice.text = text;
   voice.volume = 1;
-  voice.rate = 0.8;
+  voice.rate = 0.9;
 
   voice.onend = function() {
 	  console.log('Speech has finished');
@@ -502,7 +535,7 @@ function contractChatInput(){
 
 function disableTextToSpeech(){
   textToSpeechEnabled = false;
-  window.speechSynthesis.cancel();
+  interruptTextToSpeech();
   replaceClassByID(
     /*id:*/ "iconTextToSpeech",
     /*oldClass:*/ "mdi-volume-high",
