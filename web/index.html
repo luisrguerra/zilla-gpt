@@ -502,6 +502,7 @@ function contractChatInput(){
 
 function disableTextToSpeech(){
   textToSpeechEnabled = false;
+  window.speechSynthesis.cancel();
   replaceClassByID(
     /*id:*/ "iconTextToSpeech",
     /*oldClass:*/ "mdi-volume-high",
