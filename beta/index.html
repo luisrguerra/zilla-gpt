@@ -299,8 +299,12 @@ function lastMessage(messages){
 /* Fim de funcoes para api do gpt da openai */
 
 /* Funcoes de text to speech */
-function reader(text, language){
+function interruptTextToSpeech(){
   window.speechSynthesis.cancel();
+}
+
+function reader(text, language){
+  interruptTextToSpeech();
   let voice = new SpeechSynthesisUtterance();
   voice.lang = language;
   voice.text = text;
@@ -502,7 +506,7 @@ function contractChatInput(){
 
 function disableTextToSpeech(){
   textToSpeechEnabled = false;
-  window.speechSynthesis.cancel();
+  interruptTextToSpeech();
   replaceClassByID(
     /*id:*/ "iconTextToSpeech",
     /*oldClass:*/ "mdi-volume-high",
@@ -578,6 +582,7 @@ async function onClickClearChatButton(){
   const button = document.getElementById('btnClearChat');
   button.addEventListener('click', async () => {
     if(confirm("Tem certeza que deseja apagar o chat?")){
+      interruptTextToSpeech();
       promptSelectUpdateBehavior();
     };
   });
