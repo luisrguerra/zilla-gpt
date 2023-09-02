@@ -203,6 +203,7 @@ function updateTemperature(){
 };
 
 function promptSelectUpdateBehavior(){
+  interruptTextToSpeech();
   updateModel();
   updateTemperature();
   const promptSelected = getValueByID('promptSelect');
@@ -582,7 +583,6 @@ async function onClickClearChatButton(){
   const button = document.getElementById('btnClearChat');
   button.addEventListener('click', async () => {
     if(confirm("Tem certeza que deseja apagar o chat?")){
-      interruptTextToSpeech();
       promptSelectUpdateBehavior();
     };
   });
