@@ -45,8 +45,7 @@
   
   <div class="selectors">
   <select class="form-select form-select-lg mb-3 theme" id="promptSelect"></select>
-  <select class="form-select form-select-lg mb-3 theme" id="modelSelect" style="max-width: 100%;"></select>
-  <select class="form-select form-select-lg mb-3 theme" id="modelMode" style="max-width: 100%;"></select>
+  <button id="promptMenuButton" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#promptMenuWindow">Opções</button>
   </div>
 
   <!-- texto terminal -->
@@ -57,7 +56,7 @@
 <!-- campo de input de texto -->
 <div id="prompt-container" class="contracted">
 <div style="margin-inline: 1em;">
- <button class="btn btn-outline-light prompt-button"  data-bs-toggle="modal" data-bs-target="#exemploJanela">
+ <button class="btn btn-outline-light prompt-button"  data-bs-toggle="modal" data-bs-target="#promptViewWindow">
   <span class="mdi mdi-text-account"> <span class="unnecessary-text">Prompt</span></span>
  </button>
  <!-- botao ativar text to speech -->
@@ -88,7 +87,7 @@
 </body>
 
 <!-- janela -->
-<div class="modal fade" id="exemploJanela" tabindex="-1">
+<div class="modal fade" id="promptViewWindow" tabindex="-1">
   <!-- modal-dialog-centered torna centralizado no meio -->
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="theme modal-content">
@@ -109,6 +108,33 @@
    
     </div> <!-- modal-content -->
   </div> <!-- modal-dialog -->
+</div> <!-- modal -->
+
+<!-- janela tela cheia do menu do seletor de prompts -->
+<div class="modal fade" id="promptMenuWindow" tabindex="-1">
+ <!-- modal-fullscreen deixa em tela cheia -->
+ <div class="modal-dialog modal-fullscreen">
+  <div class="theme modal-content">
+    
+  <!-- cabeçalho da janela -->
+  <div class="theme modal-header">
+   <!--Título ao topo da janela à esquerda -->
+   <!-- fs-5 define o tamaho do texto -->
+   <h1 class="modal-title fs-5">Opções</h1>
+   <!-- Botão X de sair à direita -->
+   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+  </div>
+  <!-- corpo, conteúdo do meio -->
+  <div class="modal-body">
+    <div class="promptMenu">
+     <h5 style="text-align: center;">Modelo de inteligência artificial</h5>
+     <select class="form-select form-select-lg mb-3 theme" id="modelSelect" style="max-width: 100%;"></select>
+     <h5 style="text-align: center;">Modo de precisão</h5>
+     <select class="form-select form-select-lg mb-3 theme" id="modelMode" style="max-width: 100%;"></select>
+    </div>
+  </div>
+  </div> <!-- modal-content -->
+ </div> <!-- modal-dialog -->
 </div> <!-- modal -->
 
 <script type="module">
@@ -461,6 +487,7 @@ function disableUserInteraction(){
   disableByID("btnExpand");
   disableByID("btnTextToSpeech")
   disableByID("btnClearChat");
+  disableByID("promptMenuButton");
 }
 
 function enableUserInteraction(){
@@ -472,6 +499,7 @@ function enableUserInteraction(){
   enableByID("btnExpand");
   enableByID("btnTextToSpeech")
   enableByID("btnClearChat");
+  enableByID("promptMenuButton");
 }
 
 function setTextByID(text, id){
