@@ -1,5 +1,5 @@
 button#promptMenuButton, button#promptMenuButton:disabled{
-  display:none;
+  /* display:none; */
   color: initial;
   border-color: initial;
   border-width: 2px;
@@ -17,6 +17,11 @@ button#promptMenuButton, button#promptMenuButton:disabled{
 div.selectors{
     max-width: 100%;
     margin-inline: auto;
+}
+
+div.promptMenu{
+  max-width: 100%;
+  margin-inline: auto;
 }
   
 select.form-select,select.form-select:disabled{
@@ -37,6 +42,11 @@ select.theme:focus,select.theme:active{
     div.selectors{
       max-width: fit-content;
       display: flex;
+      margin-inline: auto;
+    }
+    div.promptMenu{
+      max-width: fit-content;
+      display: block;
       margin-inline: auto;
     }
     select.form-select,select.form-select:disabled{

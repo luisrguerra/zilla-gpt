@@ -44,10 +44,8 @@
   <br>
   
   <div class="selectors">
-  <button id="promptMenuButton" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#promptMenuWindow"></button>
   <select class="form-select form-select-lg mb-3 theme" id="promptSelect"></select>
-  <select class="form-select form-select-lg mb-3 theme" id="modelSelect" style="max-width: 100%;"></select>
-  <select class="form-select form-select-lg mb-3 theme" id="modelMode" style="max-width: 100%;"></select>
+  <button id="promptMenuButton" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#promptMenuWindow">Opções</button>
   </div>
 
   <!-- texto terminal -->
@@ -128,7 +126,12 @@
   </div>
   <!-- corpo, conteúdo do meio -->
   <div class="modal-body">
-   <p>Conteúdo da janela</p>
+    <div class="promptMenu">
+     <h5 style="text-align: center;">Modelo de inteligência artificial</h5>
+     <select class="form-select form-select-lg mb-3 theme" id="modelSelect" style="max-width: 100%;"></select>
+     <h5 style="text-align: center;">Modo de precisão</h5>
+     <select class="form-select form-select-lg mb-3 theme" id="modelMode" style="max-width: 100%;"></select>
+    </div>
   </div>
   </div> <!-- modal-content -->
  </div> <!-- modal-dialog -->
@@ -202,7 +205,6 @@ async function initializeAsPrompt(number){
   const promptName = promptsList[number].name;
   setPromptModalText(personalidade);
   setPromptModalTitle(promptName);
-  setTextByID(promptName, 'promptMenuButton');
   mensagesObject = await configurar(personalidade);
 }
 
