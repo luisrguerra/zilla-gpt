@@ -44,7 +44,7 @@
   <br>
   
   <div class="selectors">
-  <button id="promptMenuButton" class="btn btn-outline-light">ZillaGPT</button>
+  <button id="promptMenuButton" class="btn btn-outline-light"></button>
   <select class="form-select form-select-lg mb-3 theme" id="promptSelect"></select>
   <select class="form-select form-select-lg mb-3 theme" id="modelSelect" style="max-width: 100%;"></select>
   <select class="form-select form-select-lg mb-3 theme" id="modelMode" style="max-width: 100%;"></select>
@@ -180,6 +180,7 @@ async function initializeAsPrompt(number){
   const promptName = promptsList[number].name;
   setPromptModalText(personalidade);
   setPromptModalTitle(promptName);
+  setTextByID(promptName, 'promptMenuButton');
   mensagesObject = await configurar(personalidade);
 }
 

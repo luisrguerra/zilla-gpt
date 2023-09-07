@@ -10,6 +10,7 @@ button#promptMenuButton, button#promptMenuButton:disabled{
   margin-bottom: 1rem;
   border-radius: 0.5rem;
   padding: 0.375rem 0.75rem;
+  text-wrap: nowrap;
   box-shadow: none;
 }
 
