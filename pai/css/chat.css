@@ -1,36 +1,35 @@
 div.chatContent{
     overflow: auto;
-    background-color:#1E2227; 
     height: 100%;
     padding-bottom: 8em;
 }
 p.chatBot{
-    white-space: pre-wrap !important;
-    width: fit-content;
-    text-align: left;
     margin-right: auto;
-    font-size: 22px;
-    background-color:#23272E;
-    color: #c9d3e3;
-    border-width: 2px;
-    border-color: #ffffff7e;
-    border-style: solid;
-    white-space: pre-line;
-    padding: 1em 1em;
     border-radius: 22px 22px 22px 4px;
 }
 p.chatUser{
-    white-space: pre-wrap !important;
-    width: fit-content;
-    text-align: left;
     margin-left: auto;
-    font-size: 22px;
-    background-color:#23272E;
-    color: #c9d3e3;
-    border-width: 2px;
-    border-color: #ffffff3d;
-    border-style: solid;
-    white-space: pre-line;
-    padding: 1em 1em;
     border-radius: 22px 22px 4px 22px;
+}
+p.chatBot, p.chatUser{
+    width: fit-content;
+    max-width: 100%;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    font-size: 22px;
+    text-align: left;
+    border-width: 2px;
+    border-style: solid;
+    padding: 1em 1em;
+}
+
+@media only screen and (max-width: 800px) {
+    div.chatContent{
+      padding-inline: 1em;
+    }
+}
+@media only screen and (min-width: 800px) {
+    div.chatContent{
+        padding-inline: 15%;
+    }
 }

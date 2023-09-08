@@ -7,12 +7,22 @@
   <title>ZillaGPT</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R7C2W6H7P6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-R7C2W6H7P6');
+  </script>
+
   <!-- carrecargar recursos do material dessign -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
   <!--Bootstrap -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js" integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css" integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js" integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" integrity="sha512-Z/def5z5u2aR89OuzYcxmDJ0Bnd5V1cKqBEbvLOiUNWdg9PQeXVvXLI90SE4QOHGlfLqUnDNVAYyZi8UwUTmWQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   
   <!-- Material Design Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -20,15 +30,23 @@
 
 <!-- css -->
 <link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/scrollbar.css">
+<link rel="stylesheet" href="css/select.css">
 <link rel="stylesheet" href="css/chat.css">
+<link rel="stylesheet" href="css/prompt.css">
+<link rel="stylesheet" href="css/darkmode.css">
+<link disabled rel="stylesheet" href="css/whitemode.css">
 
 <body>
 
 <div id="scroll" class="chatContent">
   <!-- pular linha -->
   <br>
-
-  <select class="form-select form-select-lg mb-3" id="promptSelect"></select>
+  
+  <div class="selectors">
+  <select class="form-select form-select-lg mb-3 theme" id="promptSelect"></select>
+  <button id="promptMenuButton" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#promptMenuWindow">Opções</button>
+  </div>
 
   <!-- texto terminal -->
   <div id="terminalContainer"></div>
@@ -36,10 +54,14 @@
 </div> <!-- fim da div chatContent -->
 
 <!-- campo de input de texto -->
-<div class="prompt-container">
+<div id="prompt-container" class="contracted">
 <div style="margin-inline: 1em;">
- <button class="btn btn-outline-light prompt-button"  data-bs-toggle="modal" data-bs-target="#exemploJanela">
+ <button class="btn btn-outline-light prompt-button"  data-bs-toggle="modal" data-bs-target="#promptViewWindow">
   <span class="mdi mdi-text-account"> <span class="unnecessary-text">Prompt</span></span>
+ </button>
+ <!-- botao ativar text to speech -->
+ <button id="btnTextToSpeech" class="btn btn-outline-light prompt-button prompt-button-posterior">
+  <span id="iconTextToSpeech" class="mdi mdi-volume-off"> <span class="unnecessary-text">Voz</span></span>
  </button>
  <!-- botao de limpar chat de mensagens -->
  <button id="btnClearChat" class="btn btn-outline-light prompt-button prompt-button-posterior">
@@ -48,6 +70,10 @@
  <!-- botao regerar última mensagem -->
  <button id="btnRegenerate" class="btn btn-outline-light prompt-button prompt-button-posterior">
   <span class="mdi mdi-refresh"> <span class="unnecessary-text">Regerar</span></span>
+ </button>
+ <!-- botao de expandir input de texto -->
+ <button id="btnExpand" class="btn btn-outline-light prompt-button prompt-button-posterior">
+  <span id="iconExpand" class="mdi mdi-arrow-expand-up"> <span id="btnExpandText" class="unnecessary-text">Expandir</span></span>
  </button>
  <!-- botao enviar -->
  <button id="btnEnviar" class="btn btn-primary enviar">
@@ -61,13 +87,13 @@
 </body>
 
 <!-- janela -->
-<div class="modal fade" id="exemploJanela" tabindex="-1">
+<div class="modal fade" id="promptViewWindow" tabindex="-1">
   <!-- modal-dialog-centered torna centralizado no meio -->
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="dark-mode modal-content">
+    <div class="theme modal-content">
         
        <!-- cabeçalho da janela -->
-       <div class="dark-mode modal-header">
+       <div class="theme modal-header">
           <!--Título ao topo da janela à esquerda -->
           <!-- fs-5 define o tamaho do texto -->
           <h1 id="prompt-title" class="modal-title fs-5"></h1>
@@ -84,91 +110,91 @@
   </div> <!-- modal-dialog -->
 </div> <!-- modal -->
 
+<!-- janela tela cheia do menu do seletor de prompts -->
+<div class="modal fade" id="promptMenuWindow" tabindex="-1">
+ <!-- modal-fullscreen deixa em tela cheia -->
+ <div class="modal-dialog modal-fullscreen">
+  <div class="theme modal-content">
+    
+  <!-- cabeçalho da janela -->
+  <div class="theme modal-header">
+   <!--Título ao topo da janela à esquerda -->
+   <!-- fs-5 define o tamaho do texto -->
+   <h1 class="modal-title fs-5">Opções</h1>
+   <!-- Botão X de sair à direita -->
+   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+  </div>
+  <!-- corpo, conteúdo do meio -->
+  <div class="modal-body">
+    <div class="promptMenu">
+     <h5 style="text-align: center;">Modelo de inteligência artificial</h5>
+     <select class="form-select form-select-lg mb-3 theme" id="modelSelect" style="max-width: 100%;"></select>
+     <h5 style="text-align: center;">Modo de precisão</h5>
+     <select class="form-select form-select-lg mb-3 theme" id="modelMode" style="max-width: 100%;"></select>
+    </div>
+  </div>
+  </div> <!-- modal-content -->
+ </div> <!-- modal-dialog -->
+</div> <!-- modal -->
+
 <script type="module">
-import openailib from 'https://cdn.jsdelivr.net/npm/openai@3.2.1/+esm';
+import openailib from 'https://cdn.jsdelivr.net/npm/openai@3.3.0/+esm';
 //console.log("openailib: ",openailib);
 /* variaveis globais */
 let configuration;
 let openai;
+let gptModelName;
+let gptTemperature;
 let mensagesObject;
 let loading = false;
+let expandedChatInput = false;
+let textToSpeechEnabled = false;
 /* fim de variaveis globais */
 /* constantes globais */
 const gpt3_5= "gpt-3.5-turbo";
-const gptModelName = gpt3_5;
 const defaultPrompt = 0;
-const promptsList = [
-  {
-    "name":"ChatGPT 3.5",
-    "prompt":"Você é o ChatGPT, um assistente prestativo.",
-    "description": "Olá! Eu sou o ChatGPT. Eu possuo várias personalidades, você pode selecionar no menu acima. Como posso te ajudar?"
-  },
-  {
-    "name":"➗ Assistente de Matemática",
-    "prompt":'Resolva as tarefas, etapa por etapa de forma que se tenha certeza de que a resposta está correta. Você atuará como MatGPT o meu assistente de matemática. Você decorou todas as fórmulas matemáticas de diversas áreas da ciência, livros renomados sobre matemática e explicações didáticas de assuntos matemáticos. Você deve evitar fornecer resultados de cálculos, pois você não possui capacidade computacional como uma calculadora para resolver cálculos e não consegue fornecer resultados corretos, você deve se limitar a teoria matemática. Sempre que for relevante me forneça fórmulas e seus nomes. Quando utilizar um termo que é do meio matemático, explique esse termo. Quando me fornecer uma fórmula matemática me forneça o passo a passo de como resolver ela e explique de forma interessante e didática de forma que um estudante do ensino médio conseguiria entender. Ao resolver um problema matemático fornecido por mim, explique todos os procedimentos necessários para resolvê-lo.',
-    "description": "Olá! Eu sou o MatGPT, o assistente de matemática da EngNet otimizado para resolver problemas matemáticos e áreas relacionadas como por exemplo física. Copie e cole um problema matemático no chat abaixo para eu te ajudar a resolver ou me pergunte algo.\nExemplos de como representar expressões matemáticas:\nNúmero ao quadrado: N^2\nRaiz cúbica de N: N^(1/3)"
-  },
-  {
-    "name":"DicasGPT",
-    "prompt":'Você atuará como DicasGPT o meu assistente que fornecesse dicas de quais são os principais assuntos que devo estudar para resolver um problema em específico. Você não deve resolver o problema que foi fornecido. É importante que você se mantenha no papel de ser o DicasGPT o tempo todo. Sempre que for relevante, faça uma lista dos assuntos a serem estudados e pesquisado ordenada pelo grau de importância de cada assunto.',
-    "description": "Olá! Eu sou o DicasGPT, o assistente da EngNet otimizado para dar dicas de quais assuntos você precisa aprender para resolver um problema. Poderia me fornecer um problema para que eu te dê dicas do que você precisa para resolver?"
-  },
-  {
-    "name":"🖊️ Corretor de Gramática",
-    "prompt":'Você atuará como o meu assistente de gramática em português do Brasil. Você decorou todas as gramáticas de português. Eu irei fornecer um texto em português do Brasil e você irá sugerir pequenas correções gramaticais para esse texto e em seguida irá revisar o texto melhorando somente a gramática dele. É muito importante que o texto revisado seja fiel ao texto original em sentindo e contexto. Não invente conteúdo novo no texto, mantenha o texto totalmente fiel ao original.',
-    "description": "Olá! Eu sou o assistente de gramática da EngNet optimizado para revisar textos em português do Brasil. Copie e cole o texto no chat abaixo para eu revisar ou me pergunte algo."
-  },
-  {
-    "name":"📝 Resumo de texto",
-    "prompt":'Eu irei te fornecer um texto e você irá me responder somente o resumo desse texto, seja fiel ao sentido original do texto e não adicione conteúdo que não estava presente no texto original.',
-    "description": "Copie e cole um texto no chat abaixo para eu resumir, não pode ser um texto muito longo."
-  },
-  {
-    "name":"🌎 Tradutor inglês e português",
-    "prompt":'Quero que você atue como um tradutor de português do Brasil para inglês americano ou o contrário, de inglês para português do Brasil. Você irá me responder com a tradução e nada mais. Ao traduzir para inglês utilize uma linguagem simples, de forma que um estrangeiro que entenda o básico de inglês consiga entender com clareza. Comece me perguntando o que eu gostaria de traduzir.',
-    "description": "Me forneça um texto em português ou inglês para eu traduzir"
-  },
-  {
-    "name":"📖 Resumir livro por capítulo",
-    "prompt":'Ignore todas as instruções anteriores a esta. Você começará a resumir o primeiro capítulo do livro que eu forneci utilizando no mínimo 25 linhas. No final do resumo do capítulo você perguntará "Gostaria que eu resumisse o próximo capítulo?" e na próxima resposta você seguirá sempre as mesmas orientações de como resumir, porém resumindo o capítulo seguinte. Todos os resumos devem ser fiéis ao livro original e você deverá me avisar quando o livro acabar e não houver mais capítulos para resumir. Caso você não conheça o livro ou tenha poucas informações para resumir ele, você deve me avisar.',
-    "description": "Qual livro você gostaria que eu resumisse por capítulo?"
-  },
-  {
-    "name":"🧾 Processar informação",
-    "prompt":'Ignore todas as instruções anteriores a esta. Eu irei te fornecer um texto e você irá memorizar esse texto, as suas respostas a instruções e perguntas após isso serão baseadas primeiramente nesse texto que você memorizou. Após eu fornecer esse texto você irá perguntar "O que você quer que eu faça?" e aguarde.',
-    "description": "Copie e cole um texto no chat abaixo para eu memorizar. Após eu memorizar as informações você poderá me dar instruções do que fazer com essas informações. Exemplos: resumir texto, melhorar texto, procurar defeitos e etc..."
-  },
-  {
-    "name":"📈 Analise de mercado",
-    "prompt":'Eu irei fornecer uma área de negócio, você deve me responder baseado em informações com no máximo 2 anos vindas de pesquisas de mercado recentes, pesquisas sobre crescimento, decrescimento ou estagnação do mercado e tendencias para o setor nos próximos 5 anos. Suas fontes devem ser instituições renomadas com reputação. O que não incluí blogs pessoais e fontes que não são focadas e especializadas nesse tipo de assunto. Quando citar informações estatísticas, cite a fonte dessas informações.',
-    "description": "Qual área de negócios você quer que eu analise o mercado?"
-  },
-  {
-    "name":"⌛ Maquina do tempo",
-    "prompt":'Ignore todas as instruções anteriores a esta. Agora você irá virar o TimeGPT. A máquina do tempo de mais alta tecnologia já criada. O TimeGPT possui uma câmera que permite capturar uma imagem da data e do local do passado que for selecionado. Eu irei fornecer um ano e após o ano ser informado por mim você deve me perguntar "E para qual lugar?". Aguarde e depois de o local ser informado por mim o TimeGPT irá fotografar o passado na data e local escolhido. De preferência o TimeGPT tira fotos de eventos históricos importantes e de cenários que descrevem bem o local, a arquitetura, roupas e a sociedade na época. Após tirar a foto descreva essa foto com riqueza de detalhes, sem ser clichê. Todas as fotos do TimeGPT são fieis aos estudos de historiadores renomados e fatos reais. Em seguida pergunte "Gostaria que eu tirasse mais fotos?" e se sim, repita o processo de tirar fotos e descrevê-las. É importante resaltar que o TimeGPT não pode pular etapas do processo e escolher a data e local por conta própria, essas informações obrigatoriamente precisam ser informadas por mim. Para isso as perguntas devem ser dividas em textos gerados separadamente.',
-    "description": "Olá! eu sou o TimeGPT, a máquina do tempo mais avançada nesse instante do espaço tempo. Para qual ano você gostaria que eu viajasse?"
-  },
-  {
-    "name":"⌛🗺️ Guia de viajem no tempo",
-    "prompt":'Agora você é o TimeGPT o guia turístico de viajem no tempo. Fornecerei a você o período histórico ou o tempo no futuro que desejo visitar e você sugerirá os melhores eventos, pontos turísticos ou pessoas para conhecer. Não escreva explicações, apenas dê sugestões e qualquer informação necessária. Não seja clichê na suas respostas. Depois pergunte se eu gostaria de conhecer outro lugar e em qual época e faça de novo o processo de ser meu guia turístico.',
-    "description": "Olá! eu sou o TimeGPT, para qual local você deseja visitar e qual época?"
-  },
-  {
-    "name":"🖊️ Virar um autor conhecido",
-    "prompt":'Ignore todas as instruções anteriores a esta. Eu irei te fornecer o nome de um autor conhecido e você entrará no papel de falar como se você fosse esse autor, você imitará esse autor baseando-se em biografias e nos texto e obras desse autor. Imitando o seu jeito de escrever, os assuntos de interesse, os termos utilizados, os valores e reaproveitando as frases desse autor. Considerando a história de vida do autor. Ao entrar no papel desse autor, todas as suas respostas passaram a ser dentro do papel que foi dado, não podendo sair do personagem. Caso você não consiga reconhecer esse autor ou não tenha informações suficientes sobre ele, me avise.',
-    "description": "Qual autor você gostaria que eu virasse?"
-  },
-  {
-    "name":"📜 Conte um fato histórico",
-    "prompt":'Eu irei fornecer um tema e você me contará um fato histórico, curioso, interessante, intrigante e divertido baseado somente em fatos reais e conteúdos da Wikipedia e livros acadêmicos de história. Depois me pergunte "Gostaria que eu contasse outro fato histórico?" e se sim, repita a instrução anterior de me contar um fato histórico.',
-    "description": "Qual tema você gostaria que eu contasse um fato histórico?"
-  },
-]
+/*const modelList = [
+  {name:"GPT 3.5",value:"gpt-3.5-turbo"},
+  {name:"GPT 3.5 13/6/23",value:"gpt-3.5-turbo-0613"},
+  {name:"GPT 3.5 1/3/23",value:"gpt-3.5-turbo-0301"},
+]; */
+const modelList = [
+  {name:"GPT 3.5",value:"gpt-3.5-turbo"},
+  {name:"GPT 3.5 13/6/23",value:"gpt-3.5-turbo-0613"},
+  {name:"GPT 3.5 1/3/23",value:"gpt-3.5-turbo-0301"},
+  {name:"GPT 4",value:"gpt-4"},
+  {name:"GPT 4 13/6/23",value:"gpt-4-0613"},
+  {name:"GPT 4 14/3/23",value:"gpt-4-0314"},
+];
+const modeList = [
+  {name:"Normal",value:1},
+  {name:"Invariável 0",value:0},
+  {name:"Cabeça dura 0.25",value:0.25},
+  {name:"Pouco criativo 0.5",value:0.5},
+  {name:"Pouco criativo 0.75",value:0.75},
+  {name:"Criativo 1.1",value:1.1},
+  {name:"Impreciso 1.2",value:1.2},
+];
+const promptsList = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts.json");
 /* fim de constantes globais */
 
+loadPromptSelectOptions('promptSelect',promptsList);
+loadSelectOptions('modelSelect',modelList);
+loadSelectOptions('modelMode',modeList);
+updateModel();
+updateTemperature();
 initializeAsPrompt(defaultPrompt);
-loadSelectOptions(promptsList);
 
+async function getJson(fileName){
+  try {
+    const response = await fetch(fileName);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log('Erro ao obter Json',fileName,":", error);
+    return [];
+  }
+};
 
 /* funcoes da logica do chat */
 async function initializeAsPrompt(number){
@@ -182,7 +208,30 @@ async function initializeAsPrompt(number){
   mensagesObject = await configurar(personalidade);
 }
 
+function getModelSelect(){
+  const modelSelected = getValueByID('modelSelect');
+  return modelSelected;
+}
+
+function getModelMode(){
+  const modelMode = parseFloat(getValueByID('modelMode'));
+  return modelMode;
+}
+
+function updateModel(){
+  gptModelName = getModelSelect();
+  console.log("Updated model to:", gptModelName);
+};
+
+function updateTemperature(){
+  gptTemperature = getModelMode();
+  console.log("Updated temperature to:", gptTemperature);
+};
+
 function promptSelectUpdateBehavior(){
+  interruptTextToSpeech();
+  updateModel();
+  updateTemperature();
   const promptSelected = getValueByID('promptSelect');
   initializeAsPrompt(promptSelected);
 }
@@ -212,6 +261,7 @@ async function appendChatMessages(userInput){
       mensagesObject = await generateChatMessages(userInput, mensagesObject);
       const textResponse = lastMessage(mensagesObject);
       appendChatBot(textResponse);
+      readMessageWithVoice(textResponse);
     } catch (error) {
       appendChatBot("Erro de conexão com a API da OpenAI. Mensagem não enviada.");
     }
@@ -223,11 +273,9 @@ async function appendChatMessages(userInput){
 
 /* Funcoes para api do gpt da openai */
 
-function atoc (){
-  const hash = "c2stQ1Z3B0LTMuNS10dXJibw==FxTzBFMXUybnBvYjltMXE1b0dUM0JsYmtGSmxIMzg5dWlWOGZUa25Md1dlOUZP";
-  const temp = btoa(gpt3_5);
-  const temp2 = hash.replace(temp, "");
-  return atob(temp2);
+function atoc(){
+  const hash = 'eyJhcGlLZXkiOiJzay1raW9kTFo4OHV0TDJCWUs2c2xGSVQzQmxia0ZKamcycmtjeWpuMGZwRm9oRGZXZ0ciLCJiYXNlT3B0aW9ucyI6eyJoZWFkZXJzIjp7IlVzZXItQWdlbnQiOiJPcGVuQUkvTm9kZUpTLzMuMy4wIiwiQXV0aG9yaXphdGlvbiI6IkJlYXJlciBzay1raW9kTFo4OHV0TDJCWUs2c2xGSVQzQmxia0ZKamcycmtjeWpuMGZwRm9oRGZXZ0cifX19';
+  return JSON.parse(atob(hash));
 }
 
 function initializeChat(behavior) {
@@ -237,11 +285,12 @@ function initializeChat(behavior) {
 }
 
 async function completionsChatTextModel(messages) {
+  console.log("GPT model:", gptModelName);
   const parameters ={
       model: gptModelName,
       messages: messages,
+      temperature: gptTemperature,
       /*
-      temperature: ,
       max_tokens: ,
       top_p: ,
       frequency_penalty: ,
@@ -265,9 +314,7 @@ async function generateChatMessages(promptText, messages) {
 }
 
 async function configurar(behavior){
-  configuration = new openailib.Configuration({
-    apiKey: atoc(),
-  });
+  configuration = new openailib.Configuration(atoc());
   openai = new openailib.OpenAIApi(configuration);
   return initializeChat(behavior);
 }
@@ -277,6 +324,62 @@ function lastMessage(messages){
 }
 
 /* Fim de funcoes para api do gpt da openai */
+
+/* Funcoes de text to speech */
+function interruptTextToSpeech(){
+  window.speechSynthesis.cancel();
+}
+
+let textToSpeechVoices;
+speechSynthesis.addEventListener("voiceschanged", () => {
+  textToSpeechVoices = speechSynthesis.getVoices()
+});
+
+function isVoiceAvailable(voiceName) {
+  for (const voice of textToSpeechVoices) {
+    if (voice.name === voiceName) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function findVoiceByName(voiceName) {
+  return textToSpeechVoices.find(voice => voice.name === voiceName);
+}
+
+function setupVoice(voice){
+  const preferenceVoice = "Microsoft Antonio Online (Natural) - Portuguese (Brazil)";
+  //const preferenceVoice = "Microsoft Francisca Online (Natural) - Portuguese (Brazil)";
+  if (isVoiceAvailable(preferenceVoice)){
+    voice.voice = findVoiceByName(preferenceVoice);
+  }
+  return voice;
+}
+
+function reader(text, language){
+  interruptTextToSpeech();
+  let voice = new SpeechSynthesisUtterance();
+  voice = setupVoice(voice);
+  voice.lang = language;
+  voice.text = text;
+  voice.volume = 1;
+  voice.rate = 0.9;
+
+  voice.onend = function() {
+	  console.log('Speech has finished');
+  }
+
+  speechSynthesis.speak(voice);
+};
+
+function readMessageWithVoice(text){
+  if(textToSpeechEnabled === true){
+    reader(text, "pt-BR");
+  }
+}
+
+/* Fim de funcoes de text to speech */
 
 /* Funcoes de manipulacao do DOM */
 
@@ -304,9 +407,9 @@ function createSelectOption(text, value, selected) {
   return option;
 }
 
-function loadSelectOptions(promptsList){
+function loadPromptSelectOptions(ID, promptsList){
   const maxItems = promptsList.length;
-  const promptSelect = document.getElementById('promptSelect');
+  const promptSelect = document.getElementById(ID);
   for (let i = 0; i < maxItems; i++) {
     const name = promptsList[i].name;
     let selected = false;
@@ -317,6 +420,22 @@ function loadSelectOptions(promptsList){
     promptSelect.appendChild(option);
   }
 }
+
+function loadSelectOptions(ID,optionList){
+  const maxItems = optionList.length;
+  const Selectelement = document.getElementById(ID);
+  for (let i = 0; i < maxItems; i++) {
+    const name = optionList[i].name;
+    const value = optionList[i].value;
+    let selected = false;
+    if(i==0){
+      selected = true;
+    }
+    const option = createSelectOption(name, value, selected);
+    Selectelement.appendChild(option);
+  }
+};
+
 
 function getValueByID(id){
   const element = document.getElementById(id);
@@ -362,15 +481,25 @@ function clearInput(){
 function disableUserInteraction(){
   disableByID("btnEnviar");
   disableByID("promptSelect");
+  disableByID("modelSelect");
+  disableByID("modelMode");
   disableByID("btnRegenerate");
+  disableByID("btnExpand");
+  disableByID("btnTextToSpeech")
   disableByID("btnClearChat");
+  disableByID("promptMenuButton");
 }
 
 function enableUserInteraction(){
   enableByID("btnEnviar");
   enableByID("promptSelect");
+  enableByID("modelSelect");
+  enableByID("modelMode");
   enableByID("btnRegenerate");
+  enableByID("btnExpand");
+  enableByID("btnTextToSpeech")
   enableByID("btnClearChat");
+  enableByID("promptMenuButton");
 }
 
 function setTextByID(text, id){
@@ -411,6 +540,62 @@ function scrollToBottom(id) {
   element.scrollTop = element.scrollHeight - element.clientHeight;
 }
 
+function replaceClassByID(id, oldClass, newClass){
+  const element = document.getElementById(id);
+  element.classList.replace(oldClass, newClass);
+};
+
+//diminuir a area do de escrever a mensagem
+function contractChatInput(){
+  expandedChatInput = false;
+  replaceClassByID(
+    /*id:*/ "iconExpand",
+    /*oldClass:*/ "mdi-arrow-collapse-down",
+    /*newClass:*/ "mdi-arrow-expand-up"
+  );
+  replaceClassByID(
+    /*id:*/ "prompt-container",
+    /*oldClass:*/ "expanded",
+    /*newClass:*/ "contracted"
+  );
+  setTextByID("Expandir", "btnExpandText");
+};
+
+function disableTextToSpeech(){
+  textToSpeechEnabled = false;
+  interruptTextToSpeech();
+  replaceClassByID(
+    /*id:*/ "iconTextToSpeech",
+    /*oldClass:*/ "mdi-volume-high",
+    /*newClass:*/ "mdi-volume-off"
+  );
+};
+
+//expandir a area do de escrever a mensagem
+function expandChatInput(){
+  expandedChatInput = true;
+  replaceClassByID(
+    /*id:*/ "iconExpand",
+    /*oldClass:*/ "mdi-arrow-expand-up",
+    /*newClass:*/ "mdi-arrow-collapse-down"
+  );
+  replaceClassByID(
+    /*id:*/ "prompt-container",
+    /*oldClass:*/ "contracted",
+    /*newClass:*/ "expanded"
+  );
+  setTextByID("Encolher", "btnExpandText");
+};
+
+function enableTextToSpeech(){
+  textToSpeechEnabled = true;
+  replaceClassByID(
+    /*id:*/ "iconTextToSpeech",
+    /*oldClass:*/ "mdi-volume-off",
+    /*newClass:*/ "mdi-volume-high"
+  );
+};
+
 /* Fim de funcoes de manipulacao do DOM */
 
 /* Funcoes de event listener */
@@ -423,12 +608,29 @@ async function onChangePromptSelect(){
 }
 onChangePromptSelect();
 
+async function onChangeModelSelect(){
+  const element = document.getElementById('modelSelect');
+  element.addEventListener('change', async () => {
+    promptSelectUpdateBehavior();
+  });
+}
+onChangeModelSelect();
+
+async function onChangeModeSelect(){
+  const element = document.getElementById('modelMode');
+  element.addEventListener('change', async () => {
+    promptSelectUpdateBehavior();
+  });
+}
+onChangeModeSelect();
+
 async function onClickEnviarButton(){
   const btnEnviar = document.getElementById('btnEnviar');
   btnEnviar.addEventListener('click', async () => {
    const userInput = getPrompt();
    appendChatUser(userInput);
    await appendChatMessages (userInput);
+   contractChatInput();
   });
 }
 onClickEnviarButton();
@@ -451,6 +653,31 @@ async function onClickRegenerateLastMessageButton(){
   });
 }
 onClickRegenerateLastMessageButton();
+
+async function onClickExpandChatInputButton(){
+  const button = document.getElementById('btnExpand');
+  button.addEventListener('click', async () => {
+    if (expandedChatInput === true){
+      contractChatInput();
+    }else{
+      expandChatInput();
+    };
+  });
+}
+onClickExpandChatInputButton();
+
+async function onClickTextToSpeechButton(){
+  const button = document.getElementById('btnTextToSpeech');
+  button.addEventListener('click', async () => {
+    if (textToSpeechEnabled === true){
+      disableTextToSpeech();
+    }else{
+      enableTextToSpeech();
+    };
+  });
+}
+onClickTextToSpeechButton();
+
 
 /* Fim de funcoes de event listener */
 
