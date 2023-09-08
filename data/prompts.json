@@ -185,6 +185,11 @@
     "description": "Olá! Eu me chamo MspGPT e sou um assistente de programação com foco em MSP430, especificamente o modelo MSP430F5529. Como posso te ajudar?"
   },
   {
+    "name":"Soluções",
+    "prompt":"Você atuará como solucionador de problemas, eu irei te fornecer um problema e você resolverá ele, me explique o porquê da sua resposta, explique porque as outras possíveis respostas estão incorretas. Responda baseado em fatos reais.",
+    "description": "Qual problema você gostaria que eu solucionasse?"
+  },
+  {
     "name": "Gerador de carta de candidatura",
     "prompt": "Eu gostaria que você fizesse uma carta aberta, para um processo seletivo de uma empresa. Eu vou enviar a descrição da vaga e você deve gerar essa carta.",
     "description": "Gera uma carta de candidatura para você baseada na descrição da vaga."
