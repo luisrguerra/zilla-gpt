@@ -21,8 +21,8 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
   <!--Bootstrap -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js" integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css" integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js" integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" integrity="sha512-Z/def5z5u2aR89OuzYcxmDJ0Bnd5V1cKqBEbvLOiUNWdg9PQeXVvXLI90SE4QOHGlfLqUnDNVAYyZi8UwUTmWQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   
   <!-- Material Design Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -138,12 +138,11 @@
 </div> <!-- modal -->
 
 <script type="module">
-import openailib from 'https://cdn.jsdelivr.net/npm/openai@3.3.0/+esm';
+import openailib from 'https://cdn.jsdelivr.net/npm/openai@4.10.0/+esm';
 //console.log("openailib: ",openailib);
 /* variaveis globais */
-let configuration;
 let openai;
-let gptModelName;
+let modelName;
 let gptTemperature;
 let mensagesObject;
 let loading = false;
@@ -151,12 +150,15 @@ let expandedChatInput = false;
 let textToSpeechEnabled = false;
 /* fim de variaveis globais */
 /* constantes globais */
-const gpt3_5= "gpt-3.5-turbo";
 const defaultPrompt = 0;
 const modelList = [
   {name:"GPT 3.5",value:"gpt-3.5-turbo"},
   {name:"GPT 3.5 13/6/23",value:"gpt-3.5-turbo-0613"},
   {name:"GPT 3.5 1/3/23",value:"gpt-3.5-turbo-0301"},
+  {name:"Llama 2 70b chat hf",value:"meta-llama/Llama-2-70b-chat-hf"},
+  {name:"Lzlv 70b",value:"lizpreciatior/lzlv_70b_fp16_hf"},
+  {name:"Airoboros l2 70b 1.4.1",value:"jondurbin/airoboros-l2-70b-gpt4-1.4.1"},
+  {name:"CodeLlama 34b",value:"codellama/CodeLlama-34b-Instruct-hf"},
 ];
 /*const modelList = [
   {name:"GPT 3.5",value:"gpt-3.5-turbo"},
@@ -165,6 +167,10 @@ const modelList = [
   {name:"GPT 4",value:"gpt-4"},
   {name:"GPT 4 13/6/23",value:"gpt-4-0613"},
   {name:"GPT 4 14/3/23",value:"gpt-4-0314"},
+  {name:"Llama 2 70b chat hf",value:"meta-llama/Llama-2-70b-chat-hf"},
+  {name:"Lzlv 70b",value:"lizpreciatior/lzlv_70b_fp16_hf"},
+  {name:"Airoboros l2 70b 1.4.1",value:"jondurbin/airoboros-l2-70b-gpt4-1.4.1"},
+  {name:"CodeLlama 34b",value:"codellama/CodeLlama-34b-Instruct-hf"},
 ];*/
 const modeList = [
   {name:"Normal",value:1},
@@ -175,10 +181,16 @@ const modeList = [
   {name:"Criativo 1.1",value:1.1},
   {name:"Impreciso 1.2",value:1.2},
 ];
-const promptsList = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts.json");
+const promptsListGPT = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts.json");
+const promptsListLlama2 = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts-llama2.json");
+let currentPromptList = promptsListGPT;
 /* fim de constantes globais */
 
-loadPromptSelectOptions('promptSelect',promptsList);
+function ztoa(x){
+  return atob(atob(x));
+}
+
+loadPromptSelectOptions('promptSelect',currentPromptList);
 loadSelectOptions('modelSelect',modelList);
 loadSelectOptions('modelMode',modeList);
 updateModel();
@@ -198,11 +210,11 @@ async function getJson(fileName){
 
 /* funcoes da logica do chat */
 async function initializeAsPrompt(number){
-  const promptObj= promptsList[number];
+  const promptObj= currentPromptList[number];
   cleanChat();
   appendChatBot(promptObj.description);
-  const personalidade = promptsList[number].prompt;
-  const promptName = promptsList[number].name;
+  const personalidade = currentPromptList[number].prompt;
+  const promptName = currentPromptList[number].name;
   setPromptModalText(personalidade);
   setPromptModalTitle(promptName);
   mensagesObject = await configurar(personalidade);
@@ -219,8 +231,8 @@ function getModelMode(){
 }
 
 function updateModel(){
-  gptModelName = getModelSelect();
-  console.log("Updated model to:", gptModelName);
+  modelName = getModelSelect();
+  console.log("Updated model to:", modelName);
 };
 
 function updateTemperature(){
@@ -228,9 +240,22 @@ function updateTemperature(){
   console.log("Updated temperature to:", gptTemperature);
 };
 
+function updatePromptSelectList(){
+  if (
+    modelName === "meta-llama/Llama-2-70b-chat-hf" ||
+    modelName === "jondurbin/airoboros-l2-70b-gpt4-1.4.1" ||
+    modelName === "codellama/CodeLlama-34b-Instruct-hf" ||
+    modelName === "lizpreciatior/lzlv_70b_fp16_hf"
+  ){
+    currentPromptList = promptsListLlama2;
+  }else{
+    currentPromptList = promptsListGPT;
+  }
+  loadPromptSelectOptions('promptSelect',currentPromptList);
+}
+
 function promptSelectUpdateBehavior(){
   interruptTextToSpeech();
-  updateModel();
   updateTemperature();
   const promptSelected = getValueByID('promptSelect');
   initializeAsPrompt(promptSelected);
@@ -263,7 +288,8 @@ async function appendChatMessages(userInput){
       appendChatBot(textResponse);
       readMessageWithVoice(textResponse);
     } catch (error) {
-      appendChatBot("Erro de conexão com a API da OpenAI. Mensagem não enviada.");
+      console.error("Erro ao enviar mensagem para o serviço de API:", error);
+      appendChatBot("Erro de conexão com o serviço de API. Mensagem não enviada.");
     }
     disableLoading();
   };
@@ -274,8 +300,13 @@ async function appendChatMessages(userInput){
 /* Funcoes para api do gpt da openai */
 
 function atoc(){
-  const hash = 'eyJhcGlLZXkiOiJzay1raW9kTFo4OHV0TDJCWUs2c2xGSVQzQmxia0ZKamcycmtjeWpuMGZwRm9oRGZXZ0ciLCJiYXNlT3B0aW9ucyI6eyJoZWFkZXJzIjp7IlVzZXItQWdlbnQiOiJPcGVuQUkvTm9kZUpTLzMuMy4wIiwiQXV0aG9yaXphdGlvbiI6IkJlYXJlciBzay1raW9kTFo4OHV0TDJCWUs2c2xGSVQzQmxia0ZKamcycmtjeWpuMGZwRm9oRGZXZ0cifX19';
-  return JSON.parse(atob(hash));
+  const hash = 'ZXlKaGNHbExaWGtpT2lKemF5MXJhVzlrVEZvNE9IVjBUREpDV1VzMmMyeEdTVlF6UW14aWEwWkthbWN5Y210amVXcHVNR1p3Um05b1JHWlhaMGNpTENKa1lXNW5aWEp2ZFhOc2VVRnNiRzkzUW5KdmQzTmxjaUk2ZEhKMVpYMD0=';
+  return JSON.parse(ztoa(hash));
+}
+
+function atod(){
+  const hash = 'ZXlKaGNHbExaWGtpT2lKTk9GaG5lRko0UlZVMFNFZFRabkZMZFZaR2NtdzRVVXhLU1RFd05qZE5WU0lzSW1SaGJtZGxjbTkxYzJ4NVFXeHNiM2RDY205M2MyVnlJanAwY25WbExDSmlZWE5sVlZKTUlqb2lhSFIwY0hNNkx5OWhjR2t1WkdWbGNHbHVabkpoTG1OdmJTOTJNUzl2Y0dWdVlXa2lmUT09';
+  return JSON.parse(ztoa(hash));
 }
 
 function initializeChat(behavior) {
@@ -285,9 +316,9 @@ function initializeChat(behavior) {
 }
 
 async function completionsChatTextModel(messages) {
-  console.log("GPT model:", gptModelName);
+  console.log("Model:", modelName);
   const parameters ={
-      model: gptModelName,
+      model: modelName,
       messages: messages,
       temperature: gptTemperature,
       /*
@@ -297,7 +328,7 @@ async function completionsChatTextModel(messages) {
       presence_penalty: ,
       */
   };
-  return await openai.createChatCompletion(parameters);
+  return await openai.chat.completions.create(parameters);
 }
 
 async function generateChatMessages(promptText, messages) {
@@ -305,7 +336,7 @@ async function generateChatMessages(promptText, messages) {
   messages.push(prompt);
 
   const apiResponse = await completionsChatTextModel(messages);
-  const textResponse = apiResponse.data.choices[0].message.content;
+  const textResponse = apiResponse.choices[0].message.content;
 
   const assistantResponse = {role: "assistant", content: textResponse};
   messages.push(assistantResponse);
@@ -314,8 +345,17 @@ async function generateChatMessages(promptText, messages) {
 }
 
 async function configurar(behavior){
-  configuration = new openailib.Configuration(atoc());
-  openai = new openailib.OpenAIApi(configuration);
+  if (
+    modelName === "meta-llama/Llama-2-70b-chat-hf" ||
+    modelName === "jondurbin/airoboros-l2-70b-gpt4-1.4.1" ||
+    modelName === "codellama/CodeLlama-34b-Instruct-hf" ||
+    modelName === "lizpreciatior/lzlv_70b_fp16_hf"
+  ){
+    openai = new openailib(atod());
+  }else{
+    openai = new openailib(atoc());
+  }
+  
   return initializeChat(behavior);
 }
 
@@ -407,11 +447,12 @@ function createSelectOption(text, value, selected) {
   return option;
 }
 
-function loadPromptSelectOptions(ID, promptsList){
-  const maxItems = promptsList.length;
+function loadPromptSelectOptions(ID, currentPromptList){
+  const maxItems = currentPromptList.length;
   const promptSelect = document.getElementById(ID);
+  promptSelect.innerHTML = "";
   for (let i = 0; i < maxItems; i++) {
-    const name = promptsList[i].name;
+    const name = currentPromptList[i].name;
     let selected = false;
     if(i==0){
       selected = true;
@@ -611,6 +652,8 @@ onChangePromptSelect();
 async function onChangeModelSelect(){
   const element = document.getElementById('modelSelect');
   element.addEventListener('change', async () => {
+    updateModel();
+    updatePromptSelectList();
     promptSelectUpdateBehavior();
   });
 }
