@@ -1,5 +1,9 @@
 ## 30/10/23
 - Suporte para modelos da família llama através do serviço da deepinfra
+- Adicionado o modelo Llama 2 70b chat hf
+- Adicionado o modelo Lzlv 70b
+- Adicionado o modelo Airoboros l2 70b
+- Adicionado o modelo CodeLlama 34b
 - Atualização da biblioteca da OpenAI
 - Adicionado prompts corrigidos para funcionar com o Llama2
 - Prompt de escrever email
