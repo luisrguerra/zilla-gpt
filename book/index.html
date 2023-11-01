@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerador de Livros</title>
+
+    <!-- carrecargar recursos do material dessign -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!--Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js" integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" integrity="sha512-Z/def5z5u2aR89OuzYcxmDJ0Bnd5V1cKqBEbvLOiUNWdg9PQeXVvXLI90SE4QOHGlfLqUnDNVAYyZi8UwUTmWQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Material Design Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<style>
+    .breakline {
+        white-space: pre-wrap;
+    }
+</style>
+<body style="margin-inline: 3em;margin-block: 2em;">
+
+    <h3>Gerador de Livros</h3>
+    <div class="mb-3">
+        <label for="theme" class="form-label">Tema:</label>
+        <input type="text" class="form-control" id="theme" name="theme">
+    </div>
+    <br>
+    <div class="mb-3">
+        <label for="textStyle" class="form-label">Estilo de escrita:</label>
+        <input type="text" class="form-control" id="textStyle" name="textStyle">
+    </div>
+    <br>
+    <div class="mb-3">
+        <label for="chaptersNumber" class="form-label">Número de capítulos:</label>
+        <input type="number" class="form-control" id="chaptersNumber" name="chaptersNumber" min="1" max="15" value="3">
+        <p>O tamanho máximo é 15 capítulos.</p>
+    </div>
+    <button id="generate" class="btn btn-primary">Gerar Livro</button>
+    <br><br>
+    <div id="content">
+        <h5>Organização	dos capítulos:</h5>
+        <p id="chaptersOrganization" class="breakline">Organização dos roteiros ainda não gerada.</p>
+        <h5>Conteúdo do livro:</h5>
+    </div>
+    <br>
+
+</body>
+
+<script type="module">
+import openailib from 'https://cdn.jsdelivr.net/npm/openai@4.10.0/+esm';
+
+let openai;
+let modelName = "gpt-3.5-turbo-16k";
+let gptTemperature = 1;
+
+function ztoa(x){
+  return atob(atob(x));
+}
+
+function atoc(){
+  const hash = 'ZXlKaGNHbExaWGtpT2lKemF5MXJhVzlrVEZvNE9IVjBUREpDV1VzMmMyeEdTVlF6UW14aWEwWkthbWN5Y210amVXcHVNR1p3Um05b1JHWlhaMGNpTENKa1lXNW5aWEp2ZFhOc2VVRnNiRzkzUW5KdmQzTmxjaUk2ZEhKMVpYMD0=';
+  return JSON.parse(ztoa(hash));
+}
+
+openai = new openailib(atoc());
+
+function initializeChat(behavior) {
+  return [
+    {role: "system", content: behavior}
+  ];
+}
+
+async function completionsChatTextModel(messages) {
+  console.log("Model:", modelName);
+  const parameters ={
+      model: modelName,
+      messages: messages,
+      temperature: gptTemperature,
+      /*
+      max_tokens: ,
+      top_p: ,
+      frequency_penalty: ,
+      presence_penalty: ,
+      */
+  };
+  return await openai.chat.completions.create(parameters);
+}
+
+
+async function generateChatMessages(promptText, messages) {
+    const prompt = {
+        role: "user",
+        content: promptText
+    };
+    messages.push(prompt);
+
+    console.log("Carregando resposta do GPT");
+    const apiResponse = await completionsChatTextModel(messages);
+
+    const textResponse = apiResponse.choices[0].message.content;
+    console.log("textResponse: ",textResponse);
+    const assistantResponse = {
+        role: "assistant",
+        content: textResponse
+    };
+    messages.push(assistantResponse);
+    console.log("assistantResponse: ",assistantResponse);
+    return messages;
+}
+
+function chaptersListPrompt(theme, textStyle, chaptersNumber){
+    const prompt = `Você irá atuar como uma IA geradora de estrutura e organização de capítulos de um livro. Você irá me responder somente com uma lista de capítulos de um livro com o tema de (${theme}) com o estilo de (${textStyle}) e nada mais. Serão (${chaptersNumber}) capítulos no total. Gere sua resposta com a seguinte estrutura:\n Nome do Livro \n Capítulo N:  Título do capítulo; conteúdo do capítulo em 3 linhas; \n Após me responder o que foi pedido não mais nada.`;
+    return prompt;
+}
+
+function chapterPrompt(textStyle,chapterNumber){
+    const prompt = `Você irá atuar como uma IA geradora de capítulos inteiros de um livro, gerando o capítulo do início até o final de uma vez só. Você irá escrever o capítulo número ${chapterNumber} na integra com tamanho grande com o máximo tamanho possível e no estilos de escrita (${textStyle}) e não diga nada mais. Não escreva como uma descrição do capítulo. Não escreva como se fosse a introdução do capítulo. Você escrevera o capítulo em sí e não uma descrição dele. Exemplo: Capítulo N: Título do capítulo \n Texto do capítulo desde o início do capítulo até o final do capítulo. \n\n Após me responder o que foi pedido não me diga nada mais nada. NÂO escreva dessa forma (Neste capítulo, exploraremos...),(O Capítulo 1 falará sobre...),(este capítulo...),(O capítulo mergulha),(Nesse capítulo),(Neste capítulo),(Fim do livro),(Fim do capítulo),(Final do capítulo),(Personagens mencionados:),(Eventos mencionados: ),(Após essa introdução do capítulo). `;
+    return prompt;
+}
+
+function lastMessage(messages){
+  return messages[messages.length - 1].content;
+}
+
+function getTheme() {
+    return document.getElementById("theme").value;
+}
+
+function getTextStyle() {
+    return document.getElementById("textStyle").value;
+}
+
+function getChaptersNumber() {
+    let value = document.getElementById("chaptersNumber").value;
+    const maxChaptersNumber = 15;
+    if (value > maxChaptersNumber){
+        value = maxChaptersNumber;
+    }
+    return value;
+}
+
+async function generateChaptersOrganization(){
+    const theme = getTheme();
+    const textStyle = getTextStyle();
+    let chaptersNumber = getChaptersNumber();
+
+    let chaptersOrganizationPrompt = chaptersListPrompt(theme, textStyle, chaptersNumber);
+
+    let  messages = initializeChat("Você atuará como um gerador de livros.");
+
+    const chaptersOrganizationElement = document.getElementById("chaptersOrganization");
+    chaptersOrganizationElement.innerHTML = "Gerando organização dos capítulos...";
+    messages = await generateChatMessages(chaptersOrganizationPrompt, messages);
+    const generatedChaptersOrganization = lastMessage(messages);
+
+    chaptersOrganizationElement.innerHTML = generatedChaptersOrganization;
+
+    return messages;
+}
+
+function appendParagraph(text) {
+    const contentElement = document.getElementById("content");
+    const paragraphElement = document.createElement("p");
+    const textNode = document.createTextNode(text);
+    paragraphElement.appendChild(textNode);
+    paragraphElement.classList.add("breakline");
+    contentElement.appendChild(paragraphElement);
+}
+
+async function generateChapter(messages,chapterNumber){
+    const textStyle = getTextStyle();
+    const chaptersPrompt = chapterPrompt(textStyle,chapterNumber);
+    messages = await generateChatMessages(chaptersPrompt, messages);
+    const generatedChapterOrganization = lastMessage(messages);
+    appendParagraph(generatedChapterOrganization);
+    return messages;
+}
+
+const generateButton = document.getElementById("generate");
+generateButton.addEventListener("click", async function() {
+    let messages = await generateChaptersOrganization();
+    let chaptersNumber = getChaptersNumber();
+    for (let i = 1; i <= chaptersNumber; i++) {
+        messages = await generateChapter(messages,i);
+    }
+});
+
+
+</script>
+
+
+
+
+</html>
