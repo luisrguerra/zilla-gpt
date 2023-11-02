@@ -37,10 +37,13 @@
         <input type="number" class="form-control" id="chaptersNumber" name="chaptersNumber" min="1" max="15" value="3">
         <p>O tamanho máximo é 15 capítulos.</p>
     </div>
-    <button id="generate" class="btn btn-primary">Gerar Livro</button>
+    <button id="generate" class="btn btn-primary">Gerar roteiro dos capítulos do livro</button>
     <br><br>
     <h5>Organização	dos capítulos:</h5>
-    <p id="chaptersOrganization" class="breakline">Organização dos roteiros ainda não gerada.</p>
+    <textarea class="form-control" id="chaptersOrganization" rows="10">Organização dos capítulos ainda não gerada.</textarea>
+    <br>
+    <button id="generateChapters" class="btn btn-primary">Gerar capítulos do livro</button>
+    <br><br>
     <h5>Conteúdo do livro:</h5>
     <div id="content">
     </div>
@@ -74,6 +77,7 @@ function initializeChat(behavior) {
 
 async function completionsChatTextModel(messages) {
   console.log("Model:", modelName);
+  console.log("Temperature:", gptTemperature);
   const parameters ={
       model: modelName,
       messages: messages,
@@ -116,7 +120,7 @@ function chaptersListPrompt(theme, textStyle, chaptersNumber){
 }
 
 function chapterPrompt(textStyle,chapterNumber){
-    const prompt = `Você irá atuar como uma IA geradora de capítulos inteiros de um livro, gerando o capítulo do início até o final de uma vez só. Você irá escrever o capítulo número ${chapterNumber} na integra com tamanho grande com o máximo tamanho possível e no estilos de escrita (${textStyle}) e não diga nada mais. Não escreva como uma descrição do capítulo. Não escreva como se fosse a introdução do capítulo. Você escrevera o capítulo em sí e não uma descrição dele. Não fale do capítulo utilizando o tempo verbal no futuro. Exemplo: Capítulo N: Título do capítulo \n Texto do capítulo desde o início do capítulo até o final do capítulo. \n\n Após me responder o que foi pedido não me diga nada mais nada. NÂO escreva dessa forma (Neste capítulo, exploraremos...),(O Capítulo 1 falará sobre...),(este capítulo...),(O capítulo mergulha),(Nesse capítulo),(Neste capítulo),(Fim do livro),(Fim do capítulo),(Final do capítulo),(Personagens mencionados:),(Eventos mencionados: ),(Após essa introdução do capítulo). `;
+    const prompt = `Você irá atuar como uma IA geradora de capítulos de um livro, gerando o capítulo inteiro uma vez só. Você irá escrever o capítulo número ${chapterNumber} no formato de um paragrafo grande e no estilo de escrita (${textStyle}) e após isso não diga nada mais. Importante! Não escreva como uma descrição do capítulo. Exemplo: Capítulo N: Título do capítulo \n Texto do capítulo desde o início do capítulo até o final do capítulo. \n\n Após me responder o que foi pedido não me diga nada mais nada, não faça comentários sobre o que foi solicitado. NÂO escreva dessa forma (Neste capítulo, exploraremos...),(O Capítulo N falará sobre...),(este capítulo...),(O capítulo mergulha),(Nesse capítulo),(Neste capítulo),(Fim do livro),(Fim do capítulo),(Final do capítulo),(Personagens mencionados:),(Eventos mencionados: ),(Após essa introdução do capítulo). `;
     return prompt;
 }
 
@@ -132,6 +136,11 @@ function getTextStyle() {
     return document.getElementById("textStyle").value;
 }
 
+function getChaptersOrganization() {
+    const chaptersOrganizationElement = document.getElementById("chaptersOrganization");
+    return chaptersOrganizationElement.value;
+}
+
 function getChaptersNumber() {
     let value = document.getElementById("chaptersNumber").value;
     const maxChaptersNumber = 15;
@@ -139,6 +148,20 @@ function getChaptersNumber() {
         value = maxChaptersNumber;
     }
     return value;
+}
+
+function changeButtonTextById(text, id) {
+    const button = document.getElementById(id);
+    button.innerText = text;
+}
+function enableButtonById(id) {
+    const button = document.getElementById(id);
+    button.disabled = false;
+}
+
+function disableButtonById(id) {
+    const button = document.getElementById(id);
+    button.disabled = true;
 }
 
 async function generateChaptersOrganization(){
@@ -151,22 +174,22 @@ async function generateChaptersOrganization(){
     let  messages = initializeChat("Você atuará como um gerador de livros.");
 
     const chaptersOrganizationElement = document.getElementById("chaptersOrganization");
-    chaptersOrganizationElement.innerHTML = "Gerando organização dos capítulos...";
+    chaptersOrganizationElement.value = "Gerando organização dos capítulos...";
     messages = await generateChatMessages(chaptersOrganizationPrompt, messages);
     const generatedChaptersOrganization = lastMessage(messages);
 
-    chaptersOrganizationElement.innerHTML = generatedChaptersOrganization;
+    chaptersOrganizationElement.value = generatedChaptersOrganization;
 
     return messages;
 }
 
 function appendParagraph(text) {
     const contentElement = document.getElementById("content");
-    const paragraphElement = document.createElement("p");
-    const textNode = document.createTextNode(text);
-    paragraphElement.appendChild(textNode);
-    paragraphElement.classList.add("breakline");
-    contentElement.appendChild(paragraphElement);
+    const textareaElement = document.createElement("textarea");
+    textareaElement.value = text;
+    textareaElement.classList.add("form-control");
+    textareaElement.rows = 15;
+    contentElement.appendChild(textareaElement);
 }
 
 async function generateChapter(messages,chapterNumber){
@@ -186,13 +209,29 @@ function clearContentDiv() {
 const generateButton = document.getElementById("generate");
 generateButton.addEventListener("click", async function() {
     clearContentDiv();
+    disableButtonById("generate");
+    changeButtonTextById("Gerando roteiro dos capítulos...", "generate");
     let messages = await generateChaptersOrganization();
-    let chaptersNumber = getChaptersNumber();
-    for (let i = 1; i <= chaptersNumber; i++) {
-        messages = await generateChapter(messages,i);
-    }
+    enableButtonById("generate");
+    changeButtonTextById("Gerar roteiro dos capítulos do livro", "generate");
 });
 
+//generateChapters
+
+const generateChaptersButton = document.getElementById("generateChapters");
+generateChaptersButton.addEventListener("click", async function() {
+    clearContentDiv();
+    let chaptersNumber = getChaptersNumber();
+    let chaptersOrganization = getChaptersOrganization();
+    let messages2 = initializeChat("Você atuará como um gerador de capítulos de um livro. Esta será a organização dos capítulos: "+ chaptersOrganization);
+    disableButtonById("generateChapters");
+    changeButtonTextById("Gerando capítulos...", "generateChapters");
+    for (let i = 1; i <= chaptersNumber; i++) {
+        messages2 = await generateChapter(messages2,i);
+    }
+    enableButtonById("generateChapters");
+    changeButtonTextById("Gerar capítulos do livro", "generateChapters");
+});
 
 </script>
 
