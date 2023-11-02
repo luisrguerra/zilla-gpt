@@ -77,6 +77,7 @@ function initializeChat(behavior) {
 
 async function completionsChatTextModel(messages) {
   console.log("Model:", modelName);
+  console.log("Temperature:", gptTemperature);
   const parameters ={
       model: modelName,
       messages: messages,
@@ -219,6 +220,7 @@ generateButton.addEventListener("click", async function() {
 
 const generateChaptersButton = document.getElementById("generateChapters");
 generateChaptersButton.addEventListener("click", async function() {
+    clearContentDiv();
     let chaptersNumber = getChaptersNumber();
     let chaptersOrganization = getChaptersOrganization();
     let messages2 = initializeChat("Você atuará como um gerador de capítulos de um livro. Esta será a organização dos capítulos: "+ chaptersOrganization);
