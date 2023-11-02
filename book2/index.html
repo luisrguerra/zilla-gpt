@@ -40,7 +40,8 @@
     <button id="generate" class="btn btn-primary">Gerar Livro</button>
     <br><br>
     <h5>Organização	dos capítulos:</h5>
-    <p id="chaptersOrganization" class="breakline">Organização dos roteiros ainda não gerada.</p>
+    <textarea class="form-control breakline" id="chaptersOrganization" rows="10" readonly>Organização dos capítulos ainda não gerada.</textarea>
+    <br>
     <h5>Conteúdo do livro:</h5>
     <div id="content">
     </div>
@@ -132,6 +133,11 @@ function getTextStyle() {
     return document.getElementById("textStyle").value;
 }
 
+function getChaptersOrganization() {
+    const chaptersOrganizationElement = document.getElementById("chaptersOrganization");
+    return chaptersOrganizationElement.textContent;
+}
+
 function getChaptersNumber() {
     let value = document.getElementById("chaptersNumber").value;
     const maxChaptersNumber = 15;
@@ -151,11 +157,11 @@ async function generateChaptersOrganization(){
     let  messages = initializeChat("Você atuará como um gerador de livros.");
 
     const chaptersOrganizationElement = document.getElementById("chaptersOrganization");
-    chaptersOrganizationElement.innerHTML = "Gerando organização dos capítulos...";
+    chaptersOrganizationElement.textContent = "Gerando organização dos capítulos...";
     messages = await generateChatMessages(chaptersOrganizationPrompt, messages);
     const generatedChaptersOrganization = lastMessage(messages);
 
-    chaptersOrganizationElement.innerHTML = generatedChaptersOrganization;
+    chaptersOrganizationElement.textContent = generatedChaptersOrganization;
 
     return messages;
 }
@@ -188,6 +194,8 @@ generateButton.addEventListener("click", async function() {
     clearContentDiv();
     let messages = await generateChaptersOrganization();
     let chaptersNumber = getChaptersNumber();
+    let chaptersOrganization = getChaptersOrganization();
+    messages = initializeChat("Você atuará como um gerador de capítulos de um livro. Esta será a organização dos capítulos: "+ chaptersOrganization);
     for (let i = 1; i <= chaptersNumber; i++) {
         messages = await generateChapter(messages,i);
     }
