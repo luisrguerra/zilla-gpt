@@ -37,11 +37,13 @@
         <input type="number" class="form-control" id="chaptersNumber" name="chaptersNumber" min="1" max="15" value="3">
         <p>O tamanho máximo é 15 capítulos.</p>
     </div>
-    <button id="generate" class="btn btn-primary">Gerar Livro</button>
+    <button id="generate" class="btn btn-primary">Gerar roteiro dos capítulos do livro</button>
     <br><br>
     <h5>Organização	dos capítulos:</h5>
-    <textarea class="form-control breakline" id="chaptersOrganization" rows="10" readonly>Organização dos capítulos ainda não gerada.</textarea>
+    <textarea class="form-control breakline" id="chaptersOrganization" rows="10">Organização dos capítulos ainda não gerada.</textarea>
     <br>
+    <button id="generateChapters" class="btn btn-primary">Gerar capítulos do livro</button>
+    <br><br>
     <h5>Conteúdo do livro:</h5>
     <div id="content">
     </div>
@@ -53,7 +55,7 @@
 import openailib from 'https://cdn.jsdelivr.net/npm/openai@4.10.0/+esm';
 
 let openai;
-let modelName = "gpt-3.5-turbo-16k";
+let modelName = "gpt-3.5-turbo";
 let gptTemperature = 1;
 
 function ztoa(x){
@@ -135,7 +137,7 @@ function getTextStyle() {
 
 function getChaptersOrganization() {
     const chaptersOrganizationElement = document.getElementById("chaptersOrganization");
-    return chaptersOrganizationElement.textContent;
+    return chaptersOrganizationElement.value;
 }
 
 function getChaptersNumber() {
@@ -145,6 +147,20 @@ function getChaptersNumber() {
         value = maxChaptersNumber;
     }
     return value;
+}
+
+function changeButtonTextById(text, id) {
+    const button = document.getElementById(id);
+    button.innerText = text;
+}
+function enableButtonById(id) {
+    const button = document.getElementById(id);
+    button.disabled = false;
+}
+
+function disableButtonById(id) {
+    const button = document.getElementById(id);
+    button.disabled = true;
 }
 
 async function generateChaptersOrganization(){
@@ -157,11 +173,11 @@ async function generateChaptersOrganization(){
     let  messages = initializeChat("Você atuará como um gerador de livros.");
 
     const chaptersOrganizationElement = document.getElementById("chaptersOrganization");
-    chaptersOrganizationElement.textContent = "Gerando organização dos capítulos...";
+    chaptersOrganizationElement.value = "Gerando organização dos capítulos...";
     messages = await generateChatMessages(chaptersOrganizationPrompt, messages);
     const generatedChaptersOrganization = lastMessage(messages);
 
-    chaptersOrganizationElement.textContent = generatedChaptersOrganization;
+    chaptersOrganizationElement.value = generatedChaptersOrganization;
 
     return messages;
 }
@@ -192,15 +208,28 @@ function clearContentDiv() {
 const generateButton = document.getElementById("generate");
 generateButton.addEventListener("click", async function() {
     clearContentDiv();
+    disableButtonById("generate");
+    changeButtonTextById("Gerando roteiro dos capítulos...", "generate");
     let messages = await generateChaptersOrganization();
-    let chaptersNumber = getChaptersNumber();
-    let chaptersOrganization = getChaptersOrganization();
-    messages = initializeChat("Você atuará como um gerador de capítulos de um livro. Esta será a organização dos capítulos: "+ chaptersOrganization);
-    for (let i = 1; i <= chaptersNumber; i++) {
-        messages = await generateChapter(messages,i);
-    }
+    enableButtonById("generate");
+    changeButtonTextById("Gerar roteiro dos capítulos do livro", "generate");
 });
 
+//generateChapters
+
+const generateChaptersButton = document.getElementById("generateChapters");
+generateChaptersButton.addEventListener("click", async function() {
+    let chaptersNumber = getChaptersNumber();
+    let chaptersOrganization = getChaptersOrganization();
+    let messages2 = initializeChat("Você atuará como um gerador de capítulos de um livro. Esta será a organização dos capítulos: "+ chaptersOrganization);
+    disableButtonById("generateChapters");
+    changeButtonTextById("Gerando capítulos...", "generateChapters");
+    for (let i = 1; i <= chaptersNumber; i++) {
+        messages2 = await generateChapter(messages2,i);
+    }
+    enableButtonById("generateChapters");
+    changeButtonTextById("Gerar capítulos do livro", "generateChapters");
+});
 
 </script>
 
