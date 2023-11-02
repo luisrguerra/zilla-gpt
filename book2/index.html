@@ -185,11 +185,12 @@ async function generateChaptersOrganization(){
 
 function appendParagraph(text) {
     const contentElement = document.getElementById("content");
-    const paragraphElement = document.createElement("p");
-    const textNode = document.createTextNode(text);
-    paragraphElement.appendChild(textNode);
-    paragraphElement.classList.add("breakline");
-    contentElement.appendChild(paragraphElement);
+    const textareaElement = document.createElement("textarea");
+    textareaElement.value = text;
+    textareaElement.classList.add("breakline");
+    textareaElement.classList.add("form-control");
+    textareaElement.rows = 15;
+    contentElement.appendChild(textareaElement);
 }
 
 async function generateChapter(messages,chapterNumber){
