@@ -18,6 +18,9 @@
     .breakline {
         white-space: pre-wrap;
     }
+    textarea.chapterParagraph{
+        margin-block: 1em;
+    }
 </style>
 <body style="margin-inline: 3em;margin-block: 2em;">
 
@@ -34,8 +37,13 @@
     <br>
     <div class="mb-3">
         <label for="chaptersNumber" class="form-label">Número de capítulos:</label>
-        <input type="number" class="form-control" id="chaptersNumber" name="chaptersNumber" min="1" max="15" value="3">
+        <input type="number" class="form-control" id="chaptersNumber" name="chaptersNumber" min="1" max="15" value="1">
         <p>O tamanho máximo é 15 capítulos.</p>
+    </div>´
+    <div class="mb-3">
+        <label for="paragraphNumber" class="form-label">Número de paragrafos por capítulos:</label>
+        <input type="number" class="form-control" id="paragraphNumber" name="paragraphNumber" min="1" max="10" value="2">
+        <p>O tamanho máximo é 10 capítulos.</p>
     </div>
     <button id="generate" class="btn btn-primary">Gerar roteiro dos capítulos do livro</button>
     <br><br>
@@ -101,7 +109,13 @@ async function generateChatMessages(promptText, messages) {
     messages.push(prompt);
 
     console.log("Carregando resposta do GPT");
-    const apiResponse = await completionsChatTextModel(messages);
+    let apiResponse;
+    try {
+       apiResponse = await completionsChatTextModel(messages);
+    } catch (error) {
+        alert("Erro ao carregar resposta da API.");
+        console.error(error);
+    }
 
     const textResponse = apiResponse.choices[0].message.content;
     console.log("textResponse: ",textResponse);
@@ -114,13 +128,13 @@ async function generateChatMessages(promptText, messages) {
     return messages;
 }
 
-function chaptersListPrompt(theme, textStyle, chaptersNumber){
-    const prompt = `Você irá atuar como uma IA geradora de estrutura e organização de capítulos de um livro. Você irá me responder somente com uma lista de capítulos de um livro com o tema de (${theme}) com o estilo de (${textStyle}) e nada mais. Serão (${chaptersNumber}) capítulos no total. Gere sua resposta com a seguinte estrutura:\n Nome do Livro \n Capítulo N:  Título do capítulo; conteúdo do capítulo em 3 linhas; \n Após me responder o que foi pedido não mais nada.`;
+function chaptersListPrompt(theme, textStyle, chaptersNumber, paragraphsNumber){
+    const prompt = `Você irá atuar como uma IA geradora de estrutura e organização de capítulos de um livro. Você irá me responder somente com uma lista de capítulos de um livro com o tema de (${theme}) com o estilo de (${textStyle}) e nada mais. Serão (${chaptersNumber}) capítulos no total com o némero de (${paragraphsNumber}) parágrafos em cada capítulo. Gere sua resposta com a seguinte estrutura:\n Nome do Livro \n Capítulo N:  Título do capítulo; Parágrafo 1: conteúdo do parágrafo 1 do capítulo; Parágrafo 2: conteúdo do parágrafo 2 do capítulo;  \n Após me responder o que foi pedido não diga mais nada.`;
     return prompt;
 }
 
-function chapterPrompt(textStyle,chapterNumber){
-    const prompt = `Você irá atuar como uma IA geradora de capítulos de um livro, gerando o capítulo inteiro uma vez só. Você irá escrever o capítulo número ${chapterNumber} no formato de um paragrafo grande e no estilo de escrita (${textStyle}) e após isso não diga nada mais. Importante! Não escreva como uma descrição do capítulo. Exemplo: Capítulo N: Título do capítulo \n Texto do capítulo desde o início do capítulo até o final do capítulo. \n\n Após me responder o que foi pedido não me diga nada mais nada, não faça comentários sobre o que foi solicitado. NÂO escreva dessa forma (Neste capítulo, exploraremos...),(O Capítulo N falará sobre...),(este capítulo...),(O capítulo mergulha),(Nesse capítulo),(Neste capítulo),(Fim do livro),(Fim do capítulo),(Final do capítulo),(Personagens mencionados:),(Eventos mencionados: ),(Após essa introdução do capítulo). `;
+function chapterPrompt(textStyle,chapterNumber, paragraphsNumber){
+    const prompt = `Você irá atuar como uma IA geradora de capítulos de um livro, gerando o capítulo inteiro uma vez só. Você irá escrever o parágrafo número ${paragraphsNumber} do capítulo número ${chapterNumber} no formato de um parágrafo grande e no estilo de escrita (${textStyle}) e após isso não diga nada mais. Importante! Não escreva como uma descrição do capítulo. Exemplo de como deve responder: Texto do capítulo desde o início do capítulo até o final do capítulo. \n\n Após me responder o que foi pedido não me diga nada mais nada, não faça comentários sobre o que foi solicitado. NÂO escreva dessa forma (Neste capítulo, exploraremos...),(O Capítulo N falará sobre...),(este capítulo...),(O capítulo mergulha),(Nesse capítulo),(Neste capítulo),(Fim do livro),(Fim do capítulo),(Final do capítulo),(Personagens mencionados:),(Eventos mencionados: ),(Após essa introdução do capítulo),(Parágrafo N: ....).`;
     return prompt;
 }
 
@@ -150,6 +164,15 @@ function getChaptersNumber() {
     return value;
 }
 
+function getParagraphNumber() {
+    let value = document.getElementById("paragraphNumber").value;
+    const maxParagraphNumber = 10;
+    if (value > maxParagraphNumber){
+        value = maxParagraphNumber;
+    }
+    return value;
+}
+
 function changeButtonTextById(text, id) {
     const button = document.getElementById(id);
     button.innerText = text;
@@ -168,8 +191,9 @@ async function generateChaptersOrganization(){
     const theme = getTheme();
     const textStyle = getTextStyle();
     let chaptersNumber = getChaptersNumber();
+    let paragraphsNumber = getParagraphNumber();
 
-    let chaptersOrganizationPrompt = chaptersListPrompt(theme, textStyle, chaptersNumber);
+    let chaptersOrganizationPrompt = chaptersListPrompt(theme, textStyle, chaptersNumber, paragraphsNumber);
 
     let  messages = initializeChat("Você atuará como um gerador de livros.");
 
@@ -183,27 +207,39 @@ async function generateChaptersOrganization(){
     return messages;
 }
 
-function appendParagraph(text) {
+function appendParagraph(text,chapterNumber, paragraphsNumber) {
     const contentElement = document.getElementById("content");
     const textareaElement = document.createElement("textarea");
+    textareaElement.id = "chapter"+ chapterNumber + "paragraph" + paragraphsNumber;
     textareaElement.value = text;
     textareaElement.classList.add("form-control");
-    textareaElement.rows = 15;
+    textareaElement.classList.add("chapterParagraph");
+    textareaElement.rows = 10;
     contentElement.appendChild(textareaElement);
 }
 
-async function generateChapter(messages,chapterNumber){
+async function generateChapter(messages,chapterNumber, paragraphsNumber){
     const textStyle = getTextStyle();
-    const chaptersPrompt = chapterPrompt(textStyle,chapterNumber);
+    const chaptersPrompt = chapterPrompt(textStyle,chapterNumber, paragraphsNumber);
     messages = await generateChatMessages(chaptersPrompt, messages);
-    const generatedChapterOrganization = lastMessage(messages);
-    appendParagraph(generatedChapterOrganization);
+    let generatedChapterOrganization = lastMessage(messages);
+    generatedChapterOrganization = await fixText(generatedChapterOrganization);
+    appendParagraph(generatedChapterOrganization,chapterNumber, paragraphsNumber);
     return messages;
 }
 
 function clearContentDiv() {
     const contentElement = document.getElementById("content");
     contentElement.innerHTML = "";
+}
+
+async function fixText(text){
+    const prompt ="Você irá atuar como um corretor de formatação de textos. Eu te fornecerei um texto e você irá corrigir a formatação dele. Não altere mais que um quinto do conteúdo orginal do texto. Seja fiel ao texto original. Importante! Não escreva como uma descrição do capítulo. Não escreva o título e o número do capítulo. Não escreva sobre o capítulo no tempo futuro, exemplo (nesse capítulo falaremos sobre...). Exemplo de como escrever: Texto do capítulo desde o início do capítulo até o final do capítulo. \n\n Após me responder com o texto com a formatação solicitada não me diga nada mais nada, não faça comentários sobre o que foi solicitado. Importante! NÂO escreva dessa forma (Neste capítulo, exploraremos...),(O Capítulo N falará sobre...),(este capítulo...),(O capítulo mergulha),(Nesse capítulo),(Neste capítulo),(Fim do livro),(Fim do capítulo),(Final do capítulo),(Personagens mencionados:),(Eventos mencionados: ),(Após essa introdução do capítulo),(Parágrafo N: ....). Siga o formato de resposta fornecido por mim.";
+    let messages3 = initializeChat(prompt);
+    messages3 = await generateChatMessages(text, messages3);
+    const newText = lastMessage(messages3);
+    return newText;
+
 }
 
 const generateButton = document.getElementById("generate");
@@ -222,12 +258,19 @@ const generateChaptersButton = document.getElementById("generateChapters");
 generateChaptersButton.addEventListener("click", async function() {
     clearContentDiv();
     let chaptersNumber = getChaptersNumber();
+    let paragraphsNumber = getParagraphNumber();
     let chaptersOrganization = getChaptersOrganization();
     let messages2 = initializeChat("Você atuará como um gerador de capítulos de um livro. Esta será a organização dos capítulos: "+ chaptersOrganization);
     disableButtonById("generateChapters");
     changeButtonTextById("Gerando capítulos...", "generateChapters");
-    for (let i = 1; i <= chaptersNumber; i++) {
-        messages2 = await generateChapter(messages2,i);
+    for (let chapter = 1; chapter <= chaptersNumber; chapter++) {
+        const contentElement = document.getElementById("content");
+        const pElement = document.createElement("p");
+        pElement.textContent = "Capítulo " + chapter + ":";
+        contentElement.appendChild(pElement);
+        for (let paragraph = 1; paragraph <= paragraphsNumber; paragraph++) {
+            messages2 = await generateChapter(messages2,chapter, paragraph);
+        }
     }
     enableButtonById("generateChapters");
     changeButtonTextById("Gerar capítulos do livro", "generateChapters");
