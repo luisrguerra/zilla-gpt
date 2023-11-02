@@ -40,7 +40,7 @@
     <button id="generate" class="btn btn-primary">Gerar roteiro dos capítulos do livro</button>
     <br><br>
     <h5>Organização	dos capítulos:</h5>
-    <textarea class="form-control breakline" id="chaptersOrganization" rows="10">Organização dos capítulos ainda não gerada.</textarea>
+    <textarea class="form-control" id="chaptersOrganization" rows="10">Organização dos capítulos ainda não gerada.</textarea>
     <br>
     <button id="generateChapters" class="btn btn-primary">Gerar capítulos do livro</button>
     <br><br>
@@ -187,7 +187,6 @@ function appendParagraph(text) {
     const contentElement = document.getElementById("content");
     const textareaElement = document.createElement("textarea");
     textareaElement.value = text;
-    textareaElement.classList.add("breakline");
     textareaElement.classList.add("form-control");
     textareaElement.rows = 15;
     contentElement.appendChild(textareaElement);
