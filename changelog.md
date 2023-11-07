@@ -1,3 +1,6 @@
+## 7/11/23
+- Novos modelos do GPT
+
 ## 30/10/23
 - Suporte para modelos da família llama através do serviço da deepinfra
 - Adicionado o modelo Llama 2 70b chat hf
