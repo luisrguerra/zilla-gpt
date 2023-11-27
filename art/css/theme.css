@@ -1,0 +1,116 @@
+:root {
+    --font-color: #c9d3e3;
+    --font-color2: white;
+    --background-color: hsla(0, 0%, 100%, 0.09);
+    --background2-color: hsl(218, 14%, 16%);
+    --background3-color: hsl(213, 13%, 14%);
+}
+
+body{
+    color: var(--font-color);
+    background-color:var(--background3-color);
+}
+
+::selection {
+    background: #3D4556;
+    color: #d6e2f4;
+}
+
+button.btn.btn-primary,button.btn.btn-primary:disabled,button.btn.btn-primary:active{
+    box-shadow: none;
+}
+
+button.btn-outline{
+    color: var(--font-color2);
+    border-top-color: hsla(0, 0%, 100%, 0.30);
+    border-inline-color: hsla(0, 0%, 100%, 0.25);
+    border-bottom-color: hsla(0, 0%, 100%, 0.20);
+    border-width: 2px;
+}
+
+button.btn-outline:hover,button.btn-outline:active,button.btn-outline:focus,button.btn-outline:visited{
+    background-color: #ffffff10 !important;
+    border-color: #ffffff40 !important;
+    color: var(--font-color2) !important;
+}
+
+button.btn-outline:disabled{
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+select.form-select,select.form-select:disabled{
+    color: var(--font-color);
+    background-color: var(--background3-color);
+    border-color: #ffffff40;
+    border-width: 2px;
+}
+    
+select.form-select:focus,select.form-select:active{
+    color: var(--font-color);
+    background-color: var(--background3-color);
+    border-color: #ffffff7e;
+    box-shadow: none;
+}
+
+input.form-control,input.form-control:disabled{
+    color: var(--font-color);
+    background-color: var(--background3-color);
+    border-color: #ffffff40;
+    border-width: 2px;
+}
+    
+input.form-control:focus,input.form-control:active{
+    color: var(--font-color);
+    background-color: var(--background3-color);
+    border-color: #ffffff7e;
+    box-shadow: none;
+}
+
+input.form-control::placeholder{
+    color: var(--font-color);
+    opacity: 0.75;
+}
+
+h2.accordion-header{
+    color: var(--font-color);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+h2.accordion-header:hover,h2.accordion-header:active,h2.accordion-header:focus,h2.accordion-header:visited{
+    background-color: #ffffff10 !important;
+    border-color: #ffffff40 !important;
+    color: var(--font-color) !important;
+    box-shadow: none;
+}
+
+button.accordion-button{
+    color: var(--font-color);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+button.accordion-button::after{
+    filter: invert(100%);
+}
+
+button.accordion-button:hover,button.accordion-button:active,button.accordion-button:focus,button.accordion-button:visited,button.accordion-button:not(.collapsed){
+    background-color: transparent !important;
+    border-color: #ffffff40 !important;
+    color: var(--font-color2) !important;
+    box-shadow: none;
+}
+
+div.accordion-item{
+    color: var(--font-color);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+div.accordion-item:hover,div.accordion-item:active,div.accordion-item:focus,div.accordion-item:visited{
+    box-shadow: none;
+}
+
+#generatedImage{
+    border-radius: 4px;
+}

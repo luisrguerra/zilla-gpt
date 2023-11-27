@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- Melhoria da visualização em smartphones -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stable Diffusion</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!--Bootstrap -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js" integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" integrity="sha512-Z/def5z5u2aR89OuzYcxmDJ0Bnd5V1cKqBEbvLOiUNWdg9PQeXVvXLI90SE4QOHGlfLqUnDNVAYyZi8UwUTmWQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/theme.css">
+</head>
+<body style="padding-inline: 0.8em;padding-block: 0.5em;">
+    <label for="promptInput" class="form-label">Prompt:</label>
+    <input type="text" id="promptInput" class="form-control" placeholder="Ex: pet" autocomplete="off">
+    <br>
+    <label for="negativePromptInput" class="form-label">Negative Prompt:</label>
+    <input type="text" id="negativePromptInput" class="form-control" placeholder="Ex: cat" autocomplete="off">
+    <br>
+    <div class="row">
+      <div class="col">
+        <label for="styleSelect" class="form-label">Style:</label>
+        <select id="styleSelect" class="form-select">
+        </select>
+      </div>
+      <div class="col">
+        <label for="sizeSelect" class="form-label">Image dimensions:</label>
+        <select id="sizeSelect" class="form-select">
+          <option value="square">Square</option>
+          <option value="portrait">Portrait</option>
+          <option value="landscape">Landscape</option>
+          <option value="stories">Stories</option>
+          <option value="ultrawide">Ultrawide</option>
+        </select>
+      </div>
+    </div>
+    <br>
+    <!--Advanced options-->
+    <div class="accordion accordion-flush" id="accordionFlushAdvancedOptions">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+            Advanced options
+          </button>
+        </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushAdvancedOptions">
+          <br>
+          <!--Number of inference steps-->
+          <label for="numInferenceStepsInput" class="form-label">Number of inference steps:</label>
+          <input type="number" id="numInferenceStepsInput" class="form-control" value="20" placeholder="Number of inference steps" min="8" max="25">
+          <br>
+          <!--Guidance scale-->
+          <label for="guidanceScaleInput" class="form-label">Guidance Scale:</label>
+          <input type="number" id="guidanceScaleInput" class="form-control" value="7.5" placeholder="guidanceScale" min="4" max="10">
+          <br>
+          <!--Seed-->
+          <label for="seedInput" class="form-label">Seed:</label>
+          <input type="number" id="seedInput" class="form-control" value="0" placeholder="Seed"  min="0">
+          <br>
+          <!--Refiner-->
+          <label for="refinerSelect" class="form-label">Refiner:</label>
+          <select id="refinerSelect" class="form-select">
+            <option value="no_refiner">No refiner</option>
+            <option value="expert_ensemble_refiner">Expert ensemble refiner</option>
+            <option value="base_image_refiner">Base image refiner</option>
+          </select>
+          <br>
+          <!--Model-->
+          <label style="display: none;" for="modelSelect" class="form-label">Model:</label>
+          <select style="display: none;" id="modelSelect" class="form-select">
+            <option value="stability-ai/sdxl">stability-ai/sdxl</option>
+          </select>
+          <!--Deepinfra API token-->
+          <label for="authTokenInput" class="form-label">Custom Deepinfra API token:</label>
+          <input type="password" id="authTokenInput" class="form-control" placeholder="Deepinfra API token">
+        </div>
+      </div>
+    </div>    
+    <br>
+    <button id="generateButton" class="btn btn-outline">Generate image</button>
+    <br><br>
+    <div class="d-flex justify-content-center">
+      <img id="generatedImage" style="max-width: 90vw;" width="512" class="justify-content-center">
+    </div>
+</body>
+<script type="module">
+
+const modelName = 'stability-ai/sdxl';
+
+const stylesArray = [
+  {
+    name:'Default',
+    prompt: '',
+    negative_prompt: ''
+  },
+  {
+    name:'Anime',
+    prompt: ',realistic anime, realistic manga, [illustration], [artwork], realistic anime illumination, realistic anime shading, [realistic anime Deviantart], [realistic anime Artstation], [realistic anime wallpaper],[realistic anime fanart], [realistic anime Pinterest], realistic and detailed anime background, realistic anime shadows,',
+    negative_prompt: ',black and white,b&w, monochrome, 3d render, photography, photo, [cartoon], abstract art, poorly drawn, (text), (dialog bubble), (letters), [cartoon comics], [superhero comics], signature, [minimalist art], 3d model, amateur anime artist,canvas frame,bad art,ugly,nude,porn,naked,nsfw,hentai,'
+  },
+  {
+    name:'Photo',
+    prompt: ',sharp image, full hd, 1080p,4k, [8k] ,[uhd], high quality, detailed, high resolution, [high res],[RAW photo], [HDR], [hard shadows], [cinematic shot], [dramatic lighting], [soft lighting], [dslr], professional photographer,photorealistic, realistic,real,',
+    negative_prompt: ',blurry, low res, low resolution, low quality,ugly,nude,porn,naked,nsfw,hentai,'
+  },
+  {
+    name:'Realistic anatomy',
+    prompt: ',realistic anatomy,',
+    negative_prompt: ',amputee, deformed body, long neck, extra fingers, bad body proportions, mutated hands, mutilated, mutation, ugly, fused fingers, malformed limbs, extra heads, morbid, disfigured,'
+  },
+  {
+    name:'Renaissance',
+    prompt: ',renaissance painting style, [chiaroscuro],[detailed brushwork],[classical beauty],oil on canvas,[classical art],[historical art],oil painting,[fine details],[perspective],[masterpiece],[artwork style],[sharp image],[high resolution],[detailed],[professional style],[frescoes],',
+    negative_prompt: ',(black and white),sepia,blurry, low res, low resolution, low quality,ugly,artist painting,artist drawing,(digital painting style),3d render,photo,nude,porn,naked,nsfw,'
+  },
+  {
+    name:'Impressionism',
+    prompt: ',impressionist painting style,[brushstrokes],[loose brushwork style],[natural light],[vibrant colors],[oil on canvas],',
+    negative_prompt: ',(black and white),sepia, low res, low resolution, low quality,ugly,artist painting,artist drawing,(digital painting style),3d render,photo,nude,porn,naked,nsfw,'
+  },
+  {
+    name:'Painting',
+    prompt: ',(painting style),artwork style,[masterpiece],art style,[sharp image],[high resolution],[beautiful],[detailed],[professional style],',
+    negative_prompt: ',blurry, low res, low resolution, low quality,ugly,artist painting,artist drawing,digital painting style,nude,porn,naked,nsfw,'
+  },
+  {
+    name:'Illustration',
+    prompt: ',illustration,artwork style,masterpiece,art style,sharp image,high resolution,beautiful,detailed,professional style,',
+    negative_prompt: ',blurry, low res, low resolution, low quality,ugly,artist painting,artist drawing,nude,porn,naked,nsfw,'
+  },
+  {
+    name: "Art Nouveau",
+    prompt: ",Art Nouveau style,",
+    negative_prompt: ",3d render,anime,photo,ugly, deformed, noisy,abstract,visual glitch, low contrast, industrial, mechanical,blurry, low res, low resolution, low quality,"
+  },
+  {
+    name: "Faded Polaroid Photo",
+    prompt: ",Faded Polaroid Photo, analog, old faded photo, old polaroid,",
+    negative_prompt: ",ugly, deformed, noisy, blurry, low contrast, vibrant, black and white,vibrant colors,"
+  },
+  {
+    name: "Japanese Ink Drawing",
+    prompt: ",Japanese Ink Drawing, ink drawing, inkwash, Japanese Ink Drawing,[masterpiece],[detailed],",
+    negative_prompt: ",ugly, deformed, noisy, blurry, low contrast, colorful, vibrant,"
+  },
+  {
+    name: "Rococo",
+    prompt: ",Rococo, flamboyant, pastel colors, curved lines, elaborate detail, Rococo,",
+    negative_prompt: ",ugly, deformed, noisy, blurry, low contrast,"
+  },
+  {
+    name: "Sticker Designs",
+    prompt: ",Vector Art Stickers, professional vector design, sticker designs, Sticker Sheet,",
+    negative_prompt: ",ugly, deformed, noisy, blurry, low contrast,"
+  },
+  {
+    name: "Art Deco",
+    prompt: ",Art Deco, sleek, geometric forms, art deco style,",
+    negative_prompt: ",ugly, deformed, noisy, blurry, low contrast,"
+  },
+  {
+    name: "Flat 2D Art",
+    prompt: ",Flat 2D Art, simple flat color, 2-dimensional, Flat 2D Art Style,",
+    negative_prompt: ",ugly, deformed, noisy, blurry, low contrast, 3D render, photo, realistic,"
+  },
+  {
+    name: "Baroque",
+    prompt: ",Baroque, dramatic, exuberant, grandeur, baroque art,",
+    negative_prompt: ",ugly, deformed, noisy, blurry, low contrast,"
+  },
+  {
+    name: "Medievalism",
+    prompt: ",Medievalism, inspired by The Middle Ages, medieval art, [elaborate patterns and decoration], Medievalism,",
+    negative_prompt: ",ugly, deformed, noisy, blurry, low contrast,modern,"
+  },
+  {
+    name: "Pencil Sketch Drawing",
+    prompt: ",Pencil Sketch Drawing style, black and white drawing, graphite drawing style,",
+    negative_prompt: ",ugly, deformed, noisy, blurry, low contrast,"
+  },
+  {
+    name: "3D Model",
+    prompt: ",professional 3d model,3d render, [octane render], highly detailed, [volumetric], [dramatic lighting],",
+    negative_prompt: ",illustration,photo,ugly, deformed, noisy, low poly, blurry, painting,"
+  },
+  {
+    name: "Analog Film",
+    prompt: ",analog film photo, faded film, desaturated, 35mm photo, grainy, vignette, vintage, Kodachrome, Lomography, stained, highly detailed, found footage,",
+    negative_prompt: ",painting, drawing, illustration, glitch, deformed, mutated, cross-eyed, ugly, disfigured,"
+  },
+  {
+    name: "Comic Book",
+    prompt: ",comic, graphic illustration, comic art, graphic novel art, vibrant, highly detailed,",
+    negative_prompt: ",photograph, deformed, glitch, noisy, realistic, stock photo,"
+  },
+  {
+    name: "Origami",
+    prompt: ",origami style, paper art, pleated paper, folded, origami art, pleats, cut and fold, centered composition,",
+    negative_prompt: ",noisy, sloppy, messy, grainy, highly detailed, ultra textured, photo,"
+  },
+  {
+    name: "Pixel art",
+    prompt: ",pixel-art, low-res, blocky, pixel art style, 8-bit graphics,",
+    negative_prompt: ",3d render,sloppy, messy, blurry, noisy, highly detailed, ultra textured, photo, realistic,"
+  },
+  {
+    name: "Watercolor",
+    prompt: ",watercolor painting, [vibrant], [beautiful], [painterly], [detailed], [textural], [artistic],",
+    negative_prompt: ",anime, photorealistic, photo, deformed, glitch, low contrast, noisy,ugly,3d render,photograph,blurry,low resolution,amateur,"
+  },
+  {
+    name: "Expressionist",
+    prompt: ",expressionist, [emotional], [dynamic], [distortion], [vibrant], [use of unusual colors], [detailed],",
+    negative_prompt: ",realism, symmetry, quiet, calm, ,anime, photorealistic, photo, deformed, glitch, low contrast, noisy,ugly,3d render,photograph,blurry,low resolution,amateur,"
+  },
+  {
+    name: "Vector",
+    prompt: ",vector art style,[flat],[svg],[adobe illustrator],",
+    negative_prompt: "3d render, photo, photorealistic, realistic cartoon, anime,"
+  },
+]
+
+function loadingButton(boolean){
+  if (boolean){
+    document.getElementById('generateButton').innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+    document.getElementById('generateButton').disabled = true;
+  } else {
+    document.getElementById('generateButton').innerHTML = 'Generate image';
+    document.getElementById('generateButton').disabled = false;
+  }
+}
+
+function loadStyleSelect() {
+  const styleSelect = document.getElementById('styleSelect');
+  
+  stylesArray.forEach(style => {
+    const option = document.createElement('option');
+    option.value = style.name;
+    option.textContent = style.name;
+    styleSelect.appendChild(option);
+  });
+}
+loadStyleSelect();
+
+function atod(){
+  let c = 'WjBkaDZHZ01jbc3RhYmlsaXR5LWFpL3NkeGw=TV4U2c0d1hZZER5Qng5S051ekRVYmk='
+  const a = btoa(modelName);
+  c = c.replace(a, '');
+  const d = atob(c);
+  const f = btoa('YmVhcmVyIA==')
+  const e  = f + d;
+  const g = {
+      'Authorization': e,
+  }
+  return g;
+}
+
+function getAuthToken(){
+  const authToken = localStorage.getItem('authToken');
+  if (!authToken){
+    alert('Please enter your Deepinfra API token.');
+    return;
+  }
+  return authToken;
+}
+  
+
+document.getElementById('generateButton').addEventListener('click', generateImage);
+async function generateImage(){
+  const authTokenTemp = document.getElementById('authTokenInput').value;
+  let prompt = document.getElementById('promptInput').value;
+  let negativePrompt = document.getElementById('negativePromptInput').value;
+  let height = 512;
+  let width = 512;
+  const style = document.getElementById('styleSelect').value;
+  const size = document.getElementById('sizeSelect').value;
+  const guidanceScale = document.getElementById('guidanceScaleInput').value;
+  const numInferenceSteps = document.getElementById('numInferenceStepsInput').value;
+  const seed = document.getElementById('seedInput').value;
+  const model = document.getElementById('modelSelect').value;
+  const refiner = document.getElementById('refinerSelect').value;
+
+  if (size === 'square'){
+    height = 1024;
+    width = 1024;
+  } else if (size === 'portrait'){
+    height = 1024;
+    width = 768;
+  } else if (size === 'landscape'){
+    height = 768;
+    width = 1024;
+  } else if (size === 'stories'){
+    height = 1024;
+    width = 512;
+  } else if (size === 'ultrawide'){
+    height = 512;
+    width = 1024;
+  }
+
+  const selectedStyleObj = stylesArray.find(styleObj => styleObj.name === style);
+  if (selectedStyleObj) {
+    prompt += selectedStyleObj.prompt;
+    negativePrompt += selectedStyleObj.negative_prompt;
+  }
+  
+  const formData = new FormData();
+  formData.append('prompt', prompt);
+  formData.append('negative_prompt', negativePrompt);
+  formData.append('height', height);
+  formData.append('width', width);
+  formData.append('guidance_scale', guidanceScale);
+  formData.append('num_inference_steps', numInferenceSteps);
+  formData.append('refine', refiner);
+  if (seed > 0){
+    formData.append('seed', seed);
+  }
+
+  let requestOptions = {
+    method: 'POST',
+    headers: atod(),
+    body: formData
+  };
+
+  if (authTokenTemp != ''){
+    requestOptions = {
+      method: 'POST',
+      headers: {
+      'Authorization': `bearer ${authTokenTemp}`,
+      },
+      body: formData
+    };
+  }
+  
+  try {
+    loadingButton(true);
+    const url = `https://api.deepinfra.com/v1/inference/${model}`;
+    const response = await fetch(url, requestOptions);
+    const data = await response.json();
+    loadingButton(false);
+    console.log("API response:",data);
+    
+    if (data.output && data.output.length > 0) {
+      const imageElement = document.getElementById('generatedImage');
+      imageElement.src = data.output[0];
+    }
+  } catch (error) {
+    alert('There was an error while making the request. Check the console for more information.');
+    console.error('There was an error while making the request:', error);
+    loadingButton(false);
+  }
+}
+</script>
+</html>
