@@ -9,29 +9,40 @@
   <!--Bootstrap -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js" integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" integrity="sha512-Z/def5z5u2aR89OuzYcxmDJ0Bnd5V1cKqBEbvLOiUNWdg9PQeXVvXLI90SE4QOHGlfLqUnDNVAYyZi8UwUTmWQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Material Design Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
   <link rel="stylesheet" href="css/theme.css">
 </head>
 <body style="padding-inline: 0.8em;padding-block: 0.5em;">
+    <!-- Navbar -->
+    <nav class="navbar  navbar-light bg-transparent">
+      <div class="container" style="margin-inline:0%;padding-inline: 0px;max-width:93%">
+        <!-- Botão de retornar -->
+        <button class="btn btn-dark return" onclick="window.history.back()"><i class="mdi mdi-chevron-left"></i> Retornar</button>
+        <h6 style="color: inherit;margin-inline: auto;">Gerador de imagens</h6>
+      </div>
+    </nav>
     <label for="promptInput" class="form-label">Prompt:</label>
-    <input type="text" id="promptInput" class="form-control" placeholder="Ex: pet" autocomplete="off">
+    <input type="text" id="promptInput" class="form-control" placeholder="Ex: pet (aceita somente palavras em inglês)" autocomplete="off">
     <br>
-    <label for="negativePromptInput" class="form-label">Negative Prompt:</label>
+    <label for="negativePromptInput" class="form-label">Prompt negativo:</label>
     <input type="text" id="negativePromptInput" class="form-control" placeholder="Ex: cat" autocomplete="off">
     <br>
     <div class="row">
       <div class="col">
-        <label for="styleSelect" class="form-label">Style:</label>
+        <label for="styleSelect" class="form-label">Estilo:</label>
         <select id="styleSelect" class="form-select">
         </select>
       </div>
       <div class="col">
-        <label for="sizeSelect" class="form-label">Image dimensions:</label>
+        <label for="sizeSelect" class="form-label">Dimensão da imagem:</label>
         <select id="sizeSelect" class="form-select">
-          <option value="square">Square</option>
-          <option value="portrait">Portrait</option>
-          <option value="landscape">Landscape</option>
+          <option value="square">Quadrado</option>
+          <option value="portrait">Retrato</option>
+          <option value="landscape">Paisagem</option>
           <option value="stories">Stories</option>
-          <option value="ultrawide">Ultrawide</option>
+          <option value="ultrawide">Largo</option>
         </select>
       </div>
     </div>
@@ -41,7 +52,7 @@
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-            Advanced options
+            Opções avançadas
           </button>
         </h2>
         <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushAdvancedOptions">
@@ -66,6 +77,18 @@
             <option value="base_image_refiner">Base image refiner</option>
           </select>
           <br>
+          <!--Sampler-->
+          <label for="samplerSelect" class="form-label">Sampler:</label>
+          <select id="samplerSelect" class="form-select">
+            <option value="DDIM">DDIM</option>
+            <option value="DPMSolverMultistep">DPMSolverMultistep</option>
+            <option value="HeunDiscrete">HeunDiscrete</option>
+            <option value="KarrasDPM">KarrasDPM</option>
+            <option value="K_EULER_ANCESTRAL">K_EULER_ANCESTRAL</option>
+            <option value="K_EULER">K_EULER</option>
+            <option value="PNDM">PNDM</option>
+          </select>
+          <br>
           <!--Model-->
           <label style="display: none;" for="modelSelect" class="form-label">Model:</label>
           <select style="display: none;" id="modelSelect" class="form-select">
@@ -78,7 +101,7 @@
       </div>
     </div>    
     <br>
-    <button id="generateButton" class="btn btn-outline">Generate image</button>
+    <button id="generateButton" class="btn btn-outline">Gerar imagem</button>
     <br><br>
     <div class="d-flex justify-content-center">
       <img id="generatedImage" style="max-width: 90vw;" width="512" class="justify-content-center">
@@ -96,6 +119,16 @@ const stylesArray = [
   },
   {
     name:'Anime',
+    prompt: ',anime style, [manga], [illustration], [artwork], [anime wallpaper],[anime fanart], [detailed anime background], anime studio,',
+    negative_prompt: ',black and white,b&w, monochrome, 3d render, photography, photo, [cartoon], abstract art, poorly drawn, (text), (dialog bubble), (letters), [cartoon comics], [superhero comics], signature, [minimalist art], 3d model, amateur anime artist,canvas frame,bad art,ugly,nude,porn,naked,nsfw,hentai,'
+  },
+  {
+    name:'Anime - Studio Ghibli',
+    prompt: ',studio ghibli,[beautiful anime],',
+    negative_prompt: ',black and white,ugly,deformed,photo,3d render,abstract,noisy,blurry,poorly drawn,(text), (dialog bubble), (letters), [superhero comics],signature,amateur,nude,porn,naked,nsfw,hentai,'
+  },
+  {
+    name:'Realistic Anime',
     prompt: ',realistic anime, realistic manga, [illustration], [artwork], realistic anime illumination, realistic anime shading, [realistic anime Deviantart], [realistic anime Artstation], [realistic anime wallpaper],[realistic anime fanart], [realistic anime Pinterest], realistic and detailed anime background, realistic anime shadows,',
     negative_prompt: ',black and white,b&w, monochrome, 3d render, photography, photo, [cartoon], abstract art, poorly drawn, (text), (dialog bubble), (letters), [cartoon comics], [superhero comics], signature, [minimalist art], 3d model, amateur anime artist,canvas frame,bad art,ugly,nude,porn,naked,nsfw,hentai,'
   },
@@ -115,6 +148,11 @@ const stylesArray = [
     negative_prompt: ',(black and white),sepia,blurry, low res, low resolution, low quality,ugly,artist painting,artist drawing,(digital painting style),3d render,photo,nude,porn,naked,nsfw,'
   },
   {
+    name:'Caravaggio',
+    prompt: ',Caravaggio,Italian Baroque style, [chiaroscuro],[dramatic composition],oil painting,Renaissance art,',
+    negative_prompt: ',nude,porn,naked,nsfw,'
+  },
+  {
     name:'Impressionism',
     prompt: ',impressionist painting style,[brushstrokes],[loose brushwork style],[natural light],[vibrant colors],[oil on canvas],',
     negative_prompt: ',(black and white),sepia, low res, low resolution, low quality,ugly,artist painting,artist drawing,(digital painting style),3d render,photo,nude,porn,naked,nsfw,'
@@ -131,8 +169,13 @@ const stylesArray = [
   },
   {
     name: "Art Nouveau",
-    prompt: ",Art Nouveau style,",
-    negative_prompt: ",3d render,anime,photo,ugly, deformed, noisy,abstract,visual glitch, low contrast, industrial, mechanical,blurry, low res, low resolution, low quality,"
+    prompt: ",Art Nouveau style,illustration,detailed,artwork,[vintage],[[realistic anatomy]],",
+    negative_prompt: ",nude,porn,naked,nsfw,[deformed],[morbid],[disfigured],noisy,abstract,visual glitch,low contrast,blurry,"
+  },
+  {
+    name: "Art Nouveau - Harrison Fisher",
+    prompt: ",[Harrison Fisher],[[Gilded Age aesthetics]],",
+    negative_prompt: ",nude,porn,naked,nsfw,[deformed],[morbid],[disfigured],"
   },
   {
     name: "Faded Polaroid Photo",
@@ -280,6 +323,7 @@ async function generateImage(){
   const seed = document.getElementById('seedInput').value;
   const model = document.getElementById('modelSelect').value;
   const refiner = document.getElementById('refinerSelect').value;
+  const sampler = document.getElementById('samplerSelect').value;
 
   if (size === 'square'){
     height = 1024;
@@ -312,6 +356,7 @@ async function generateImage(){
   formData.append('guidance_scale', guidanceScale);
   formData.append('num_inference_steps', numInferenceSteps);
   formData.append('refine', refiner);
+  formData.append('scheduler', sampler);
   if (seed > 0){
     formData.append('seed', seed);
   }
@@ -339,6 +384,11 @@ async function generateImage(){
     const data = await response.json();
     loadingButton(false);
     console.log("API response:",data);
+
+    if (data.error === "NSFW content detected. Try running it again, or try a different prompt."){
+      alert("A imagem não foi gerada pois foi censurada. Tente outro prompt ou outra seed.");
+      console.error("NSFW content detected. Try running it again, or try a different prompt.");
+    }
     
     if (data.output && data.output.length > 0) {
       const imageElement = document.getElementById('generatedImage');

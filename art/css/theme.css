@@ -114,3 +114,12 @@ div.accordion-item:hover,div.accordion-item:active,div.accordion-item:focus,div.
 #generatedImage{
     border-radius: 4px;
 }
+
+button.return,button.return:hover,button.return:active,button.return:focus,button.return:visited{
+    background-color: transparent;
+    background: none;
+    border: none;
+    box-shadow: none;
+    color:white;
+    padding: 0.4em;
+}
