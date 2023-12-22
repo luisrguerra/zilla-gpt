@@ -154,6 +154,8 @@ let mensagesObject;
 let loading = false;
 let expandedChatInput = false;
 let textToSpeechEnabled = false;
+let promptMethod = "system-prompt";
+let currentPrompt='';
 /* fim de variaveis globais */
 /* constantes globais */
 const defaultPrompt = 0;
@@ -165,11 +167,11 @@ const modelList = [
   {name:"GPT 3.5 16k - MMLU: 71.9",value:"gpt-3.5-turbo-16k",architecture:'openai',maxLength: 16000},
   {name:"GPT 3.5 16k 6/11/23 - MMLU: 71.9",value:"gpt-3.5-turbo-1106",architecture:'openai',maxLength: 16000},
   {name:"GPT 3.5 16k 13/6/23 - MMLU: 71.9",value:"gpt-3.5-turbo-16k-0613",architecture:'openai',maxLength: 16000},
-  {name:"Google Gemini Pro",value:"google/gemini-pro",architecture:'openrouter',maxLength: 32000},
-  {name:"Google Palm 2 Chat Bison",value:"google/palm-2-chat-bison",architecture:'openrouter',maxLength: 9000},
-  {name:"Google Palm 2 Codechat Bison",value:"google/palm-2-codechat-bison",architecture:'openrouter',maxLength: 7000},
-  {name:"Google Palm 2 Chat Bison 32k",value:"google/palm-2-chat-bison-32k",architecture:'openrouter',maxLength: 32000},
-  {name:"Google Palm 2 Codechat Bison 32k",value:"google/palm-2-codechat-bison-32k",architecture:'openrouter',maxLength: 32000},
+  {name:"Google Gemini Pro",value:"google/gemini-pro",architecture:'openrouter-gpt-prompt',maxLength: 32000},
+  {name:"Google Palm 2 Chat Bison",value:"google/palm-2-chat-bison",architecture:'openrouter-gpt-prompt',maxLength: 9000},
+  {name:"Google Palm 2 Codechat Bison",value:"google/palm-2-codechat-bison",architecture:'openrouter-gpt-prompt',maxLength: 7000},
+  {name:"Google Palm 2 Chat Bison 32k",value:"google/palm-2-chat-bison-32k",architecture:'openrouter-gpt-prompt',maxLength: 32000},
+  {name:"Google Palm 2 Codechat Bison 32k",value:"google/palm-2-codechat-bison-32k",architecture:'openrouter-gpt-prompt',maxLength: 32000},
   {name:"Claude Instant v1",value:"anthropic/claude-instant-v1",architecture:'openrouter',maxLength: 100000},
   {name:"PPLX 7b Online",value:"perplexity/pplx-7b-online",architecture:'openrouter',maxLength: 4000},
   {name:"PPLX 7b",value:"perplexity/pplx-7b-chat",architecture:'openrouter',maxLength: 4000},
@@ -204,8 +206,8 @@ const voiceModelList = [
   {name:"Browser",value:"browser"},
 ];
 
-const promptsListGPT = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts.json");
-const promptsListLlama2 = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts-llama2.json");
+const promptsListGPT = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts-v2.json");
+const promptsListLlama2 = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts-llama2-v2.json");
 let currentPromptList = promptsListGPT;
 /* fim de constantes globais */
 
@@ -234,14 +236,24 @@ async function getJson(fileName){
 
 /* funcoes da logica do chat */
 async function initializeAsPrompt(number){
-  const promptObj= currentPromptList[number];
   cleanChat();
-  appendChatBot(promptObj.description);
-  const personalidade = currentPromptList[number].prompt;
-  const promptName = currentPromptList[number].name;
-  setPromptModalText(personalidade);
+  const promptObj= currentPromptList[number];
+  currentPrompt = promptObj.prompt;
+  const promptName = promptObj.name;
+  const method = promptObj.method;
+  //update information
+  setPromptModalText(currentPrompt);
   setPromptModalTitle(promptName);
-  mensagesObject = await configurar(personalidade);
+  appendChatBot(promptObj.description);
+  //initialize chat conversation
+  if (method === "evry-user-begin" || method === "evry-user-end"){
+    promptMethod = method;
+    mensagesObject = await configurar("");
+  }else{
+    promptMethod = "system-prompt";
+    mensagesObject = await configurar(currentPrompt);
+  }
+  console.log("Current prompt method:", promptMethod);
 }
 
 function getModelSelect(){
@@ -284,6 +296,8 @@ function updatePromptSelectList(){
     currentPromptList = promptsListLlama2;
   }else if (modelArchitecture === "openrouter"){
     currentPromptList = promptsListLlama2;
+  }else if (modelArchitecture === "openrouter-gpt-prompt"){
+    currentPromptList = promptsListGPT;
   }else{
     currentPromptList = promptsListGPT;
   }
@@ -390,6 +404,8 @@ async function configurar(behavior){
   if (modelArchitecture === "deepinfra"){
     openai = new openailib(atod());
   }else if (modelArchitecture === "openrouter"){
+    openai = new openailib(atoe());
+  }else if (modelArchitecture === "openrouter-gpt-prompt"){
     openai = new openailib(atoe());
   }else{
     openai = new openailib(atoc());
@@ -735,10 +751,22 @@ onChangeModeSelect();
 async function onClickEnviarButton(){
   const btnEnviar = document.getElementById('btnEnviar');
   btnEnviar.addEventListener('click', async () => {
+
    const userInput = getPrompt();
-   appendChatUser(userInput);
-   await appendChatMessages (userInput);
+
+   if (promptMethod === "evry-user-begin"){
+     appendChatUser(userInput);
+     await appendChatMessages (currentPrompt + "\n" + userInput);
+   }else if(promptMethod === "evry-user-end"){
+     appendChatUser(userInput);
+     await appendChatMessages (userInput + "\n" + currentPrompt);
+   }else{
+    appendChatUser(userInput);
+    await appendChatMessages (userInput);
+   }
+
    contractChatInput();
+
   });
 }
 onClickEnviarButton();
@@ -757,7 +785,7 @@ async function onClickGenerateArt(){
   const button = document.getElementById('btnArtGeneration');
   button.addEventListener('click', async () => {
     if(confirm("Deseja acessar o gerador de artes?")){
-      window.location.href = "https://luisrguerra.github.io/zilla-gpt/art/";
+      window.location.href = "https://luisrguerra.github.io/zilla-gpt/art/index.html";
     };
   });
 }
