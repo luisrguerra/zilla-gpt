@@ -160,7 +160,7 @@ let currentPrompt='';
 /* constantes globais */
 const defaultPrompt = 0;
 const modelList = [
-  {name:"Mixtral 8x7B Instruct v0.1 - MMLU: 71.82",value:"mistralai/Mixtral-8x7B-Instruct-v0.1",architecture:'deepinfra',maxLength: 16000},
+  {name:"Google Gemini Pro",value:"google/gemini-pro",architecture:'openrouter-gpt-prompt',maxLength: 32000},
   {name:"GPT 3.5 13/6/23 - MMLU: 71.9",value:"gpt-3.5-turbo-0613",architecture:'openai',maxLength: 4000},
   {name:"GPT 3.5 - MMLU: 71.9",value:"gpt-3.5-turbo",architecture:'openai',maxLength: 4000},
   {name:"GPT 3.5 6/11/23 - MMLU: 71.9",value:"gpt-3.5-turbo-1106",architecture:'openai',maxLength: 4000},
@@ -168,7 +168,6 @@ const modelList = [
   {name:"GPT 3.5 16k - MMLU: 71.9",value:"gpt-3.5-turbo-16k",architecture:'openai',maxLength: 16000},
   {name:"GPT 3.5 16k 6/11/23 - MMLU: 71.9",value:"gpt-3.5-turbo-1106",architecture:'openai',maxLength: 16000},
   {name:"GPT 3.5 16k 13/6/23 - MMLU: 71.9",value:"gpt-3.5-turbo-16k-0613",architecture:'openai',maxLength: 16000},
-  {name:"Google Gemini Pro",value:"google/gemini-pro",architecture:'openrouter-gpt-prompt',maxLength: 32000},
   {name:"Google Palm 2 Chat Bison",value:"google/palm-2-chat-bison",architecture:'openrouter-gpt-prompt',maxLength: 9000},
   {name:"Google Palm 2 Codechat Bison",value:"google/palm-2-codechat-bison",architecture:'openrouter-gpt-prompt',maxLength: 7000},
   {name:"Google Palm 2 Chat Bison 32k",value:"google/palm-2-chat-bison-32k",architecture:'openrouter-gpt-prompt',maxLength: 32000},
@@ -177,6 +176,7 @@ const modelList = [
   {name:"PPLX 7b Online",value:"perplexity/pplx-7b-online",architecture:'openrouter',maxLength: 4000},
   {name:"PPLX 7b",value:"perplexity/pplx-7b-chat",architecture:'openrouter',maxLength: 4000},
   {name:"Yi 34B Chat - MMLU: 73.5",value:"01-ai/Yi-34B-Chat",architecture:'deepinfra',maxLength: 3000},
+  {name:"Mixtral 8x7B Instruct v0.1 - MMLU: 71.82",value:"mistralai/Mixtral-8x7B-Instruct-v0.1",architecture:'deepinfra',maxLength: 16000},
   {name:"Openchat 3.5 - MMLU: 64.3",value:"openchat/openchat_3.5",architecture:'deepinfra',maxLength: 16000},
   {name:"lzlv 70b fp16 hf - MMLU: 70.23",value:"lizpreciatior/lzlv_70b_fp16_hf",architecture:'deepinfra',maxLength: 4000},
   {name:"Llama 2 70b chat hf - MMLU: 63",value:"meta-llama/Llama-2-70b-chat-hf",architecture:'deepinfra',maxLength: 4000},
