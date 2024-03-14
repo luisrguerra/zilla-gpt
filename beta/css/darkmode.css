@@ -11,7 +11,7 @@ body{
   background-color:var(--chat-background-color);
 }
 
-/* selecao de texto para copiar */
+/* selection of text to copy */
 ::selection {
   background: #3D4556;
   color: #d6e2f4;

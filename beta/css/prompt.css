@@ -15,7 +15,7 @@ div#prompt-container.expanded > div > textarea.form-control{
   height: 87%;
   margin-bottom: 0%;
 }
-#btnEnviar{
+#btnSendUserInput{
   border-width: 1px;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
@@ -45,7 +45,7 @@ button.prompt-button:hover,button.prompt-button:active,button.prompt-button:focu
 }
 
 button.prompt-button-posterior{
-  margin-left: 0.5em;
+  margin-left: 0.25em;
 }
 
 textarea.form-control{
