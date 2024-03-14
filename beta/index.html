@@ -1,6 +1,6 @@
 <head>
   <meta charset="utf-8">
-  <!-- Melhoria da visualização em smartphones -->
+  <!-- Improved viewing on smartphones -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="canonical" href="https://luisrguerra.github.io/zilla-gpt/" />
   <link rel="manifest" href="/zilla-gpt/manifest.json">
@@ -17,7 +17,7 @@
     gtag('config', 'G-R7C2W6H7P6');
   </script>
 
-  <!-- carrecargar recursos do material dessign -->
+  <!-- load material design resources -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
   <!--Bootstrap -->
@@ -40,7 +40,7 @@
 <body>
 
 <div id="scroll" class="chatContent">
-  <!-- pular linha -->
+  <!-- break line -->
   <br>
   
   <div class="selectors">
@@ -48,39 +48,43 @@
   <button id="promptMenuButton" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#promptMenuWindow">Opções</button>
   </div>
 
-  <!-- texto terminal -->
+  <!-- terminal text -->
   <div id="terminalContainer"></div>
 
-</div> <!-- fim da div chatContent -->
+</div> <!-- end of chatContent div -->
 
-<!-- campo de input de texto -->
+<!-- text input field -->
 <div id="prompt-container" class="contracted">
 <div style="margin-inline: 1em;">
- <button class="btn btn-outline-light prompt-button"  data-bs-toggle="modal" data-bs-target="#promptViewWindow">
+ <button class="btn btn-outline-light prompt-button unnecessary-text" style="margin-right: 0.25em;"  data-bs-toggle="modal" data-bs-target="#promptViewWindow">
   <span class="mdi mdi-text-account"> <span class="unnecessary-text">Prompt</span></span>
  </button>
- <!-- botao ativar text to speech -->
- <button id="btnTextToSpeech" class="btn btn-outline-light prompt-button prompt-button-posterior">
+ <!-- button activate text to speech -->
+ <button id="btnTextToSpeech" class="btn btn-outline-light prompt-button">
   <span id="iconTextToSpeech" class="mdi mdi-volume-off"> <span class="unnecessary-text">Voz</span></span>
  </button>
- <!-- botao de limpar chat de mensagens -->
+ <!-- clear message chat button -->
  <button id="btnClearChat" class="btn btn-outline-light prompt-button prompt-button-posterior">
   <span class="mdi mdi-delete"> <span class="unnecessary-text">Apagar</span></span>
  </button>
- <!-- botao regerar última mensagem -->
+ <!-- button regenerate last message -->
  <button id="btnRegenerate" class="btn btn-outline-light prompt-button prompt-button-posterior">
   <span class="mdi mdi-refresh"> <span class="unnecessary-text">Regerar</span></span>
  </button>
- <!-- botao gerar arte -->
+  <!-- button verify information -->
+  <button id="btnVerifyInformation" class="btn btn-outline-light prompt-button prompt-button-posterior">
+    <span class="mdi mdi-shield-search"> <span class="unnecessary-text">Verificar</span></span>
+  </button>
+ <!-- button generate art -->
  <button id="btnArtGeneration" class="btn btn-outline-light prompt-button prompt-button-posterior">
   <span class="mdi mdi-palette"> <span class="unnecessary-text">Arte</span></span>
  </button>
- <!-- botao de expandir input de texto -->
+ <!-- expand text input button -->
  <button id="btnExpand" class="btn btn-outline-light prompt-button prompt-button-posterior">
   <span id="iconExpand" class="mdi mdi-arrow-expand-up"> <span id="btnExpandText" class="unnecessary-text">Expandir</span></span>
  </button>
- <!-- botao enviar -->
- <button id="btnEnviar" class="btn btn-primary enviar">
+ <!-- send button -->
+ <button id="btnSendUserInput" class="btn btn-primary enviar">
   <span class="mdi mdi-send"></span>
  </button>
  <!-- input prompt -->
@@ -90,22 +94,22 @@
 
 </body>
 
-<!-- janela -->
+<!-- modal dialog window -->
 <div class="modal fade" id="promptViewWindow" tabindex="-1">
   <!-- modal-dialog-centered torna centralizado no meio -->
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="theme modal-content">
         
-       <!-- cabeçalho da janela -->
+       <!-- modal dialog window Header -->
        <div class="theme modal-header">
-          <!--Título ao topo da janela à esquerda -->
-          <!-- fs-5 define o tamaho do texto -->
+          <!-- Title at the top of the left of the modal dialog-->
+          <!-- fs-5 defines the text size -->
           <h1 id="prompt-title" class="modal-title fs-5"></h1>
-          <!-- Botão X de sair à direita -->
+          <!-- "X" close button on the right side -->
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
        </div>
     
-       <!-- corpo, conteúdo do meio -->
+        <!-- body of modal dialog, main content of modal dialog -->
        <div class="modal-body">
           <h4 id="prompt-text"></h4>
        </div>
@@ -114,21 +118,21 @@
   </div> <!-- modal-dialog -->
 </div> <!-- modal -->
 
-<!-- janela tela cheia do menu do seletor de prompts -->
+ <!-- Full screen window of the menu selector prompts -->
 <div class="modal fade" id="promptMenuWindow" tabindex="-1">
- <!-- modal-fullscreen deixa em tela cheia -->
+ <!-- "modal-fullscreen" sets the modal to full screen -->
  <div class="modal-dialog modal-fullscreen">
   <div class="theme modal-content">
     
-  <!-- cabeçalho da janela -->
+  <!-- modal dialog window header -->
   <div class="theme modal-header">
-   <!--Título ao topo da janela à esquerda -->
-   <!-- fs-5 define o tamaho do texto -->
+  <!-- Title at the top of the window on the left side -->
+   <!-- "fs-5" defines the text size -->
    <h1 class="modal-title fs-5">Opções</h1>
-   <!-- Botão X de sair à direita -->
+   <!-- "X" close button on the right side -->
    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
   </div>
-  <!-- corpo, conteúdo do meio -->
+   <!-- modal body, main content of modal -->
   <div class="modal-body">
     <div class="promptMenu">
      <h5 style="text-align: center;">Modelo de inteligência artificial</h5>
@@ -146,8 +150,9 @@
 <script type="module">
 import openailib from 'https://cdn.jsdelivr.net/npm/openai@4.20.1/+esm';
 //console.log("openailib: ",openailib);
-/* variaveis globais */
+/* global variables */
 let openai;
+const defaultModel = "google/gemini-pro";
 let modelName;
 let gptTemperature;
 let mensagesObject;
@@ -156,41 +161,37 @@ let expandedChatInput = false;
 let textToSpeechEnabled = false;
 let promptMethod = "system-prompt";
 let currentPrompt='';
-/* fim de variaveis globais */
-/* constantes globais */
+let promptPreferedModel = "";
+/* end of global variables */
+/* global constants */
 const defaultPrompt = 0;
 const modelList = [
+  {name:"Padrão",value:"",architecture:'',maxLength: 0},
   {name:"Google Gemini Pro",value:"google/gemini-pro",architecture:'openrouter-gpt-prompt',maxLength: 32000},
-  {name:"GPT 3.5 13/6/23 - MMLU: 71.9",value:"gpt-3.5-turbo-0613",architecture:'openai',maxLength: 4000},
   {name:"GPT 3.5 - MMLU: 71.9",value:"gpt-3.5-turbo",architecture:'openai',maxLength: 4000},
-  {name:"GPT 3.5 6/11/23 - MMLU: 71.9",value:"gpt-3.5-turbo-1106",architecture:'openai',maxLength: 4000},
-  {name:"GPT 3.5 1/3/23 - MMLU: 71.9",value:"gpt-3.5-turbo-0301",architecture:'openai',maxLength: 4000},
+  {name:"GPT 3.5 25/1/24",value:"gpt-3.5-turbo-0125",architecture:'openai',maxLength: 4000},
+  {name:"GPT 3.5 6/11/23 - MMLU: 71.3",value:"gpt-3.5-turbo-1106",architecture:'openai',maxLength: 4000},
+  {name:"GPT 3.5 13/6/23 - MMLU: 71.9",value:"gpt-3.5-turbo-0613",architecture:'openai',maxLength: 4000},
+  {name:"GPT 3.5 1/3/23 - MMLU: 71.1",value:"gpt-3.5-turbo-0301",architecture:'openai',maxLength: 4000},
   {name:"GPT 3.5 16k - MMLU: 71.9",value:"gpt-3.5-turbo-16k",architecture:'openai',maxLength: 16000},
-  {name:"GPT 3.5 16k 6/11/23 - MMLU: 71.9",value:"gpt-3.5-turbo-1106",architecture:'openai',maxLength: 16000},
+  {name:"GPT 3.5 16k 6/11/23 - MMLU: 71.3",value:"gpt-3.5-turbo-1106",architecture:'openai',maxLength: 16000},
   {name:"GPT 3.5 16k 13/6/23 - MMLU: 71.9",value:"gpt-3.5-turbo-16k-0613",architecture:'openai',maxLength: 16000},
-  {name:"Google Palm 2 Chat Bison",value:"google/palm-2-chat-bison",architecture:'openrouter-gpt-prompt',maxLength: 9000},
-  {name:"Google Palm 2 Codechat Bison",value:"google/palm-2-codechat-bison",architecture:'openrouter-gpt-prompt',maxLength: 7000},
-  {name:"Google Palm 2 Chat Bison 32k",value:"google/palm-2-chat-bison-32k",architecture:'openrouter-gpt-prompt',maxLength: 32000},
-  {name:"Google Palm 2 Codechat Bison 32k",value:"google/palm-2-codechat-bison-32k",architecture:'openrouter-gpt-prompt',maxLength: 32000},
-  {name:"Claude Instant v1",value:"anthropic/claude-instant-v1",architecture:'openrouter',maxLength: 100000},
+  {name:"Claude 3 Haiku - MMLU: 75.2",value:"anthropic/claude-3-haiku",architecture:'openrouter',maxLength: 100000},
+  {name:"Claude Instant v1.2",value:"anthropic/claude-instant-1.2",architecture:'openrouter',maxLength: 100000},
+  {name:"Claude Instant v1.1",value:"anthropic/claude-instant-1.1",architecture:'openrouter',maxLength: 9000},
+  {name:"Claude Instant v1.0 - MMLU: 73.4",value:"anthropic/claude-instant-1",architecture:'openrouter',maxLength: 100000},
+  {name:"Dolphin 2.6 Mixtral 8x7b",value:"cognitivecomputations/dolphin-2.6-mixtral-8x7b",architecture:'deepinfra',maxLength: 16000},
+  {name:"Perplexity: Sonar 8x7B Online",value:"perplexity/sonar-medium-online",architecture:'openrouter',maxLength: 12000},
+  {name:"Perplexity: Sonar 7B Online",value:"perplexity/sonar-small-online",architecture:'openrouter',maxLength: 16000},
   {name:"PPLX 7b Online",value:"perplexity/pplx-7b-online",architecture:'openrouter',maxLength: 4000},
-  {name:"PPLX 7b",value:"perplexity/pplx-7b-chat",architecture:'openrouter',maxLength: 4000},
-  {name:"Yi 34B Chat - MMLU: 73.5",value:"01-ai/Yi-34B-Chat",architecture:'deepinfra',maxLength: 3000},
   {name:"Mixtral 8x7B Instruct v0.1 - MMLU: 71.82",value:"mistralai/Mixtral-8x7B-Instruct-v0.1",architecture:'deepinfra',maxLength: 16000},
-  {name:"Openchat 3.5 - MMLU: 64.3",value:"openchat/openchat_3.5",architecture:'deepinfra',maxLength: 16000},
-  {name:"lzlv 70b fp16 hf - MMLU: 70.23",value:"lizpreciatior/lzlv_70b_fp16_hf",architecture:'deepinfra',maxLength: 4000},
-  {name:"Llama 2 70b chat hf - MMLU: 63",value:"meta-llama/Llama-2-70b-chat-hf",architecture:'deepinfra',maxLength: 4000},
-  {name:"Airoboros l2 70b 2.2.1 - MMLU: 69.79",value:"deepinfra/airoboros-70b",architecture:'deepinfra',maxLength: 4000},
-  {name:"Phind CodeLlama 34B v2 - MMLU: 25.76",value:"Phind/Phind-CodeLlama-34B-v2",architecture:'deepinfra',maxLength: 4000},
+  {name:"Nous Capybara 34b",value:"nousresearch/nous-capybara-34b",architecture:'openrouter',maxLength: 32000},
+  {name:"Yi 34B Chat - MMLU: 73.5",value:"01-ai/Yi-34B-Chat",architecture:'deepinfra',maxLength: 3000},
+  {name:"Phind CodeLlama 34B v2 Deepinfra - MMLU: 25.76",value:"Phind/Phind-CodeLlama-34B-v2",architecture:'deepinfra',maxLength: 4000},
+  {name:"Deepseek Coder 33B Instruct - MMLU: 37.2",value:"deepseek-ai/deepseek-coder-33b-instruct",architecture:'together-gpt-prompt',maxLength: 4000},
+  {name:"Qwen1.5 72B Chat - MMLU: 77.37",value:"Qwen/Qwen1.5-72B-Chat",architecture:'together-gpt-prompt',maxLength: 4000},
+  {name:"Platypus2 70B Instruct - MMLU: 70.48",value:"garage-bAInd/Platypus2-70B-instruct",architecture:'together-gpt-prompt',maxLength: 4000},
 ];
-
-function getModelArchitecture(modelName) {
-  for (const model of modelList) {
-    if (model.value === modelName) {
-      return model.architecture;
-    }
-  }
-}
 
 const modeList = [
   {name:"Normal",value:1},
@@ -206,10 +207,29 @@ const voiceModelList = [
   {name:"Browser",value:"browser"},
 ];
 
-const promptsListGPT = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts-v2.json");
-const promptsListLlama2 = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts-llama2-v2.json");
-let currentPromptList = promptsListGPT;
-/* fim de constantes globais */
+/*
+const voiceModelList = [
+  {name:"Browser",value:"browser"},
+  {name:"OpenaAI Alloy",value:"alloy"},
+  {name:"OpenaAI Echo",value:"echo"},
+  {name:"OpenaAI Fable",value:"fable"},
+  {name:"OpenaAI Onyx",value:"onyx"},
+  {name:"OpenaAI Nova",value:"nova"},
+  {name:"OpenaAI Shimmer",value:"shimmer"},
+]; */
+
+const promptsList = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts-v2.json");
+/* end of global constants */
+
+let currentPromptList = promptsList;
+
+function getModelArchitecture(modelName) {
+  for (const model of modelList) {
+    if (model.value === modelName) {
+      return model.architecture;
+    }
+  }
+}
 
 function ztoa(x){
   return atob(atob(x));
@@ -219,7 +239,6 @@ loadPromptSelectOptions('promptSelect',currentPromptList);
 loadSelectOptions('modelSelect',modelList);
 loadSelectOptions('modelMode',modeList);
 loadSelectOptions('voiceModelSelect',voiceModelList);
-updateModel();
 updateTemperature();
 initializeAsPrompt(defaultPrompt);
 
@@ -229,18 +248,21 @@ async function getJson(fileName){
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log('Erro ao obter Json',fileName,":", error);
+    console.log('Error getting JSON: ',fileName,":", error);
     return [];
   }
 };
 
-/* funcoes da logica do chat */
+/* chat logic functions */
 async function initializeAsPrompt(number){
   cleanChat();
   const promptObj= currentPromptList[number];
   currentPrompt = promptObj.prompt;
+  promptPreferedModel = promptObj.model;
+  updateModel();
   const promptName = promptObj.name;
   const method = promptObj.method;
+  const defaultPromptModel = promptObj.model;
   //update information
   setPromptModalText(currentPrompt);
   setPromptModalTitle(promptName);
@@ -257,7 +279,10 @@ async function initializeAsPrompt(number){
 }
 
 function getModelSelect(){
-  const modelSelected = getValueByID('modelSelect');
+  let modelSelected = getValueByID('modelSelect');
+  if (modelSelected === ""){
+    modelSelected = defaultModel;
+  }
   return modelSelected;
 }
 
@@ -271,15 +296,18 @@ function getVoiceModelSelect(){
   return voiceModelSelected;
 }
 
-function updateMaxLength(){
-  modelName = getModelSelect();
-  const model = modelList.find(model => model.value === modelName);
-  document.getElementById('formterminal').maxLength = model.maxLength;
-}
-
 
 function updateModel(){
-  modelName = getModelSelect();
+  let modelSelected = getValueByID('modelSelect');
+  if (promptPreferedModel === "" || promptPreferedModel === undefined) {
+    modelName = getModelSelect();
+  }else{
+    if (modelSelected === "" || !modelSelected) {
+      modelName = promptPreferedModel;
+    }else{
+      modelName = getModelSelect();
+    }
+  }
   const model = modelList.find(model => model.value === modelName);
   document.getElementById('formterminal').maxLength = model.maxLength;
   console.log("Updated model to:", modelName);
@@ -291,16 +319,7 @@ function updateTemperature(){
 };
 
 function updatePromptSelectList(){
-  const modelArchitecture = getModelArchitecture(modelName);
-  if (modelArchitecture === "deepinfra"){
-    currentPromptList = promptsListLlama2;
-  }else if (modelArchitecture === "openrouter"){
-    currentPromptList = promptsListLlama2;
-  }else if (modelArchitecture === "openrouter-gpt-prompt"){
-    currentPromptList = promptsListGPT;
-  }else{
-    currentPromptList = promptsListGPT;
-  }
+  currentPromptList = promptsList;
   loadPromptSelectOptions('promptSelect',currentPromptList);
 }
 
@@ -345,9 +364,9 @@ async function appendChatMessages(userInput){
   };
 };
 
-/* fim de funcoes da logica do chat */
+/* End of chat logic functions */
 
-/* Funcoes para api do gpt da openai */
+/* Functions for llm api */
 
 function atoc(){
   const hash = 'ZXlKaGNHbExaWGtpT2lKemF5MXJhVzlrVEZvNE9IVjBUREpDV1VzMmMyeEdTVlF6UW14aWEwWkthbWN5Y210amVXcHVNR1p3Um05b1JHWlhaMGNpTENKa1lXNW5aWEp2ZFhOc2VVRnNiRzkzUW5KdmQzTmxjaUk2ZEhKMVpYMD0=';
@@ -364,13 +383,18 @@ function atoe(){
   return JSON.parse(ztoa(hash));
 }
 
+function atof(){
+  const hash = 'ZXlKaGNHbExaWGtpT2lJMFlUWTVObU0xWXpoaU9ETXdNemRsTlRZMU5tUTVOMlEwWkRnNU5UTTRaVFkxTXpGbU9XUXpOR1F4WXpVeU1UUmhaR1kzWkRKbE5qazBaVFZtT1dGa0lpd2laR0Z1WjJWeWIzVnpiSGxCYkd4dmQwSnliM2R6WlhJaU9uUnlkV1VzSW1KaGMyVlZVa3dpT2lKb2RIUndjem92TDJGd2FTNTBiMmRsZEdobGNpNTRlWG92ZGpFaWZRPT0=';
+  return JSON.parse(ztoa(hash));
+}
+
 function initializeChat(behavior) {
   return [
     {role: "system", content: behavior}
   ];
 }
 
-async function completionsChatTextModel(messages) {
+async function completionsChatTextModel(messages,modelName) {
   console.log("Model:", modelName);
   const parameters ={
       model: modelName,
@@ -390,7 +414,7 @@ async function generateChatMessages(promptText, messages) {
   const prompt = {role: "user", content: promptText};
   messages.push(prompt);
 
-  const apiResponse = await completionsChatTextModel(messages);
+  const apiResponse = await completionsChatTextModel(messages,modelName);
   const textResponse = apiResponse.choices[0].message.content;
 
   const assistantResponse = {role: "assistant", content: textResponse};
@@ -407,6 +431,8 @@ async function configurar(behavior){
     openai = new openailib(atoe());
   }else if (modelArchitecture === "openrouter-gpt-prompt"){
     openai = new openailib(atoe());
+  }else if (modelArchitecture === "together-gpt-prompt"){
+    openai = new openailib(atof());
   }else{
     openai = new openailib(atoc());
   }
@@ -418,9 +444,9 @@ function lastMessage(messages){
   return messages[messages.length - 1].content;
 }
 
-/* Fim de funcoes para api do gpt da openai */
+/* End of functions for llm api */
 
-/* Funcoes de text to speech */
+/* Text-to-speech functions */
 function interruptTextToSpeech(){
   window.speechSynthesis.cancel();
 }
@@ -500,9 +526,9 @@ function readMessageWithVoice(text){
   }
 }
 
-/* Fim de funcoes de text to speech */
+/* End of text-to-speech functions */
 
-/* Funcoes de manipulacao do DOM */
+/* DOM manipulation functions */
 
 function cleanByID(id){
   const element = document.getElementById(id);
@@ -601,7 +627,7 @@ function clearInput(){
 }
 
 function disableUserInteraction(){
-  disableByID("btnEnviar");
+  disableByID("btnSendUserInput");
   disableByID("promptSelect");
   disableByID("modelSelect");
   disableByID("modelMode");
@@ -610,10 +636,11 @@ function disableUserInteraction(){
   disableByID("btnTextToSpeech")
   disableByID("btnClearChat");
   disableByID("promptMenuButton");
+  disableByID("btnVerifyInformation");
 }
 
 function enableUserInteraction(){
-  enableByID("btnEnviar");
+  enableByID("btnSendUserInput");
   enableByID("promptSelect");
   enableByID("modelSelect");
   enableByID("modelMode");
@@ -622,6 +649,7 @@ function enableUserInteraction(){
   enableByID("btnTextToSpeech")
   enableByID("btnClearChat");
   enableByID("promptMenuButton");
+  enableByID("btnVerifyInformation");
 }
 
 function setTextByID(text, id){
@@ -630,8 +658,8 @@ function setTextByID(text, id){
 }
 
 function setButtonEnviarText(text){
-  const btnEnviar = document.getElementById('btnEnviar');
-  btnEnviar.innerHTML = text;
+  const element = document.getElementById('btnSendUserInput');
+  element.innerHTML = text;
 }
 
 function setPromptModalText(text){
@@ -667,7 +695,7 @@ function replaceClassByID(id, oldClass, newClass){
   element.classList.replace(oldClass, newClass);
 };
 
-//diminuir a area do de escrever a mensagem
+//Decrease the size of the message input area
 function contractChatInput(){
   expandedChatInput = false;
   replaceClassByID(
@@ -693,7 +721,7 @@ function disableTextToSpeech(){
   );
 };
 
-//expandir a area do de escrever a mensagem
+//expand the size of the message input area
 function expandChatInput(){
   expandedChatInput = true;
   replaceClassByID(
@@ -718,9 +746,9 @@ function enableTextToSpeech(){
   );
 };
 
-/* Fim de funcoes de manipulacao do DOM */
+/* End of functions to manipulate the DOM */
 
-/* Funcoes de event listener */
+/* Event listener functions */
 
 async function onChangePromptSelect(){
   const promptSelect = document.getElementById('promptSelect');
@@ -733,8 +761,6 @@ onChangePromptSelect();
 async function onChangeModelSelect(){
   const element = document.getElementById('modelSelect');
   element.addEventListener('change', async () => {
-    updateModel();
-    updatePromptSelectList();
     promptSelectUpdateBehavior();
   });
 }
@@ -749,8 +775,8 @@ async function onChangeModeSelect(){
 onChangeModeSelect();
 
 async function onClickEnviarButton(){
-  const btnEnviar = document.getElementById('btnEnviar');
-  btnEnviar.addEventListener('click', async () => {
+  const element = document.getElementById('btnSendUserInput');
+  element.addEventListener('click', async () => {
 
    const userInput = getPrompt();
 
@@ -784,7 +810,7 @@ onClickClearChatButton();
 async function onClickGenerateArt(){
   const button = document.getElementById('btnArtGeneration');
   button.addEventListener('click', async () => {
-    if(confirm("Deseja acessar o gerador de artes?")){
+    if(confirm("Deseja acessar o gerador de artes? Sua conversa será apagada.")){
       window.location.href = "https://luisrguerra.github.io/zilla-gpt/art/index.html";
     };
   });
@@ -825,7 +851,77 @@ async function onClickTextToSpeechButton(){
 onClickTextToSpeechButton();
 
 
-/* Fim de funcoes de event listener */
+/* End of event listener functions */
+
+/* code of verification of information */
+
+function getAssistantLastReply(){
+  const lastMessageIndex = mensagesObject.length -1;
+  const lastMessage = mensagesObject[lastMessageIndex];
+  if (lastMessage.role === "assistant"){
+    const lastMessageContent = lastMessage.content;
+    return lastMessageContent;
+  }else{
+    return "";
+  }
+}
+
+async function verifyAnswer(textToVeify,modelName,temperature){
+  const systemInstructions = "";
+  const userMessagePrompt = "Você será o meu assistente de verificação de informações para saber se elas são fatos reais ou não. Você deverá identificar se a informação é uma notícia falsa, ou uma afirmação incorreta. Você deverá procura por informações conflitantes com o texto fornecido, procure informações conhecidas que são incompatíveis com o texto fornecido. Você deverá escrever uma reflexão de pelo menos 5 linhas analisando a informação para descobrir se ela é uma verdade ou não e depois irá pular uma linha e dará um veredito final sobre o resultado. Verifique a seguinte informação:\n";
+  const userMessageInstructions = userMessagePrompt + textToVeify;
+  let apiVerifyAnswer = new openailib(atoc());
+  if (modelName === "google/gemini-pro"){
+    apiVerifyAnswer = new openailib(atoe());
+  }
+  let verifyMessages = initializeChat(systemInstructions);
+  const prompt = {role: "user", content: userMessageInstructions};
+  verifyMessages.push(prompt);
+  console.log("Verification model name:", modelName);
+  console.log("Verification temperature:", temperature);
+  const parameters ={
+      model: modelName,
+      messages: verifyMessages,
+      temperature: 0.25,
+  };
+  try {
+    const apiResponse = await apiVerifyAnswer.chat.completions.create(parameters);
+    const textResponse = apiResponse.choices[0].message.content;
+    return textResponse;
+  } catch (error) {
+    console.error("Error occurred during API call:", error);
+    const errorMessage = "Erro ao verificar a informação.";
+    return errorMessage;
+  }
+}
+
+async function onClickVerifyInformation(){
+  const button = document.getElementById('btnVerifyInformation');
+  button.addEventListener('click', async () => {
+    enableLoading();
+    const verifyModel = [
+      "gpt-3.5-turbo-0125",
+      "gpt-3.5-turbo-1106",
+      "gpt-3.5-turbo-0613",
+      "gpt-3.5-turbo-0301",
+      "google/gemini-pro"
+    ];
+    const randonModelIndex = Math.floor(Math.random() * verifyModel.length);
+    const choosedModel = verifyModel[randonModelIndex];
+    const temperature = Math.round(Math.random() * 10) / 10;
+    const assistantLastReply = getAssistantLastReply();
+    if(assistantLastReply != ""){
+      const verificationResult = await verifyAnswer(assistantLastReply,choosedModel,temperature);
+      const warning = "\n\n Atenção: Este verificador de informações não é preciso e pode cometer muitos erros."
+      const verificationResponse = "Verificação de resultado\nModelo utilizado na verificação: " + choosedModel + "\nTemperatura:" + temperature + "\n\n" + verificationResult + warning;
+      appendChatBot(verificationResponse);
+    }
+    disableLoading();
+  });
+}
+onClickVerifyInformation()
+
+/* end of code of verification of information */
 
 
 </script>
