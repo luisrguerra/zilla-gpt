@@ -26,7 +26,10 @@ div.promptMenu{
   
 select.form-select,select.form-select:disabled{
     width:100%;
+    /* text-align: center; don't work on iphone */
     text-align: center;
+    /* text-align-last: center; works on iphone */
+    text-align-last: center;
     margin-inline: auto;
     border-width: 2px;
 }
