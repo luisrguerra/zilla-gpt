@@ -152,7 +152,7 @@ import openailib from 'https://cdn.jsdelivr.net/npm/openai@4.20.1/+esm';
 //console.log("openailib: ",openailib);
 /* global variables */
 let openai;
-const defaultModel = "google/gemini-pro";
+const defaultModel = "anthropic/claude-3-haiku";
 let modelName;
 let gptTemperature;
 let mensagesObject;
@@ -167,7 +167,8 @@ let promptPreferedModel = "";
 const defaultPrompt = 0;
 const modelList = [
   {name:"Padrão",value:"",architecture:'',maxLength: 0},
-  {name:"Google Gemini Pro",value:"google/gemini-pro",architecture:'openrouter-gpt-prompt',maxLength: 32000},
+  {name:"Google Gemini Pro 1.5 - MMLU: 81.9",value:"google/gemini-pro-1.5",architecture:'openrouter-gpt-prompt',maxLength: 200000},
+  {name:"Google Gemini Pro - MMLU: 71.8",value:"google/gemini-pro",architecture:'openrouter-gpt-prompt',maxLength: 32000},
   {name:"GPT 3.5 - MMLU: 71.9",value:"gpt-3.5-turbo",architecture:'openai',maxLength: 4000},
   {name:"GPT 3.5 25/1/24",value:"gpt-3.5-turbo-0125",architecture:'openai',maxLength: 4000},
   {name:"GPT 3.5 6/11/23 - MMLU: 71.3",value:"gpt-3.5-turbo-1106",architecture:'openai',maxLength: 4000},
@@ -191,6 +192,9 @@ const modelList = [
   {name:"Deepseek Coder 33B Instruct - MMLU: 37.2",value:"deepseek-ai/deepseek-coder-33b-instruct",architecture:'together-gpt-prompt',maxLength: 4000},
   {name:"Qwen1.5 72B Chat - MMLU: 77.37",value:"Qwen/Qwen1.5-72B-Chat",architecture:'together-gpt-prompt',maxLength: 4000},
   {name:"Platypus2 70B Instruct - MMLU: 70.48",value:"garage-bAInd/Platypus2-70B-instruct",architecture:'together-gpt-prompt',maxLength: 4000},
+  {name:"Sapien IA 1.0",value:"ft:gpt-3.5-turbo-0613:sapien-ia::8umFawLA",architecture:'openai',maxLength: 4000},
+  {name:"Sapien IA 1.1",value:"ft:gpt-3.5-turbo-0613:sapien-ia::8vcpPD8I",architecture:'openai',maxLength: 4000},
+  {name:"Física 180 GPT3.5 25/1/24",value:"ft:gpt-3.5-turbo-0125:sapien-ia:fisica-180-haiku:98sGG330",architecture:'openai',maxLength: 4000},
   {name:"Física 240 GPT3.5 25/1/24",value:"ft:gpt-3.5-turbo-0125:sapien-ia:nuclear-fusion-240:99eFIfRV",architecture:'openai',maxLength: 4000},
 ];
 
