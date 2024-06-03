@@ -1,0 +1,35 @@
+div.chatContent{
+    overflow: auto;
+    height: 100%;
+    padding-bottom: 8em;
+}
+p.chatBot{
+    margin-right: auto;
+    border-radius: 22px 22px 22px 4px;
+}
+p.chatUser{
+    margin-left: auto;
+    border-radius: 22px 22px 4px 22px;
+}
+p.chatBot, p.chatUser{
+    width: fit-content;
+    max-width: 100%;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    font-size: 22px;
+    text-align: left;
+    border-width: 2px;
+    border-style: solid;
+    padding: 1em 1em;
+}
+
+@media only screen and (max-width: 800px) {
+    div.chatContent{
+      padding-inline: 1em;
+    }
+}
+@media only screen and (min-width: 800px) {
+    div.chatContent{
+        padding-inline: 15%;
+    }
+}

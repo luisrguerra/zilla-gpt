@@ -1,0 +1,127 @@
+:root {
+  --font-color: #c9d3e3;
+  --font-color2: white;
+  --prompt-border-color: hsla(0, 0%, 100%, 0.09);
+  --prompt-background-color: hsl(218, 14%, 16%);
+  --chat-background-color: hsl(213, 13%, 14%);
+}
+
+body{
+  color: var(--font-color);
+  background-color:var(--chat-background-color);
+}
+
+/* selection of text to copy */
+::selection {
+  background: #3D4556;
+  color: #d6e2f4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffffff22;
+}
+
+/* Selecionar o scrollbar */
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff22;
+}
+
+/* fundo da tela do chat */
+div.chatContent{
+  background-color: var(--chat-background-color);
+}
+
+select.theme,select.theme:disabled{
+  color: var(--font-color);
+  background-color: var(--chat-background-color);
+  border-color: #ffffff40;
+}
+  
+select.theme:focus,select.theme:active{
+  color: var(--font-color);
+  background-color: var(--chat-background-color);
+  border-color: #ffffff7e;
+}
+
+button#promptMenuButton, button#promptMenuButton:disabled{
+  color: var(--font-color);
+  background-color: var(--chat-background-color);
+  border: 2px solid #ffffff40;
+}
+
+button#promptMenuButton:focus,button#promptMenuButton:active{
+  color: var(--font-color);
+  background-color: var(--chat-background-color);
+  border: 2px solid #ffffff7e;
+}
+
+option:checked {
+  background-color: #181b1f;
+  color: var(--font-color);
+}
+
+p.chatBot, p.chatUser{
+  color: var(--font-color);
+  background-image: linear-gradient(
+    150deg,
+  hsl(218, 14%, 18%) 0%,
+  hsl(218, 14%, 16%) 100% 
+  );
+}
+
+p.chatBot{
+  border-top-color: rgb(255 255 255 / 49%);
+  border-inline-color: rgb(255 255 255 / 40%);
+  border-bottom-color: rgb(255 255 255 / 35%);
+}
+
+p.chatUser{
+  border-top-color: rgb(255 255 255 / 24%);
+  border-inline-color: rgb(255 255 255 / 18%);
+  border-bottom-color: rgb(255 255 255 / 13%);
+}
+
+div#prompt-container{
+  border-top: 1px solid var(--prompt-border-color);
+  background-color: var(--prompt-background-color);
+}
+
+button.prompt-button{
+  color: var(--font-color2);
+  border-top-color: hsla(0, 0%, 100%, 0.30);
+  border-inline-color: hsla(0, 0%, 100%, 0.25);
+  border-bottom-color: hsla(0, 0%, 100%, 0.20);
+}
+
+button.prompt-button:hover,button.prompt-button:active,button.prompt-button:focus,button.prompt-button:visited{
+  background-color: #ffffff10 !important;
+  border-color: #ffffff40 !important;
+  color: var(--font-color2) !important;
+}
+
+button.prompt-button:disabled{
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+textarea.form-control{
+  color: var(--font-color);
+  background-color: var(--prompt-background-color);
+  border-top-color: hsla(0, 0%, 100%, 0.20);
+  border-inline-color: hsla(0, 0%, 100%, 0.175);
+  border-bottom-color: hsla(0, 0%, 100%, 0.175);
+}
+
+textarea.form-control:focus,textarea.form-control:active{
+  color: var(--font-color);
+  background: #1E2227;
+  border-color: #ffffff7e;
+}
+
+div.theme.modal-header{
+  border-color: var(--prompt-border-color);
+}
+  
+div.theme.modal-content{
+  border: 1px solid var(--prompt-border-color);
+  background-color: var(--prompt-background-color);
+}

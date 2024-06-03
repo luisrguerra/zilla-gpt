@@ -1,0 +1,59 @@
+div#prompt-container{
+  width: 100%;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: white;
+}
+div#prompt-container.expanded{
+  height: 100%;
+}
+div#prompt-container.expanded > div > textarea.form-control{
+  max-height: 87%;
+  height: 87%;
+  margin-bottom: 0%;
+}
+#btnSendUserInput{
+  border-width: 1px;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  width:fit-content;
+  height:fit-content;
+  min-width:38px;
+  float: right;
+  border-radius: 32px;
+  padding-inline: 0.5em;
+}
+
+button.prompt-button{
+  color: initial;
+  border-color: initial;
+  border-width: 2px;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  width:fit-content;
+  float: left;
+  border-radius: 4px;
+  padding-inline: 0.5em;
+}
+
+button.prompt-button:hover,button.prompt-button:active,button.prompt-button:focus,button.prompt-button:visited{
+  border-color: initial;
+  box-shadow: none;
+}
+
+button.prompt-button-posterior{
+  margin-left: 0.25em;
+}
+
+textarea.form-control{
+  max-height: 60px;
+  border-width: 2px;
+  margin-bottom: 1em;
+  resize: none;
+}
+textarea.form-control:focus,textarea.form-control:active{
+  box-shadow: none;
+}
