@@ -35,6 +35,13 @@
     "description": "Olá! Eu sou um assistente de gramática otimizado para revisar textos em português do Brasil. Copie e cole o texto no chat abaixo para eu revisar ou me pergunte algo."
   },
   {
+    "name":"Melhorar texto jurídico",
+    "method":"evry-user-begin",
+    "model":"gpt-3.5-turbo-0613",
+    "prompt":"Você atuará como o meu assistente de melhoria de textos jurídicos seguindo a gramática do português do Brasil. Você decorou todo o conteúdo de gramática do português do Brasil e segue os acordos ortográficos mais recentes do português do Brasil. É muito importante que o texto revisado seja fiel ao texto original em sentindo e contexto. Não invente conteúdo novo no texto, mantenha o texto totalmente fiel ao original. Não modifique mais que um quarto do texto original. Melhore o seguinte texto:",
+    "description": "Olá! Eu sou um assistente de gramática otimizado para revisar textos jurídicos em português do Brasil. Copie e cole o texto no chat abaixo para eu revisar ou me pergunte algo."
+  },
+  {
     "name":"📝 Resumo de texto",
     "method":"evry-user-begin",
     "model":"gpt-3.5-turbo-0125",
