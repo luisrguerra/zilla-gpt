@@ -176,6 +176,7 @@ const modelList = [
   {name:"GPT 3.5 16k 6/11/23 - MMLU: 71.3",value:"gpt-3.5-turbo-1106",architecture:'openai',maxLength: 16000},
   {name:"GPT 3.5 16k 13/6/23 - MMLU: 71.9",value:"gpt-3.5-turbo-16k-0613",architecture:'openai',maxLength: 16000},
   {name:"GPT-4o 13/5/2024",value:"gpt-4o-2024-05-13",architecture:'openai',maxLength: 32000},
+  {name:"Google Gemini Flash 1.5",value:"google/gemini-flash-1.5",architecture:'openrouter-gpt-prompt',maxLength: 200000},
   {name:"Google Gemini Pro 1.5 - MMLU: 81.9",value:"google/gemini-pro-1.5",architecture:'openrouter-gpt-prompt',maxLength: 200000},
   {name:"Claude 3 Haiku - MMLU: 75.2",value:"anthropic/claude-3-haiku",architecture:'openrouter',maxLength: 100000},
 ];
@@ -199,17 +200,6 @@ const modeList = [
 const voiceModelList = [
   {name:"Browser",value:"browser"},
 ];
-
-/*
-const voiceModelList = [
-  {name:"Browser",value:"browser"},
-  {name:"OpenaAI Alloy",value:"alloy"},
-  {name:"OpenaAI Echo",value:"echo"},
-  {name:"OpenaAI Fable",value:"fable"},
-  {name:"OpenaAI Onyx",value:"onyx"},
-  {name:"OpenaAI Nova",value:"nova"},
-  {name:"OpenaAI Shimmer",value:"shimmer"},
-]; */
 
 const promptsList = await getJson("https://luisrguerra.github.io/zilla-gpt/data/direito.json");
 /* end of global constants */
