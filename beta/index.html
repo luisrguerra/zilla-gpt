@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <head>
   <meta charset="utf-8">
   <!-- Improved viewing on smartphones -->
@@ -26,6 +27,16 @@
   
   <!-- Material Design Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.2.96/css/materialdesignicons.min.css" integrity="sha512-LX0YV/MWBEn2dwXCYgQHrpa9HJkwB+S+bnBpifSOTO1No27TqNMKYoAn6ff2FBh03THAzAiiCwQ+aPX+/Qt/Ow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css" integrity="sha384-D+9gmBxUQogRLqvARvNLmA9hS2x//eK1FhVb9PiU86gmcrBrJAQT8okdJ4LMp2uv" crossorigin="anonymous">
+
+  <!-- The loading of KaTeX is deferred to speed up page rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js" integrity="sha384-483A6DwYfKeDa0Q52fJmxFXkcPCFfnXMoXblOkJ4JcA8zATN6Tm78UNL72AKk+0O" crossorigin="anonymous"></script>
+
+  <!-- To automatically render math in text elements, include the auto-render extension: -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/contrib/auto-render.min.js" integrity="sha384-yACMu8JWxKzSp/C1YV86pzGiQ/l1YUfE8oPuahJQxzehAjEt2GiQuy/BIvl9KyeF" crossorigin="anonymous"
+      onload="renderMathInElement(document.body);">
+  </script> 
 </head>
 
 <!-- css -->
@@ -44,8 +55,8 @@
   <br>
   
   <div class="selectors">
-  <select class="form-select form-select-lg mb-3 theme" id="promptSelect"></select>
-  <button id="promptMenuButton" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#promptMenuWindow">Opções</button>
+  <button id="promptMenuSelectorButton" class="btn btn-outline-light promptMenuButton" data-bs-toggle="modal" data-bs-target="#promptMenuSelectorWindow">Prompts</button>
+  <button id="promptMenuButton" class="btn btn-outline-light promptMenuButton" data-bs-toggle="modal" data-bs-target="#promptMenuWindow">Opções</button>
   </div>
 
   <!-- terminal text -->
@@ -56,7 +67,7 @@
 <!-- text input field -->
 <div id="prompt-container" class="contracted">
 <div style="margin-inline: 1em;">
- <button class="btn btn-outline-light prompt-button unnecessary-text" style="margin-right: 0.25em;"  data-bs-toggle="modal" data-bs-target="#promptViewWindow">
+ <button id="showPromptSelectorButton" class="btn btn-outline-light prompt-button unnecessary-text" style="margin-right: 0.25em;"  data-bs-toggle="modal" data-bs-target="#promptViewWindow">
   <span class="mdi mdi-text-account"> <span class="unnecessary-text">Prompt</span></span>
  </button>
  <!-- button activate text to speech -->
@@ -76,9 +87,9 @@
     <span class="mdi mdi-shield-search"> <span class="unnecessary-text">Verificar</span></span>
   </button>
  <!-- button generate art -->
- <button id="btnArtGeneration" class="btn btn-outline-light prompt-button prompt-button-posterior">
-  <span class="mdi mdi-palette"> <span class="unnecessary-text">Arte</span></span>
- </button>
+ <!-- <button id="btnArtGeneration" class="btn btn-outline-light prompt-button prompt-button-posterior">
+  <span class="mdi mdi-robot-happy"> <span class="unnecessary-text">Apps</span></span>
+ </button>-->
  <!-- expand text input button -->
  <button id="btnExpand" class="btn btn-outline-light prompt-button prompt-button-posterior">
   <span id="iconExpand" class="mdi mdi-arrow-expand-up"> <span id="btnExpandText" class="unnecessary-text">Expandir</span></span>
@@ -111,6 +122,7 @@
     
         <!-- body of modal dialog, main content of modal dialog -->
        <div class="modal-body">
+          <h6>Default model: <span id="prompt-default-model"></span></h6>
           <h4 id="prompt-text"></h4>
        </div>
    
@@ -118,7 +130,7 @@
   </div> <!-- modal-dialog -->
 </div> <!-- modal -->
 
- <!-- Full screen window of the menu selector prompts -->
+<!-- Full screen window of the menu selector prompts -->
 <div class="modal fade" id="promptMenuWindow" tabindex="-1">
  <!-- "modal-fullscreen" sets the modal to full screen -->
  <div class="modal-dialog modal-fullscreen">
@@ -147,6 +159,29 @@
  </div> <!-- modal-dialog -->
 </div> <!-- modal -->
 
+<!-- Full screen window of the menu to select prompts -->
+<div class="modal fade" id="promptMenuSelectorWindow" tabindex="-1">
+  <!-- "modal-fullscreen" sets the modal to full screen -->
+  <div class="modal-dialog modal-fullscreen">
+   <div class="theme modal-content">
+     
+   <!-- modal dialog window header -->
+   <div class="theme modal-header">
+   <!-- Title at the top of the window on the left side -->
+    <!-- "fs-5" defines the text size -->
+    <h1 class="modal-title fs-5">Selecione um modo</h1>
+    <!-- "X" close button on the right side -->
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+   </div>
+    <!-- modal body, main content of modal -->
+   <div class="modal-body">
+     <div class="list-group" id="promptListAtWindow">
+     </div>
+   </div>
+   </div> <!-- modal-content -->
+  </div> <!-- modal-dialog -->
+ </div> <!-- modal -->
+
 <script type="module">
 import openailib from 'https://cdn.jsdelivr.net/npm/openai@4.20.1/+esm';
 //console.log("openailib: ",openailib);
@@ -161,60 +196,78 @@ let expandedChatInput = false;
 let textToSpeechEnabled = false;
 let promptMethod = "system-prompt";
 let currentPrompt='';
+let currentPromptNumber='';
 let promptPreferedModel = "";
 /* end of global variables */
 /* global constants */
 const defaultPrompt = 0;
 const modelList = [
   {name:"Padrão",value:"",architecture:'',maxLength: 0},
-  {name:"Google Gemini Pro 1.5 - MMLU: 81.9",value:"google/gemini-pro-1.5",architecture:'openrouter-gpt-prompt',maxLength: 200000},
-  {name:"Google Gemini Pro - MMLU: 71.8",value:"google/gemini-pro",architecture:'openrouter-gpt-prompt',maxLength: 32000},
+  {name:"Google Gemini Flash",value:"google/gemini-flash-1.5",architecture:'openrouter',maxLength: 200000},
+  {name:"Gemini Flash 1.5 Experimental",value:"google/gemini-flash-1.5-exp",architecture:'openrouter',maxLength: 200000},
+  {name:"Gemini Flash 8B 1.5 Experimental",value:"google/gemini-flash-8b-1.5-exp",architecture:'openrouter',maxLength: 200000},
+  {name:"Gemini Pro 1.5 Experimental",value:"google/gemini-pro-1.5-exp",architecture:'openrouter',maxLength: 200000},
+  {name:"Google Gemini Pro 1.5 - MMLU: 81.9",value:"google/gemini-pro-1.5",architecture:'openrouter',maxLength: 200000},
+  {name:"Gemma 2 27B",value:"google/gemma-2-27b-it",architecture:'openrouter',maxLength: 8000},
   {name:"GPT 4o Mini",value:"gpt-4o-mini",architecture:'openai',maxLength: 128000},
+  {name:"GPT 4o Mini 2024-07-18",value:"gpt-4o-mini-2024-07-18",architecture:'openai',maxLength: 128000},
   {name:"GPT 3.5 - MMLU: 71.9",value:"gpt-3.5-turbo",architecture:'openai',maxLength: 4000},
   {name:"GPT 3.5 25/1/24",value:"gpt-3.5-turbo-0125",architecture:'openai',maxLength: 4000},
   {name:"GPT 3.5 6/11/23 - MMLU: 71.3",value:"gpt-3.5-turbo-1106",architecture:'openai',maxLength: 4000},
-  {name:"GPT 3.5 13/6/23 - MMLU: 71.9",value:"gpt-3.5-turbo-0613",architecture:'openai',maxLength: 4000},
-  {name:"GPT 3.5 1/3/23 - MMLU: 71.1",value:"gpt-3.5-turbo-0301",architecture:'openai',maxLength: 4000},
   {name:"GPT 3.5 16k - MMLU: 71.9",value:"gpt-3.5-turbo-16k",architecture:'openai',maxLength: 16000},
   {name:"GPT 3.5 16k 6/11/23 - MMLU: 71.3",value:"gpt-3.5-turbo-1106",architecture:'openai',maxLength: 16000},
-  {name:"GPT 3.5 16k 13/6/23 - MMLU: 71.9",value:"gpt-3.5-turbo-16k-0613",architecture:'openai',maxLength: 16000},
   {name:"Claude 3 Haiku - MMLU: 75.2",value:"anthropic/claude-3-haiku",architecture:'openrouter',maxLength: 100000},
-  {name:"Claude Instant v1.2",value:"anthropic/claude-instant-1.2",architecture:'openrouter',maxLength: 100000},
-  {name:"Claude Instant v1.1",value:"anthropic/claude-instant-1.1",architecture:'openrouter',maxLength: 9000},
-  {name:"Claude Instant v1.0 - MMLU: 73.4",value:"anthropic/claude-instant-1",architecture:'openrouter',maxLength: 100000},
-  {name:"Llama 3 70b instruct",value:"meta-llama/llama-3-70b-instruct",architecture:'openrouter',maxLength: 8000},
-  {name:"DBRX instruct",value:"databricks/dbrx-instruct",architecture:'deepinfra',maxLength: 32000},
-  {name:"Zephyr Orpo141b A35b v0.1",value:"HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1",architecture:'deepinfra',maxLength: 64000},
-  {name:"WizardLM 2 8x22B",value:"microsoft/WizardLM-2-8x22B",architecture:'deepinfra',maxLength: 64000},
-  {name:"Mixtral 8x22B",value:"mistralai/Mixtral-8x22B-v0.1",architecture:'deepinfra',maxLength: 64000},
-  {name:"Dolphin 2.6 Mixtral 8x7b",value:"cognitivecomputations/dolphin-2.6-mixtral-8x7b",architecture:'deepinfra',maxLength: 16000},
-  {name:"Mixtral 8x7B Instruct v0.1 - MMLU: 71.82",value:"mistralai/Mixtral-8x7B-Instruct-v0.1",architecture:'deepinfra',maxLength: 16000},
-  {name:"Qwen1.5 72B Chat - MMLU: 77.37",value:"Qwen/Qwen1.5-72B-Chat",architecture:'together-gpt-prompt',maxLength: 4000},
-  {name:"Phind CodeLlama 34B v2 Deepinfra - MMLU: 25.76",value:"Phind/Phind-CodeLlama-34B-v2",architecture:'deepinfra',maxLength: 4000},
-  {name:"Deepseek Coder 33B Instruct - MMLU: 37.2",value:"deepseek-ai/deepseek-coder-33b-instruct",architecture:'together-gpt-prompt',maxLength: 4000},
-  {name:"Gemma 1.1 7b it",value:"google/gemma-1.1-7b-it",architecture:'deepinfra',maxLength: 8000},
-  {name:"PPLX 7b Online",value:"perplexity/pplx-7b-online",architecture:'openrouter',maxLength: 4000},
-  {name:"Sapien IA 1.0",value:"ft:gpt-3.5-turbo-0613:sapien-ia::8umFawLA",architecture:'openai',maxLength: 4000},
-  {name:"Sapien IA 1.1",value:"ft:gpt-3.5-turbo-0613:sapien-ia::8vcpPD8I",architecture:'openai',maxLength: 4000},
-  {name:"Física 180 GPT3.5 25/1/24",value:"ft:gpt-3.5-turbo-0125:sapien-ia:fisica-180-haiku:98sGG330",architecture:'openai',maxLength: 16000},
-  {name:"Graph Theory 42 GPT3.5 25/1/24",value:"ft:gpt-3.5-turbo-0125:sapien-ia:graph-theory-42:9FVsToAD",architecture:'openai',maxLength: 16000},
-  {name:"Graph Theory 42 Steps 84 GPT3.5 25/1/24",value:"ft:gpt-3.5-turbo-0125:sapien-ia:graph-theory-42:9FVsTBqr:ckpt-step-84",architecture:'openai',maxLength: 16000},
-  {name:"Graph Theory 42 Steps 42 GPT3.5 25/1/24",value:"ft:gpt-3.5-turbo-0125:sapien-ia:graph-theory-42:9FVsTLHU:ckpt-step-42",architecture:'openai',maxLength: 16000},
+  {name:"Cohere: Command R (08-2024)",value:"cohere/command-r-08-2024",architecture:'openrouter',maxLength: 128000},
+  {name:"Nous: Hermes 3 405B Instruct",value:"nousresearch/hermes-3-llama-3.1-405b",architecture:'openrouter',maxLength: 131000},
+  {name:"Qwen 2.5 72b",value:"Qwen/Qwen2.5-72B-Instruct",architecture:'deepinfra',maxLength: 31000},
+  {name:"Llama 3.2 90b",value:"meta-llama/llama-3.2-90b-vision-instruct",architecture:'openrouter',maxLength: 131000},
+  {name:"Llama 3.1 405b instruct",value:"meta-llama/Meta-Llama-3.1-405B-Instruct",architecture:'deepinfra',maxLength: 32000},
+  {name:"Llama 3.1 Sonar Large 128k online",value:"perplexity/llama-3.1-sonar-large-128k-online",architecture:'openrouter',maxLength: 128000},
+  {name:"Llama 3.1 70b instruct",value:"meta-llama/Meta-Llama-3.1-70B-Instruct",architecture:'deepinfra',maxLength: 128000},
+  {name:"mathcode-gpt-4o-mini",value:"ft:gpt-4o-mini-2024-07-18:sapien-ia:mathcode:A1MudjBI",architecture:'openai',maxLength: 128000},
 ];
 
+/* const modelList = [
+  {name:"openai/o1-mini",value:"openai/o1-mini",architecture:'openrouter',maxLength: 128000},
+  {name:"openai/o1-mini-2024-09-12",value:"openai/o1-mini-2024-09-12",architecture:'openrouter',maxLength: 128000},
+  {name:"gpt-4o",value:"gpt-4o",architecture:'openai',maxLength: 128000},
+  {name:"gpt-4o-2024-05-13",value:"gpt-4o-2024-05-13",architecture:'openai',maxLength: 128000},
+  {name:"gpt-4o-2024-08-06",value:"gpt-4o-2024-08-06",architecture:'openai',maxLength: 128000},
+  {name:"chatgpt-4o-latest",value:"chatgpt-4o-latest:'openai',maxLength: 128000},
+  {name:"Claude 3.5 Sonnet",value:"anthropic/claude-3.5-sonnet",architecture:'openrouter',maxLength: 200000},
+  {name:"Claude 3 Opus - MMLU: 86.8",value:"anthropic/claude-3-opus",architecture:'openrouter',maxLength: 200000},
+]; */
+
 const modeList = [
-  {name:"Normal",value:1},
-  {name:"Invariável 0",value:0},
-  {name:"Cabeça dura 0.25",value:0.25},
-  {name:"Pouco criativo 0.5",value:0.5},
-  {name:"Pouco criativo 0.75",value:0.75},
-  {name:"Criativo 1.1",value:1.1},
-  {name:"Impreciso 1.2",value:1.2},
+  {name:"Normal 100%",value:1},
+  {name:"Invariável 0%",value:0},
+  {name:"Cabeça dura 10%",value:0.1},
+  {name:"Cabeça dura 20%",value:0.2},
+  {name:"Cabeça dura 30%",value:0.3},
+  {name:"Pouco criativo 40%",value:0.4},
+  {name:"Pouco criativo 50%",value:0.5},
+  {name:"Pouco criativo 60%",value:0.6},
+  {name:"Normal 70%",value:0.7},
+  {name:"Normal 80%",value:0.8},
+  {name:"Normal 90%",value:0.9},
+  {name:"Criativo 110%",value:1.1},
+  {name:"Impreciso 120%",value:1.2},
 ];
 
 const voiceModelList = [
   {name:"Browser",value:"browser"},
 ];
+
+/*
+const voiceModelList = [
+  {name:"Browser",value:"browser"},
+  {name:"OpenaAI Alloy",value:"alloy"},
+  {name:"OpenaAI Echo",value:"echo"},
+  {name:"OpenaAI Fable",value:"fable"},
+  {name:"OpenaAI Onyx",value:"onyx"},
+  {name:"OpenaAI Nova",value:"nova"},
+  {name:"OpenaAI Shimmer",value:"shimmer"},
+]; */
 
 const promptsList = await getJson("https://luisrguerra.github.io/zilla-gpt/data/prompts-v2.json");
 /* end of global constants */
@@ -233,10 +286,10 @@ function ztoa(x){
   return atob(atob(x));
 }
 
-loadPromptSelectOptions('promptSelect',currentPromptList);
 loadSelectOptions('modelSelect',modelList);
 loadSelectOptions('modelMode',modeList);
 loadSelectOptions('voiceModelSelect',voiceModelList);
+loadPromptListOptions('promptListAtWindow',currentPromptList);
 updateTemperature();
 initializeAsPrompt(defaultPrompt);
 
@@ -256,14 +309,22 @@ async function initializeAsPrompt(number){
   cleanChat();
   const promptObj= currentPromptList[number];
   currentPrompt = promptObj.prompt;
+  currentPromptNumber = number;
   promptPreferedModel = promptObj.model;
   updateModel();
   const promptName = promptObj.name;
   const method = promptObj.method;
+  const redirect = promptObj.redirect;
   const defaultPromptModel = promptObj.model;
+
+  if (redirect !== "" || redirect !== undefined){
+      window.open(redirect,"_self")
+  }
+
   //update information
   setPromptModalText(currentPrompt);
   setPromptModalTitle(promptName);
+  setPromptDefaultModel(defaultPromptModel);
   appendChatBot(promptObj.description);
   //initialize chat conversation
   if (method === "evry-user-begin" || method === "evry-user-end"){
@@ -273,6 +334,7 @@ async function initializeAsPrompt(number){
     promptMethod = "system-prompt";
     mensagesObject = await configurar(currentPrompt);
   }
+  document.getElementById('promptMenuSelectorButton').innerText = promptName;
   console.log("Current prompt method:", promptMethod);
 }
 
@@ -324,7 +386,7 @@ function updatePromptSelectList(){
 function promptSelectUpdateBehavior(){
   interruptTextToSpeech();
   updateTemperature();
-  const promptSelected = getValueByID('promptSelect');
+  const promptSelected = currentPromptNumber;
   initializeAsPrompt(promptSelected);
 }
 
@@ -582,6 +644,28 @@ function loadSelectOptions(ID,optionList){
   }
 };
 
+function loadPromptListOptions(ID,optionList){
+  const maxItems = optionList.length;
+  const promptListDiv = document.getElementById(ID);
+  for (let i = 0; i < maxItems; i++) {
+    const name = optionList[i].name;
+    const value = optionList[i].value;
+    let selected = false;
+    if(i==0){
+      selected = true;
+    }
+    const promptSelectionItemButton = document.createElement("button");
+    promptSelectionItemButton.classList.add("list-group-item");
+    promptSelectionItemButton.classList.add("list-group-action");
+    promptSelectionItemButton.innerText = name;
+    promptSelectionItemButton.setAttribute("data-bs-dismiss", "modal");
+    promptSelectionItemButton.onclick = function() {
+      initializeAsPrompt(i);
+    };
+    promptListDiv.appendChild(promptSelectionItemButton);
+  }
+};
+
 
 function getValueByID(id){
   const element = document.getElementById(id);
@@ -592,10 +676,46 @@ function getPrompt(){
   return getValueByID("formterminal");
 }
 
+function renderLatexInString(inputString) {
+    // Expressão regular para encontrar partes do texto que estão entre \( e \) ou \[ e \]
+    const latexRegex = /\\[([]([\s\S]*?)\\[)\]]/g;
+    const parts = inputString.split(latexRegex);
+    const container = document.createElement("p");
+
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+
+        // Verifica se a parte atual é o LaTeX ou texto normal
+        if (i % 2 === 0) {
+            const elementText = document.createElement("span");
+            elementText.innerText = part.trim();
+            container.appendChild(elementText);
+        } else {
+            // Adiciona um espaço entre o texto normal e a fórmula LaTeX
+            const space = document.createElement("span");
+            space.innerHTML = "&nbsp;"; // ou você pode usar um estilo CSS para adicionar margem
+            container.appendChild(space);
+            
+            // Renderiza o LaTeX encontrado.
+            const renderedLatex = katex.renderToString(part.trim(), { throwOnError: false });
+            const elementLatex = document.createElement("span");
+            elementLatex.innerHTML = renderedLatex;
+            container.appendChild(elementLatex);
+
+            const space2 = document.createElement("span");
+            space2.innerHTML = "&nbsp;"; // ou você pode usar um estilo CSS para adicionar margem
+            container.appendChild(space2);
+        }
+    }
+
+    return container;
+}
+
+
+
 function appendChatUser(text){
   const container = document.getElementById("terminalContainer");
-  let p = document.createElement("p");
-  p.innerText = text;
+  let p = renderLatexInString(text);
   p.classList.add("chatUser");
   container.appendChild(p);
   scrollToBottom("scroll");
@@ -603,8 +723,7 @@ function appendChatUser(text){
 
 function appendChatBot(text){
   const container = document.getElementById("terminalContainer");
-  let p = document.createElement("p");
-  p.innerText = text;
+  let p = renderLatexInString(text);
   p.classList.add("chatBot");
   container.appendChild(p);
   scrollToBottom("scroll");
@@ -626,7 +745,7 @@ function clearInput(){
 
 function disableUserInteraction(){
   disableByID("btnSendUserInput");
-  disableByID("promptSelect");
+  disableByID("showPromptSelectorButton");
   disableByID("modelSelect");
   disableByID("modelMode");
   disableByID("btnRegenerate");
@@ -639,7 +758,7 @@ function disableUserInteraction(){
 
 function enableUserInteraction(){
   enableByID("btnSendUserInput");
-  enableByID("promptSelect");
+  enableByID("showPromptSelectorButton");
   enableByID("modelSelect");
   enableByID("modelMode");
   enableByID("btnRegenerate");
@@ -662,6 +781,13 @@ function setButtonEnviarText(text){
 
 function setPromptModalText(text){
   setTextByID(text, 'prompt-text');
+}
+
+function setPromptDefaultModel(text){
+  if (text === undefined){
+    text = defaultModel;
+  }
+  setTextByID(text, 'prompt-default-model');
 }
 
 function setPromptModalTitle(text){
@@ -748,14 +874,6 @@ function enableTextToSpeech(){
 
 /* Event listener functions */
 
-async function onChangePromptSelect(){
-  const promptSelect = document.getElementById('promptSelect');
-  promptSelect.addEventListener('change', async () => {
-    promptSelectUpdateBehavior();
-  });
-}
-onChangePromptSelect();
-
 async function onChangeModelSelect(){
   const element = document.getElementById('modelSelect');
   element.addEventListener('change', async () => {
@@ -804,16 +922,6 @@ async function onClickClearChatButton(){
   });
 }
 onClickClearChatButton();
-
-async function onClickGenerateArt(){
-  const button = document.getElementById('btnArtGeneration');
-  button.addEventListener('click', async () => {
-    if(confirm("Deseja acessar o gerador de artes? Sua conversa será apagada.")){
-      window.location.href = "https://luisrguerra.github.io/zilla-gpt/art/index.html";
-    };
-  });
-}
-onClickGenerateArt();
 
 async function onClickRegenerateLastMessageButton(){
   const button = document.getElementById('btnRegenerate');
@@ -869,7 +977,13 @@ async function verifyAnswer(textToVeify,modelName,temperature){
   const userMessagePrompt = "Você será o meu assistente de verificação de informações para saber se elas são fatos reais ou não. Você deverá identificar se a informação é uma notícia falsa, ou uma afirmação incorreta. Você deverá procura por informações conflitantes com o texto fornecido, procure informações conhecidas que são incompatíveis com o texto fornecido. Você deverá escrever uma reflexão de pelo menos 5 linhas analisando a informação para descobrir se ela é uma verdade ou não e depois irá pular uma linha e dará um veredito final sobre o resultado. Verifique a seguinte informação:\n";
   const userMessageInstructions = userMessagePrompt + textToVeify;
   let apiVerifyAnswer = new openailib(atoc());
-  if (modelName === "google/gemini-pro"){
+  if (
+    modelName === "google/gemini-pro-1.5" || 
+    modelName === "anthropic/claude-3-haiku" || 
+    modelName === "anthropic/claude-instant-1.2" ||
+    modelName === "anthropic/claude-instant-1.1" ||
+    modelName === "anthropic/claude-instant-1"
+  ){
     apiVerifyAnswer = new openailib(atoe());
   }
   let verifyMessages = initializeChat(systemInstructions);
@@ -901,8 +1015,11 @@ async function onClickVerifyInformation(){
       "gpt-3.5-turbo-0125",
       "gpt-3.5-turbo-1106",
       "gpt-3.5-turbo-0613",
-      "gpt-3.5-turbo-0301",
-      "google/gemini-pro"
+      "google/gemini-pro-1.5",
+      "anthropic/claude-3-haiku",
+      "anthropic/claude-instant-1.2",
+      "anthropic/claude-instant-1.1",
+      "anthropic/claude-instant-1"
     ];
     const randonModelIndex = Math.floor(Math.random() * verifyModel.length);
     const choosedModel = verifyModel[randonModelIndex];
