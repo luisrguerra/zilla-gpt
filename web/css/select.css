@@ -1,4 +1,4 @@
-button#promptMenuButton, button#promptMenuButton:disabled{
+button#promptMenuButton,button#promptMenuSelectorButton, button#promptMenuButton:disabled,button#promptMenuSelectorButton:disabled{
   /* display:none; */
   color: initial;
   border-color: initial;
@@ -38,6 +38,17 @@ select.theme:focus,select.theme:active{
     box-shadow: none;
 }
 
+button.list-group-item{
+  font-size: 20px;
+  padding-block: 1em;
+}
+
+div.list-group{
+  max-width: 100%;
+  margin-inline: auto;
+  border-radius: 0px;
+}
+
 @media only screen and (min-width: 600px) {
     button#promptMenuButton{
       margin-inline: 0.25em;
@@ -54,5 +65,8 @@ select.theme:focus,select.theme:active{
     }
     select.form-select,select.form-select:disabled{
       margin-inline: 0.25em;
+    }
+    div.list-group{
+      max-width: 35em;
     }
 }

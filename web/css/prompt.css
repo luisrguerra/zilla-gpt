@@ -10,9 +10,12 @@ div#prompt-container{
 div#prompt-container.expanded{
   height: 100%;
 }
+div#prompt-container.expanded > div{
+  height: 100%;
+}
 div#prompt-container.expanded > div > textarea.form-control{
-  max-height: 87%;
-  height: 87%;
+  max-height: 89%;
+  height: 89%;
   margin-bottom: 0%;
 }
 #btnSendUserInput{

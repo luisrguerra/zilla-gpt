@@ -2,6 +2,8 @@
   --font-color: #c9d3e3;
   --font-color2: white;
   --prompt-border-color: hsla(0, 0%, 100%, 0.09);
+  --button-border-color: #ffffff40;
+  --button-border-color-selected: #ffffff7e;
   --prompt-background-color: hsl(218, 14%, 16%);
   --chat-background-color: hsl(213, 13%, 14%);
 }
@@ -43,13 +45,13 @@ select.theme:focus,select.theme:active{
   border-color: #ffffff7e;
 }
 
-button#promptMenuButton, button#promptMenuButton:disabled{
+button#promptMenuButton,button#promptMenuSelectorButton, button#promptMenuButton:disabled, button#promptMenuSelectorButton:disabled{
   color: var(--font-color);
   background-color: var(--chat-background-color);
   border: 2px solid #ffffff40;
 }
 
-button#promptMenuButton:focus,button#promptMenuButton:active{
+button#promptMenuButton:focus,button#promptMenuSelectorButton:focus,button#promptMenuButton:active,button#promptMenuSelectorButton:active{
   color: var(--font-color);
   background-color: var(--chat-background-color);
   border: 2px solid #ffffff7e;
@@ -124,4 +126,15 @@ div.theme.modal-header{
 div.theme.modal-content{
   border: 1px solid var(--prompt-border-color);
   background-color: var(--prompt-background-color);
+}
+
+button.list-group-item{
+  background-color: var(--prompt-background-color);
+  color:var(--font-color);
+  border: 1px solid var(--button-border-color);
+}
+
+button.list-group-item:hover{
+  background-color: var(--chat-background-color);
+  border: 1px solid var(--button-border-color-selected);
 }
